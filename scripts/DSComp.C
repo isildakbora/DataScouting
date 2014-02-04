@@ -106,7 +106,7 @@ void DSComp::Loop()
         int RecoFlagsGood = (HBHENoiseFilterResultFlag 
                 && hcalLaserEventFilterFlag && eeBadScFilterFlag);
 
-        int JetIDFlag           = (dsJetFracHad[i] < 0.95 && dsJetFracEm[i] < 0.95) ? 1 : 0;
+        int JetIDFlag           = (dsJetFracHad[0] < 0.95 && dsJetFracEm[0] < 0.95 && dsJetFracHad[1] < 0.95 && dsJetFracEm[1] < 0.95) ? 1 : 0;
         int DeltaPhiFlag        = (fabs(dsJetPhi[0]-dsJetPhi[1]) > TMath::Pi()/3) ? 1 : 0;
         int MET_vs_METCleanFlag = (dsMetPt != dsMetCleanPt) ? 0 : 1;
         
