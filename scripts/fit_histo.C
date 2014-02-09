@@ -1,15 +1,27 @@
+#ifndef __CINT__
+#include "RooGlobalFunc.h"
+#endif
+#include "RooRealVar.h"
+#include "RooDataSet.h"
+#include "RooGaussian.h"
+#include "TCanvas.h"
+#include "RooPlot.h"
+#include "TAxis.h"
 #include <TH1.h>
 #include <TCanvas.h>
 #include <utility>
 #include "DSComp.C"
+
+using namespace RooFit ;
 
 void fit_histo()
 {
     //gROOT->ProcessLine(".L DSComp.C");
     TString histoname;
     TH1F *hDeltapT[8][5];
-	TFile *f = new TFile("Delta_pT_histograms.root");
-	
+	TFile *f = new TFile("Delta_pT_histograms_legends.root");
+	TCanvas *i_can[8][5];
+    TString name;
     float pTbins[]  = {30., 103., 206., 309., 413., 515., 618., 721., 1237.};
     const Int_t   n_pTbins  = sizeof(pTbins)/sizeof(float)-1;
 
@@ -22,17 +34,17 @@ void fit_histo()
         {
             histoname      = "Delta_pT_"+TString::Format("%.0f",pTbins[i])+"_"+TString::Format("%.0f",pTbins[i+1])+"_eta_"+TString::Format("%2.1f",j*0.5)+"_"+TString::Format("%2.1f",(j+1)*0.5);
             hDeltapT[i][j] = (TH1F*)f->FindObjectAny(histoname);
-            if(hDeltapT[i][j]->GetEntries()>3000)hDeltapT[i][j]->Rebin(4);
-            //else hDeltapT[i][j]->Rebin(3);
+            i_can[i][j] =  new TCanvas(histoname);
+            if(hDeltapT[i][j]->GetEntries()>3000)hDeltapT[i][j]->Rebin(6);
+            else hDeltapT[i][j]->Rebin(3);
         }
         
     }
 
     TCanvas *can = new TCanvas("DSComparison","DSComparison",1200,1200);
-    TCanvas *i_can[8][5];
+
     TF1 *cbfit[8][5];
     can->Divide(3,3);
-    TString name;
 
     Double_t maxVal, mean, RMS;
     for (int i = 0; i < n_pTbins; ++i)
@@ -41,19 +53,15 @@ void fit_histo()
         {
             std::cout << i << "\t" << j << std::endl;
             name = "Delta_pT_"+TString::Format("%.0f",pTbins[i])+"_"+TString::Format("%.0f",pTbins[i+1])+"_eta_"+TString::Format("%2.1f",j*0.5)+"_"+TString::Format("%2.1f",(j+1)*0.5);
-            
-            i_can[i][j] =  new TCanvas(name);
 
             maxVal = hDeltapT[i][j]->GetBinContent(hDeltapT[i][j]->GetMaximumBin());
             mean   = hDeltapT[i][j]->GetMean();
             RMS    = hDeltapT[i][j]->GetRMS();
 
-            cbfit[i][j] = new TF1(name, DoubleCrystalBallFunction, mean-3*RMS, mean+3*RMS, 7);
-
+            cbfit[i][j] = new TF1(name, DoubleCrystalBallFunction, mean-4*RMS, mean+4*RMS, 7);
             cbfit[i][j]->SetParNames("A_{1}","#alpha_{1}","#alpha_{2}","n_{1}","n_{2}","#mu","#sigma");
             cbfit[i][j]->SetParameters(maxVal, 2., 2., 2., 2., mean, RMS);
             //cbfit[i][j]->SetParLimits(3, 0, 10);
-
             cbfit[i][j]   ->SetLineColor(kRed+1);
 
             gStyle->SetOptStat(1101);
@@ -61,15 +69,14 @@ void fit_histo()
             if(i*5+j+1<10)can->cd(i*5+j+1);
             //gPad->SetLogy();
             hDeltapT[i][j]->Fit(name, "REMQN+");
-            hDeltapT[i][j]->Fit(name, "REMQN+");
             hDeltapT[i][j]->Fit(name, "REMQ");
-            hDeltapT[i][j]->GetXaxis()->SetRangeUser(mean-3*RMS, mean+3*RMS);
+            hDeltapT[i][j]->GetXaxis()->SetRangeUser(mean-6*RMS, mean+6*RMS);
             hDeltapT[i][j]->GetXaxis()->SetTitle("#Deltap_{T}/p_{T}");
             hDeltapT[i][j]->GetXaxis()->SetLabelSize(0.04);
             hDeltapT[i][j]->GetYaxis()->SetLabelSize(0.04);
 
             i_can[i][j]   ->cd();
-            hDeltapT[i][j]->Draw();
+            hDeltapT[i][j]->Draw("E1");
             cbfit[i][j]   ->Draw("same");
             i_can[i][j]   ->SaveAs(name.ReplaceAll(".", "_")+".pdf");
         }
@@ -80,7 +87,6 @@ void fit_histo()
 Double_t DoubleCrystalBallFunction(Double_t *xx, Double_t *par) {
     // variable x
     Double_t x = xx[0];
-    
     // parameters alpha, n, x0, sigma
     Double_t A = par[0];
     Double_t alpha1 = par[1];
