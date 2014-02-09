@@ -19,7 +19,7 @@ void fit_histo()
     //gROOT->ProcessLine(".L DSComp.C");
     TString histoname;
     TH1F *hDeltapT[8][5];
-	TFile *f = new TFile("Delta_pT_histograms_legends.root");
+	TFile *f = new TFile("Delta_pT_histograms.root");
 	TCanvas *i_can[8][5];
     TString name;
     float pTbins[]  = {30., 103., 206., 309., 413., 515., 618., 721., 1237.};
