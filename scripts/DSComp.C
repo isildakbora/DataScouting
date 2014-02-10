@@ -46,6 +46,7 @@ void DSComp::Loop()
     const Int_t   n_etaBins = sizeof(etaBins)/sizeof(float)-1;
     TString histoname;
     TH1F *hDeltapT[8][5];
+    TH1F *hDeltapMjj[8][5];
     TH1F *hdspileupCorr[8][5];
     TH1F *hdsJECL2L3Res[8][5];
     TH1F *hrecoJEC[8][5];
@@ -61,6 +62,9 @@ void DSComp::Loop()
             histoname = "Delta_pT_"+TString::Format("%.0f",pTbins[i])+"_"+TString::Format("%.0f",pTbins[i+1])+"_eta_"+TString::Format("%2.1f",j*0.5)+"_"+TString::Format("%2.1f",(j+1)*0.5);
             hDeltapT[i][j]= new TH1F(histoname, histoname, 1200, -1.2, 1.2);
             hDeltapT[i][j]->Sumw2();
+
+            hDeltapMjj[i][j]= new TH1F(histoname+"Mjj", histoname+"Mjj", 1200, -1.2, 1.2);
+            hDeltapMjj[i][j]->Sumw2();
 
             histoname = "dspileopCorr"+TString::Format("%.0f",pTbins[i])+"_"+TString::Format("%.0f",pTbins[i+1])+"_eta_"+TString::Format("%2.1f",j*0.5)+"_"+TString::Format("%2.1f",(j+1)*0.5);
             hdspileupCorr[i][j]= new TH1F(histoname, histoname, 1000, 0, 10);
@@ -80,7 +84,7 @@ void DSComp::Loop()
     float maxEtaSepThreshold = 2.0;
     
    // Tree Loop
-   for (Long64_t jentry=0; jentry<nentries/50; jentry++)
+   for (Long64_t jentry=0; jentry<nentries/100; jentry++)
    {
       Long64_t ientry = LoadTree(jentry);
       if (ientry < 0) break;
@@ -136,11 +140,32 @@ void DSComp::Loop()
 
         // Filters //
 
+      // Dijet mass difference
+      int , pTbin, etabin;
+      matchindex0 = dsJetMatchIndex[0];
+      matchindex1 = dsJetMatchIndex[1];
+      TLorentzVector dsJet1, dsJet2, recoJet1, recoJet2;
+      Double_t dsMjj, recoMjj;
+      if(matchindex0 >=0 && matchindex1 >=0)
+      {
+        dsJet1.SetPtEtaPhiE(dsJetPt[0], dsJetEta[0], dsJetPhi[0], dsJetE[0]);
+        dsJet2.SetPtEtaPhiE(dsJetPt[1], dsJetEta[1], dsJetPhi[1], dsJetE[1]);
+        recoJet1.SetPtEtaPhiE(recoJetPt[matchindex0], recoJetEta[matchindex0], recoJetPhi[matchindex0], recoJetE[matchindex0]);
+        recoJet2.SetPtEtaPhiE(recoJetPt[matchindex1], recoJetEta[matchindex1], recoJetPhi[matchindex1], recoJetE[matchindex1]);
+        
+        dsMjj   = (dsJet1+dsJet2).M();
+        recoMjj = (recoJet1+recoJet2).M();
+
+        pTbin     = Get_ij(pTbins, n_pTbins, etaBins, n_etaBins, dsPt,dsEta).first;
+        etabin    = Get_ij(pTbins, n_pTbins, etaBins, n_etaBins, dsPt,dsEta).second;
+        hDeltapMjj[pTbin][etabin]->Fill((dsMjj-recoMjj)/recoMjj);
+      }
+
        // Jet Loop//
        for(Int_t i=0; i< nDSJets; i++)
        {
-           float frac_diff, dsPt, recoPt, dsEta, recoEta, dsPhi, recoPhi, dsMjj, recoMjj;
-           int matchindex, pTbin, etabin;
+           Double_t frac_diff, dsPt, recoPt, dsEta, recoEta, dsPhi, recoPhi;
+           int matchindex;
            
            if( nDSJets<35)
            {
@@ -191,10 +216,12 @@ void DSComp::Loop()
         {
             name = "Delta_pT_"+TString::Format("%.0f",pTbins[i])+"_"+TString::Format("%.0f",pTbins[i+1])+"_eta_"+TString::Format("%2.1f",j*0.5)+"_"+TString::Format("%2.1f",(j+1)*0.5);
             
-            hDeltapT[i][j]->Scale(1./hDeltapT[i][j]->GetEntries());
+            hDeltapT[i][j]  ->Scale(1./hDeltapT[i][j]->GetEntries());
+            hDeltapMjj[i][j]->Scale(1./hDeltapMjj[i][j]->GetEntries());
             f->cd();
             
             hDeltapT[i][j]      ->Write();
+            hDeltapMjj[i][j]    ->Write();
             hdspileupCorr[i][j] ->Write();
             hdsJECL2L3Res[i][j] ->Write();
             hrecoJEC[i][j]      ->Write();
