@@ -19,8 +19,8 @@ void fit_histo()
     //gROOT->ProcessLine(".L DSComp.C");
     TString histoname;
     TH1F *hDeltapT[8][5];
-	TFile *f = new TFile("Delta_pT_histograms.root");
-	TCanvas *i_can[8][5];
+    TFile *f = new TFile("Delta_pT_histograms.root");
+    TCanvas *i_can[8][5];
     TString name;
     float pTbins[]  = {30., 103., 206., 309., 413., 515., 618., 721., 1237.};
     const Int_t   n_pTbins  = sizeof(pTbins)/sizeof(float)-1;
@@ -35,8 +35,8 @@ void fit_histo()
             histoname      = "Delta_pT_"+TString::Format("%.0f",pTbins[i])+"_"+TString::Format("%.0f",pTbins[i+1])+"_eta_"+TString::Format("%2.1f",j*0.5)+"_"+TString::Format("%2.1f",(j+1)*0.5);
             hDeltapT[i][j] = (TH1F*)f->FindObjectAny(histoname);
             i_can[i][j] =  new TCanvas(histoname);
-            if(hDeltapT[i][j]->GetEntries()>3000)hDeltapT[i][j]->Rebin(6);
-            else hDeltapT[i][j]->Rebin(3);
+            if(hDeltapT[i][j]->GetEntries()>3000)hDeltapT[i][j]->Rebin(1);
+            else hDeltapT[i][j]->Rebin(1);
         }
         
     }
@@ -53,22 +53,28 @@ void fit_histo()
         {
             std::cout << i << "\t" << j << std::endl;
             name = "Delta_pT_"+TString::Format("%.0f",pTbins[i])+"_"+TString::Format("%.0f",pTbins[i+1])+"_eta_"+TString::Format("%2.1f",j*0.5)+"_"+TString::Format("%2.1f",(j+1)*0.5);
+           
+            gStyle->SetOptStat(1101);
 
             maxVal = hDeltapT[i][j]->GetBinContent(hDeltapT[i][j]->GetMaximumBin());
             mean   = hDeltapT[i][j]->GetMean();
             RMS    = hDeltapT[i][j]->GetRMS();
 
-            cbfit[i][j] = new TF1(name, DoubleCrystalBallFunction, mean-4*RMS, mean+4*RMS, 7);
+            cbfit[i][j] = new TF1(name, DoubleCrystalBallFunction, mean-3*RMS, mean+3*RMS, 7);
             cbfit[i][j]->SetParNames("A_{1}","#alpha_{1}","#alpha_{2}","n_{1}","n_{2}","#mu","#sigma");
             cbfit[i][j]->SetParameters(maxVal, 2., 2., 2., 2., mean, RMS);
-            //cbfit[i][j]->SetParLimits(3, 0, 10);
-            cbfit[i][j]   ->SetLineColor(kRed+1);
-
-            gStyle->SetOptStat(1101);
+            cbfit[i][j]->SetParLimits(0, 0.9*maxVal, 1.1*maxVal);
+            cbfit[i][j]->SetParLimits(1, 2., 5.);
+            cbfit[i][j]->SetParLimits(2, 2., 5.);
+            cbfit[i][j]->SetParLimits(3, 0., 10);
+            cbfit[i][j]->SetParLimits(4, 0., 10);
+            cbfit[i][j]->SetParLimits(5, 0.9*mean, 1.1*mean);
+            cbfit[i][j]->SetParLimits(6, 0.8*RMS, 1.2*RMS);
+            cbfit[i][j]->SetLineColor(kRed+1);
 
             if(i*5+j+1<10)can->cd(i*5+j+1);
             //gPad->SetLogy();
-            hDeltapT[i][j]->Fit(name, "REMQN+");
+            hDeltapT[i][j]->Fit(name, "REMQ0+");
             hDeltapT[i][j]->Fit(name, "REMQ");
             hDeltapT[i][j]->GetXaxis()->SetRangeUser(mean-6*RMS, mean+6*RMS);
             hDeltapT[i][j]->GetXaxis()->SetTitle("#Deltap_{T}/p_{T}");
@@ -102,6 +108,8 @@ Double_t DoubleCrystalBallFunction(Double_t *xx, Double_t *par) {
    double A2 = pow(n2/fabs(alpha2),n2)*exp(-alpha2*alpha2/2);
    double B1 = n1/fabs(alpha1)-fabs(alpha1);
    double B2 = n2/fabs(alpha2)-fabs(alpha2);
+
+   
 
    if((x-mean)/width>-alpha1 && (x-mean)/width<alpha2)
    {
