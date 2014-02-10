@@ -85,27 +85,39 @@ void fit_histo()
 }
 
 Double_t DoubleCrystalBallFunction(Double_t *xx, Double_t *par) {
-    // variable x
-    Double_t x = xx[0];
-    // parameters alpha, n, x0, sigma
-    Double_t A = par[0];
-    Double_t alpha1 = par[1];
-    Double_t alpha2 = par[2];
-    Double_t n1 = par[3];
-    Double_t n2 = par[4];
-    Double_t x0 = par[5];
-    Double_t sigma = par[6];
-
-    Double_t absAlpha1 = fabs((Double_t)alpha1);
-    Double_t absAlpha2 = fabs((Double_t)alpha2);
     
-    Double_t t = (x-x0)/sigma;
-    Double_t a1 = pow(n1/absAlpha1,n1)*exp(-0.5*absAlpha1*absAlpha1);
-    Double_t b1 = n1/absAlpha1 - absAlpha1; 
-    Double_t a2 = pow(n2/absAlpha2,n2)*exp(-0.5*absAlpha2*absAlpha2);
-    Double_t b2 = n2/absAlpha2 - absAlpha2;
+   // variable x
+   Double_t x = xx[0];
+    
+   // parameters alpha, n, x0, sigma
+   Double_t A      = par[0];
+   Double_t alpha1 = par[1];
+   Double_t alpha2 = par[2];
+   Double_t n1     = par[3];
+   Double_t n2     = par[4];
+   Double_t mean   = par[5];
+   Double_t width  = par[6];
 
-    if (t < -alpha1)        return A*a1*TMath::Power(b1 - t, -n1);
-    else if (t > alpha2)    return A*a2*TMath::Power(b2 - t, -n2);
-    else                    return A*exp(-0.5*t*t);
+   double A1 = pow(n1/fabs(alpha1),n1)*exp(-alpha1*alpha1/2);
+   double A2 = pow(n2/fabs(alpha2),n2)*exp(-alpha2*alpha2/2);
+   double B1 = n1/fabs(alpha1)-fabs(alpha1);
+   double B2 = n2/fabs(alpha2)-fabs(alpha2);
+
+   if((x-mean)/width>-alpha1 && (x-mean)/width<alpha2)
+   {
+     return A*exp(-(x-mean)*(x-mean)/(2*width*width));
+   }
+   else if((x-mean)/width<-alpha1)
+   {
+     return A*A1*pow(B1-(x-mean)/width,-n1);
+   }
+   else if((x-mean)/width>alpha2)
+   {
+     return A*A2*pow(B2+(x-mean)/width,-n2);
+   }
+   else
+   {
+     cout << "ERROR evaluating range..." << endl;
+     return 99;
+   }
 }
