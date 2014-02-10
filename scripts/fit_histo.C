@@ -35,7 +35,7 @@ void fit_histo()
             histoname      = "Delta_pT_"+TString::Format("%.0f",pTbins[i])+"_"+TString::Format("%.0f",pTbins[i+1])+"_eta_"+TString::Format("%2.1f",j*0.5)+"_"+TString::Format("%2.1f",(j+1)*0.5);
             hDeltapT[i][j] = (TH1F*)f->FindObjectAny(histoname);
             i_can[i][j] =  new TCanvas(histoname);
-            if(hDeltapT[i][j]->GetEntries()>3000)hDeltapT[i][j]->Rebin(1);
+            if(hDeltapT[i][j]->GetEntries()>3000)hDeltapT[i][j]->Rebin(2);
             else hDeltapT[i][j]->Rebin(1);
         }
         
@@ -60,14 +60,14 @@ void fit_histo()
             mean   = hDeltapT[i][j]->GetMean();
             RMS    = hDeltapT[i][j]->GetRMS();
 
-            cbfit[i][j] = new TF1(name, DoubleCrystalBallFunction, mean-3*RMS, mean+3*RMS, 7);
+            cbfit[i][j] = new TF1(name, DoubleCrystalBallFunction, mean-4*RMS, mean+4*RMS, 7);
             cbfit[i][j]->SetParNames("A_{1}","#alpha_{1}","#alpha_{2}","n_{1}","n_{2}","#mu","#sigma");
             cbfit[i][j]->SetParameters(maxVal, 2., 2., 2., 2., mean, RMS);
             cbfit[i][j]->SetParLimits(0, 0.9*maxVal, 1.1*maxVal);
-            cbfit[i][j]->SetParLimits(1, 2., 5.);
-            cbfit[i][j]->SetParLimits(2, 2., 5.);
-            cbfit[i][j]->SetParLimits(3, 0., 10);
-            cbfit[i][j]->SetParLimits(4, 0., 10);
+            cbfit[i][j]->SetParLimits(1, 0., 5.);
+            cbfit[i][j]->SetParLimits(2, 0., 5.);
+            cbfit[i][j]->SetParLimits(3, 0., 20);
+            cbfit[i][j]->SetParLimits(4, 0., 20);
             cbfit[i][j]->SetParLimits(5, 0.9*mean, 1.1*mean);
             cbfit[i][j]->SetParLimits(6, 0.8*RMS, 1.2*RMS);
             cbfit[i][j]->SetLineColor(kRed+1);
