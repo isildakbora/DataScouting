@@ -19,6 +19,7 @@ void DSComp::Loop()
 
   TH1F* h_recoHLTpTdiff  = new TH1F("recoHLTpTdiff","recoHLTpTdiff",400,-1.,1.);
   TH1F* h_recoHLTEtadiff = new TH1F("recoHLTEtadiff","recoHLTEtadiff",4800,-2,2);
+  TH1F* h_recoHLTPhidiff = new TH1F("recoHLTPhidiff","recoHLTPhidiff",4800,-TMath::Pi(), TMath::Pi());
 
   char *HLT[2]  = {"HLT Pass","HLT Fail"};
   char *RECO[2] = {"RECO Pass","RECO Fail"};
@@ -58,7 +59,7 @@ void DSComp::Loop()
         for (int j=0; j<n_etaBins; ++j)
         {
             histoname = "Delta_pT_"+TString::Format("%.0f",pTbins[i])+"_"+TString::Format("%.0f",pTbins[i+1])+"_eta_"+TString::Format("%2.1f",j*0.5)+"_"+TString::Format("%2.1f",(j+1)*0.5);
-            hDeltapT[i][j]= new TH1F(histoname, histoname, 300, -1.2, 1.2);
+            hDeltapT[i][j]= new TH1F(histoname, histoname, 1200, -1.2, 1.2);
             hDeltapT[i][j]->Sumw2();
 
             histoname = "dspileopCorr"+TString::Format("%.0f",pTbins[i])+"_"+TString::Format("%.0f",pTbins[i+1])+"_eta_"+TString::Format("%2.1f",j*0.5)+"_"+TString::Format("%2.1f",(j+1)*0.5);
@@ -79,7 +80,7 @@ void DSComp::Loop()
     float maxEtaSepThreshold = 2.0;
     
    // Tree Loop
-   for (Long64_t jentry=0; jentry<nentries/1; jentry++)
+   for (Long64_t jentry=0; jentry<nentries/50; jentry++)
    {
       Long64_t ientry = LoadTree(jentry);
       if (ientry < 0) break;
@@ -93,43 +94,52 @@ void DSComp::Loop()
       //if two jets exist
       if (!((nDSJets > 1) && (nRECOJets > 1))) continue;    
 
-        int meetsMinPtThreshold = ((dsJetPt[0] > minPtThreshold) 
-                && (dsJetPt[1] > minPtThreshold) 
-                && (recoJetPt[0] > minPtThreshold) 
-                && (recoJetPt[1] > minPtThreshold));
+        //Dijet HLT Selection
+        int DeltaEtaHLT           = (fabs(dsJetEta[0]-dsJetEta[1]) < 1.3) ? 1 : 0;
+        int MaxAbsEtaThresholdHLT = ((fabs(dsJetEta[0]) < maxAbsEtaThreshold) && (fabs(dsJetEta[1]) < maxAbsEtaThreshold));
+        int MinPtThresholdHLT     = ((dsJetPt[0] > minPtThreshold) && (dsJetPt[1] > minPtThreshold));
+        int allHLTDijetSelection  = (DeltaEtaHLT && MinPtThresholdHLT && MaxAbsEtaThresholdHLT);     
 
-        int meetsMaxAbsEtaThreshold = ((fabs(dsJetEta[0]) < maxAbsEtaThreshold) 
-                && (fabs(dsJetEta[1]) < maxAbsEtaThreshold)
-                && (fabs(recoJetEta[0]) < maxAbsEtaThreshold)
-                && (fabs(recoJetEta[1]) < maxAbsEtaThreshold));
+        //Dijet RECO Selection
+        int matchindex0 = dsJetMatchIndex[0];
+        int matchindex1 = dsJetMatchIndex[1];
+        if(matchindex0 >=0 && matchindex1 >=0)
+        {
+          int DeltaEtaRECO           = (fabs(recoJetEta[matchindex0]-recoJetEta[matchindex1]) < 1.3) ? 1 : 0;
+          int MinPtThresholdRECO     = ((recoJetPt[matchindex0] > minPtThreshold) && (recoJetPt[matchindex1] > minPtThreshold));
+          int MaxAbsEtaThresholdRECO = ((fabs(recoJetEta[matchindex0]) < maxAbsEtaThreshold) && (fabs(recoJetEta[matchindex1]) < maxAbsEtaThreshold));
+          int allRECODijetSelection  = (DeltaEtaRECO && MinPtThresholdRECO && MaxAbsEtaThresholdRECO);  
+        }
+        else int allRECODijetSelection = 0;
+        //RECO Event Filters
+        int DeltaPhiRECO  = (fabs(recoJetPhi[0]-recoJetPhi[1]) > TMath::Pi()/3) ? 1 : 0;
+        int RecoFlagsGood = (DeltaPhiRECO && HBHENoiseFilterResultFlag && hcalLaserEventFilterFlag && eeBadScFilterFlag);
 
-        int RecoFlagsGood = (HBHENoiseFilterResultFlag 
-                && hcalLaserEventFilterFlag && eeBadScFilterFlag);
-
-        int JetIDFlag           = (dsJetFracHad[0] < 0.95 && dsJetFracEm[0] < 0.95 && dsJetFracHad[1] < 0.95 && dsJetFracEm[1] < 0.95) ? 1 : 0;
-        int DeltaPhiFlag        = (fabs(dsJetPhi[0]-dsJetPhi[1]) > TMath::Pi()/3) ? 1 : 0;
+        //HLT Event Filters
+        int DeltaPhiHLT         = (fabs(dsJetPhi[0]-dsJetPhi[1]) > TMath::Pi()/3) ? 1 : 0;
         int MET_vs_METCleanFlag = (dsMetPt != dsMetCleanPt) ? 0 : 1;
-        
-        int HLTFlagsGood        = (JetIDFlag && DeltaPhiFlag && MET_vs_METCleanFlag);
+        int JetIDHLT            = (dsJetFracHad[0] < 0.95 && dsJetFracHad[1] < 0.95 && dsJetFracEm[0] < 0.95 && dsJetFracEm[1] < 0.95) ? 1 : 0;
+        int HLTFlagsGood        = (JetIDHLT && MET_vs_METCleanFlag && DeltaPhiHLT);
 
-        if(HLTFlagsGood && RecoFlagsGood)        HLT_RECO_Table->Fill(0,0);
-        else if(!HLTFlagsGood && !RecoFlagsGood) HLT_RECO_Table->Fill(1,1);
-        else if(!HLTFlagsGood && RecoFlagsGood)  HLT_RECO_Table->Fill(1,0);
-        else (HLTFlagsGood && !RecoFlagsGood)    HLT_RECO_Table->Fill(0,1);
+        int keepEvent = (allHLTDijetSelection && allRECODijetSelection);
 
-        int keepEvent = (meetsMinPtThreshold && meetsMaxAbsEtaThreshold && RecoFlagsGood && JetIDFlag && DeltaPhiFlag && MET_vs_METCleanFlag);
-
-        //cout << "hcalLaserEventFilterFlag:" << hcalLaserEventFilterFlag  << endl;
         if (!keepEvent)
         {
           continue; 
         }
+
+        // Fill the HLT vs RECO Filter Table
+        if(HLTFlagsGood && RecoFlagsGood)        h_HLT_RECO_Table->Fill(0,0);
+        else if(!HLTFlagsGood && !RecoFlagsGood) h_HLT_RECO_Table->Fill(1,1);
+        else if(!HLTFlagsGood && RecoFlagsGood)  h_HLT_RECO_Table->Fill(1,0);
+        else                                     h_HLT_RECO_Table->Fill(0,1);
+
         // Filters //
 
        // Jet Loop//
        for(Int_t i=0; i< nDSJets; i++)
        {
-           float frac_diff, dsPt, recoPt, dsEta;
+           float frac_diff, dsPt, recoPt, dsEta, recoEta, dsPhi, recoPhi, dsMjj, recoMjj;
            int matchindex, pTbin, etabin;
            
            if( nDSJets<35)
@@ -137,17 +147,26 @@ void DSComp::Loop()
             matchindex = dsJetMatchIndex[i];
             if( matchindex >= 0)
             {
-              
+              dsPt      = dsJetPt[i];
+              recoPt    = recoJetPt[matchindex];
+              dsEta     = dsJetEta[i];
+              recoEta   = recoJetEta[matchindex];
+              dsPhi     = dsJetPhi[i];
+              recoPhi   = recoJetPhi[matchindex];
+
+              frac_diff = (dsPt-recoPt)/recoPt;
+
               h_dsJetRawE   -> Fill(dsJetRawE[i]);
               h_recoJetRawE -> Fill(recoJetRawE[i]);
 
               h_dsJetE      -> Fill(dsJetE[i]);
               h_recoJetE    -> Fill(recoJetE[i]);
 
-              dsPt      = dsJetPt[i];
-              recoPt    = recoJetPt[matchindex];
-              dsEta     = dsJetEta[i];
-              frac_diff = (dsPt-recoPt)/recoPt;
+              h_recoHLTEtadiff -> Fill((dsEta - recoEta)/recoEta);
+              h_recoHLTPhidiff -> Fill((dsPhi - recoPhi)/recoPhi);
+              h_recoHLTpTdiff  -> Fill(frac_diff);
+
+
               pTbin     = Get_ij(pTbins, n_pTbins, etaBins, n_etaBins, dsPt,dsEta).first;
               etabin    = Get_ij(pTbins, n_pTbins, etaBins, n_etaBins, dsPt,dsEta).second;
 
@@ -163,11 +182,6 @@ void DSComp::Loop()
    }
    // Tree Loop
 
-
-    //Set the canvases, perform the fits and draw the histograms
-    TCanvas *can = new TCanvas("DSComparison","DSComparison",2240,1400);
-    TCanvas *i_can[8][5];
-    can->Divide(8,5);
     TString name;
 
     Double_t maxVal, mean, RMS;
@@ -177,52 +191,7 @@ void DSComp::Loop()
         {
             name = "Delta_pT_"+TString::Format("%.0f",pTbins[i])+"_"+TString::Format("%.0f",pTbins[i+1])+"_eta_"+TString::Format("%2.1f",j*0.5)+"_"+TString::Format("%2.1f",(j+1)*0.5);
             
-            i_can[i][j] =  new TCanvas(name);
             hDeltapT[i][j]->Scale(1./hDeltapT[i][j]->GetEntries());
-
-            
-
-            maxVal = hDeltapT[i][j]->GetBinContent(hDeltapT[i][j]->GetMaximumBin());
-            mean   = hDeltapT[i][j]->GetMean();
-            RMS    = hDeltapT[i][j]->GetRMS();
-
-            cbfit[i][j] = new TF1(name, CrystalBallFunctionL, mean-1.5*RMS, mean+1.5*RMS, 5);
-            //cbfit[i][j]->SetParameters(maxVal/2, -1.6, 4, mean, RMS, maxVal/2, -1.6, 4, mean, RMS);
-            cbfit[i][j]->SetParNames("A_{1}","#alpha","n","#mu","#sigma");
-            //cbfit[i][j]->SetParNames("A_{1}","#alpha_{1}","n_{1}","#mu_{1}","#sigma_{1}","A_{2}","#alpha_{2}","n_{2}","#mu_{2}","#sigma_{2}");
-            //cbfit[i][j]->SetParNames("N","A_{L}","A_{R}","#alpha_{L}","#alpha_{R}","n_{L}","n_{R}","#mu","#sigma");
-            cbfit[i][j]->SetParameters(maxVal, -4e+5, -1.e+5, mean, RMS);
-            
-            gStyle->SetOptStat(1101);
-            can->cd(i*5+j+1);
-            hDeltapT[i][j]->Fit(name, "REMQ+");
-            hDeltapT[i][j]->Fit(name, "REMQ");
-            hDeltapT[i][j]->GetXaxis()->SetRangeUser(mean-2*RMS,mean+2*RMS);
-
-            /*aux_xBal[i][j] = new TF1("CrystalBallFunctionL", CrystalBallFunctionL, mean-2*RMS, mean+2*RMS, 5);
-            aux_gaus[i][j] = new TF1("CrystalBallFunctionR", CrystalBallFunctionR, mean-2*RMS, mean+2*RMS, 5);
-
-            aux_xBal[i][j]->SetParNames("A_{1}","#alpha_{1}","n_{1}","#mu_{1}","#sigma_{1}");
-            aux_gaus[i][j]->SetParNames("A_{2}","#alpha_{2}","n_{2}","#mu_{2}","#sigma_{2}");
-
-            Double_t par[10];
-
-            cbfit[i][j]->GetParameters(par);
-            aux_xBal[i][j]->SetParameters(par);
-            aux_gaus[i][j]->SetParameters(&par[5]);
-            
-
-            aux_xBal[i][j]->SetLineColor(kBlue);
-            aux_gaus[i][j]->SetLineColor(kRed);
-            cbfit[i][j]   ->SetLineColor(kBlack);*/
-
-            i_can[i][j]   ->cd();
-            hDeltapT[i][j]->Draw();
-            cbfit[i][j]   ->Draw("same");
-            //aux_gaus[i][j]->Draw("same");
-            //aux_xBal[i][j]->Draw("same");
-            i_can[i][j]   ->Write();
-
             f->cd();
             
             hDeltapT[i][j]      ->Write();
@@ -233,7 +202,6 @@ void DSComp::Loop()
            
     }
     h_HLT_RECO_Table ->Write();
-    can->Write();
 
     TF1 *func = new TF1("TripleGaussian_fit",Total,-0.8,0.8,9);
     func->SetParameter(0,2e+5);
@@ -321,50 +289,50 @@ Double_t CrystalBallFunctionR(Double_t *xx, Double_t *par) {
 
 Double_t DoubleCrystalBallFunction(Double_t *xx, Double_t *par) {
     
-    // variable x
-    Double_t x = xx[0];
+   // variable x
+   Double_t x = xx[0];
     
-    // parameters alpha, n, x0, sigma
-    Double_t N = par[0];
-    Double_t AR = par[1];
-    Double_t AL = par[2];
+   // parameters alpha, n, x0, sigma
+   Double_t A      = par[0];
+   Double_t alpha1 = par[1];
+   Double_t alpha2 = par[2];
+   Double_t n1     = par[3];
+   Double_t n2     = par[4];
+   Double_t mean   = par[5];
+   Double_t width  = par[6];
 
-    Double_t alphaR = par[3];
-    Double_t alphaL = par[4];
+   double A1 = pow(n1/fabs(alpha1),n1)*exp(-alpha1*alpha1/2);
+   double A2 = pow(n2/fabs(alpha2),n2)*exp(-alpha2*alpha2/2);
+   double B1 = n1/fabs(alpha1)-fabs(alpha1);
+   double B2 = n2/fabs(alpha2)-fabs(alpha2);
 
-    Double_t nR = par[5];
-    Double_t nL = par[6];
-
-    Double_t x0 = par[7];
-    Double_t sigma = par[8];
-    
-    Double_t t = (x-x0)/sigma;
-
-    Double_t absAlphaR = fabs((Double_t)alphaR);
-    Double_t absAlphaL = fabs((Double_t)alphaL);
-
-    if (t >= -absAlphaR) 
-    {
-      Double_t aR = AR*TMath::Power(nR/absAlphaR,nR)*exp(-0.5*absAlphaR*absAlphaR);
-      Double_t bR = nR/absAlphaR - absAlphaR; 
-      return N*aR/TMath::Power(bR - t, nR);
-    }
-    else if(t < -absAlphaR && t >= -absAlphaL)
-    {
-      Double_t aL = AL*TMath::Power(nL/absAlphaL,nL)*exp(-0.5*absAlphaL*absAlphaL);
-      Double_t bL = nL/absAlphaL - absAlphaL; 
-      return aL/TMath::Power(bL - t, nL);  
-    }
-    else 
-    {
-      N*exp(-0.5*t*t);
-    }
+   if((x-mean)/width>-alpha1 && (x-mean)/width<alpha2)
+   {
+     return A*exp(-(x-mean)*(x-mean)/(2*width*width));
+   }
+   else if((x-mean)/width<-alpha1)
+   {
+     return A*A1*pow(B1-(x-mean)/width,-n1);
+   }
+   else if((x-mean)/width>alpha2)
+   {
+     return A*A2*pow(B2+(x-mean)/width,-n2);
+   }
+   else
+   {
+     cout << "ERROR evaluating range..." << endl;
+     return 99;
+   }
 }
 
-Double_t CrystalBallFunctionL_plus_CrystalBallFunctionL(Double_t *x, Double_t *par)
+Double_t CrystalBallFunctionL_plus_CrystalBallFunctionR(Double_t *x, Double_t *par)
 {
-   Double_t y = CrystalBallFunctionL(x,par)+CrystalBallFunctionR(x,&par[5]);
-   return y;
+  par[0]=par[5];
+  par[3]=par[8];
+  par[4]=par[9];
+
+  Double_t y = 0.5*(CrystalBallFunctionL(x,par)+CrystalBallFunctionR(x,&par[5]));
+  return y;
 }
 
 Double_t G1(Double_t *x, Double_t *par)
@@ -445,4 +413,47 @@ std::pair <int,int> Get_ij(float array1[], int length1, float array2[], int leng
     return std::make_pair(i,j);
 }
 
+Double_t CrystalBallFunction(Double_t *xx, Double_t *par) {
+    
+    // variable x
+    Double_t x = xx[0];
+    
+    // parameters alpha, n, x0, sigma
+    Double_t A = par[0];
+    Double_t alpha = par[1];
+    Double_t n = par[2];
+    Double_t x0 = par[3];
+    Double_t sigma = par[4];
+    
+    Double_t t = (x-x0)/sigma;
+    if (alpha < 0) t = -t;
+
+    Double_t absAlpha = fabs((Double_t)alpha);
+
+    if (t >= -absAlpha) {
+        return A*exp(-0.5*t*t);
+    }
+    else {
+        Double_t a = A*TMath::Power(n/absAlpha,n)*exp(-0.5*absAlpha*absAlpha);
+        Double_t b = n/absAlpha - absAlpha; 
+
+        return a/TMath::Power(b - t, n);
+    }
+}
+
+Double_t Gaussian(Double_t *x, Double_t *par)
+{
+   Double_t arg = 0;
+   if (par[2]) arg = (x[0] - par[1])/par[2];
+
+   Double_t y = par[0]*TMath::Exp(-0.5*arg*arg);
+   return y;
+}
+
+
+Double_t CrystalBallFunction_plus_Gaussian(Double_t *x, Double_t *par)
+{
+   Double_t y = CrystalBallFunction(x,par) + Gaussian(x,&par[5]);
+   return y;
+}
 
