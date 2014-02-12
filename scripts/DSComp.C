@@ -247,26 +247,8 @@ void DSComp::Loop()
         }  
            
     }
-    h_HLT_RECO_Table ->Write();
+  h_HLT_RECO_Table ->Write();
 
-    TF1 *func = new TF1("TripleGaussian_fit",Total,-0.8,0.8,9);
-    func->SetParameter(0,2e+5);
-    func->SetParameter(1,-0.02);
-    func->SetParameter(2,0.1);
-    
-    func->SetParameter(3,1000);
-    func->SetParameter(4,-0.02);
-    func->SetParameter(5,0.5);
-    
-    func->SetParameter(6,1000);
-    func->SetParameter(7,-0.02);
-    func->SetParameter(8,0.5);
-   //h_recoHLTpTdiff -> GetXaxis()->SetTitle("#Delta p_{T}/p_{T}");
-   //h_recoHLTpTdiff -> GetXaxis()->SetRangeUser(-0.4,0.4); 
-   
-
-   //TString fit_func = "CB_fit";
-   //h_recoHLTpTdiff->Fit(fit_func, "RMQ+");*/
   f -> cd();
   h_dsJetRawE   -> Write();
   h_recoJetRawE -> Write();
