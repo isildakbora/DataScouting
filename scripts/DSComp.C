@@ -7,7 +7,12 @@
 #include <string>
 void DSComp::Loop()
 {
-  TFile *f = new TFile("Delta_pT_histograms_legends.root", "RECREATE");
+  //create a tree file 
+  TFile *mjjtree = new TFile("dijet.root","recreate");
+
+  TTree *DijetMassTree = new TTree("DijetMassTree","DijetMassTree");
+
+  TFile *f = new TFile("Delta_pT_histograms.root", "RECREATE");
 
   TH1F* h_recoJetPt      = new TH1F("RecoJetpT","Reco Jet pT",498,20,5000);
 
@@ -20,6 +25,39 @@ void DSComp::Loop()
   TH1F* h_recoHLTpTdiff  = new TH1F("recoHLTpTdiff","recoHLTpTdiff",400,-1.,1.);
   TH1F* h_recoHLTEtadiff = new TH1F("recoHLTEtadiff","recoHLTEtadiff",4800,-2,2);
   TH1F* h_recoHLTPhidiff = new TH1F("recoHLTPhidiff","recoHLTPhidiff",4800,-TMath::Pi(), TMath::Pi());
+
+
+  Float_t recoMjj, dsMjj, dsJetPt0, dsJetE0, dsJetE1, dsJetPt1, dsJetEta0, dsJetEta1, dsJetPhi0, dsJetPhi1, recoJetPt0, recoJetPt1, recoJetE0, recoJetE1, recoJetEta0, recoJetEta1, recoJetPhi0, recoJetPhi1;
+
+  DijetMassTree->Branch("runNo",&runNo,"runNo/I");   
+  DijetMassTree->Branch("evtNo",&evtNo,"evtNo/I");
+  DijetMassTree->Branch("dsMjj",&dsMjj,"dsMjj/F");
+  DijetMassTree->Branch("recoMjj",&recoMjj,"recoMjj/F");
+
+
+  DijetMassTree->Branch("dsJetEta0",&dsJetEta0,"dsJetEta0/F");
+  DijetMassTree->Branch("dsJetEta1",&dsJetEta1,"dsJetEta1/F");
+
+  DijetMassTree->Branch("dsJetPhi0",&dsJetPhi0,"dsJetPhi0/F");
+  DijetMassTree->Branch("dsJetPhi1",&dsJetPhi1,"dsJetPhi1/F");
+
+  DijetMassTree->Branch("dsJetPt0",&dsJetPt0,"dsJetPt0/F");
+  DijetMassTree->Branch("dsJetPt1",&dsJetPt1,"dsJetPt1/F");
+
+  DijetMassTree->Branch("dsJetE0",&dsJetE0,"dsJetE0/F");
+  DijetMassTree->Branch("dsJetE1",&dsJetE1,"dsJetE1/F");
+
+  DijetMassTree->Branch("recoJetEta0",&recoJetEta0,"recoJetEta0/F");
+  DijetMassTree->Branch("recoJetEta1",&recoJetEta1,"recoJetEta1/F");
+  
+  DijetMassTree->Branch("recoJetPhi0",&recoJetEta0,"recoJetPhi0/F");
+  DijetMassTree->Branch("recoJetPhi1",&recoJetPhi1,"recoJetPhi1/F");
+
+  DijetMassTree->Branch("recoJetPt0",&recoJetPt0,"recoJetPt0/F");
+  DijetMassTree->Branch("recoJetPt1",&recoJetPt1,"recoJetPt1/F");
+
+  DijetMassTree->Branch("recoJetE0",&recoJetE0,"recoJetE0/F");
+  DijetMassTree->Branch("recoJetE1",&recoJetE1,"recoJetE1/F");
 
   char *HLT[2]  = {"HLT Pass","HLT Fail"};
   char *RECO[2] = {"RECO Pass","RECO Fail"};
@@ -59,23 +97,22 @@ void DSComp::Loop()
     {
         for (int j=0; j<n_etaBins; ++j)
         {
-            histoname = "Delta_pT_"+TString::Format("%.0f",pTbins[i])+"_"+TString::Format("%.0f",pTbins[i+1])+"_eta_"+TString::Format("%2.1f",j*0.5)+"_"+TString::Format("%2.1f",(j+1)*0.5);
-            hDeltapT[i][j]= new TH1F(histoname, histoname, 1200, -1.2, 1.2);
-            hDeltapT[i][j]->Sumw2();
+          histoname = "Delta_pT_"+TString::Format("%.0f",pTbins[i])+"_"+TString::Format("%.0f",pTbins[i+1])+"_eta_"+TString::Format("%2.1f",j*0.5)+"_"+TString::Format("%2.1f",(j+1)*0.5);
+          hDeltapT[i][j]= new TH1F(histoname, histoname, 1200, -1.2, 1.2);
+          hDeltapT[i][j]->Sumw2();
 
-            hDeltapMjj[i][j]= new TH1F(histoname+"Mjj", histoname+"Mjj", 1200, -1.2, 1.2);
-            hDeltapMjj[i][j]->Sumw2();
+          hDeltapMjj[i][j]= new TH1F(histoname+"Mjj", histoname+"Mjj", 1200, -1.2, 1.2);
+          hDeltapMjj[i][j]->Sumw2();
 
-            histoname = "dspileopCorr"+TString::Format("%.0f",pTbins[i])+"_"+TString::Format("%.0f",pTbins[i+1])+"_eta_"+TString::Format("%2.1f",j*0.5)+"_"+TString::Format("%2.1f",(j+1)*0.5);
-            hdspileupCorr[i][j]= new TH1F(histoname, histoname, 1000, 0, 10);
+          histoname = "dspileopCorr"+TString::Format("%.0f",pTbins[i])+"_"+TString::Format("%.0f",pTbins[i+1])+"_eta_"+TString::Format("%2.1f",j*0.5)+"_"+TString::Format("%2.1f",(j+1)*0.5);
+          hdspileupCorr[i][j]= new TH1F(histoname, histoname, 1000, 0, 10);
 
-            histoname = "dsJECL2L3Res"+TString::Format("%.0f",pTbins[i])+"_"+TString::Format("%.0f",pTbins[i+1])+"_eta_"+TString::Format("%2.1f",j*0.5)+"_"+TString::Format("%2.1f",(j+1)*0.5);
-            hdsJECL2L3Res[i][j]= new TH1F(histoname, histoname, 1000, 0, 10);
+          histoname = "dsJECL2L3Res"+TString::Format("%.0f",pTbins[i])+"_"+TString::Format("%.0f",pTbins[i+1])+"_eta_"+TString::Format("%2.1f",j*0.5)+"_"+TString::Format("%2.1f",(j+1)*0.5);
+          hdsJECL2L3Res[i][j]= new TH1F(histoname, histoname, 1000, 0, 10);
 
-            histoname = "recoJEC"+TString::Format("%.0f",pTbins[i])+"_"+TString::Format("%.0f",pTbins[i+1])+"_eta_"+TString::Format("%2.1f",j*0.5)+"_"+TString::Format("%2.1f",(j+1)*0.5);
-            hrecoJEC[i][j]= new TH1F(histoname, histoname, 1000, 0, 10);
-        }
-        
+          histoname = "recoJEC"+TString::Format("%.0f",pTbins[i])+"_"+TString::Format("%.0f",pTbins[i+1])+"_eta_"+TString::Format("%2.1f",j*0.5)+"_"+TString::Format("%2.1f",(j+1)*0.5);
+          hrecoJEC[i][j]= new TH1F(histoname, histoname, 1000, 0, 10);
+        }  
     }
 
    // Set threshold values at which events are excluded
@@ -86,14 +123,14 @@ void DSComp::Loop()
    // Tree Loop
    int decade = 0;
    double progress = 0;
-   for (Long64_t jentry=0; jentry<nentries; jentry++)
+   for (Long64_t jentry=0; jentry<nentries/1; jentry++)
    {
       Long64_t ientry = LoadTree(jentry);
       if (ientry < 0) break;
       nb = fChain->GetEntry(jentry);   nbytes += nb;
 
       //----------- progress report -------------
-      double progress = 100.0*jentry/(1.0*nentries);
+      double progress = 100.*jentry/nentries;
       int k = TMath::FloorNint(progress);
       std::cout << "\r" << progress << "% completed: ";
       //std::cout << "[" << std::string(k, '|') << std::string(99-k, ' ') << "]";
@@ -104,313 +141,177 @@ void DSComp::Loop()
       //if two jets exist
       if (!((nDSJets > 1) && (nRECOJets > 1))) continue;    
 
-        //Dijet HLT Selection
-        int DeltaEtaHLT           = (fabs(dsJetEta[0]-dsJetEta[1]) < 1.3) ? 1 : 0;
-        int MaxAbsEtaThresholdHLT = ((fabs(dsJetEta[0]) < maxAbsEtaThreshold) && (fabs(dsJetEta[1]) < maxAbsEtaThreshold));
-        int MinPtThresholdHLT     = ((dsJetPt[0] > minPtThreshold) && (dsJetPt[1] > minPtThreshold));
-        int allHLTDijetSelection  = (DeltaEtaHLT && MinPtThresholdHLT && MaxAbsEtaThresholdHLT);     
+      //Dijet HLT Selection
+      int DeltaEtaHLT           = (fabs(dsJetEta[0]-dsJetEta[1]) < 1.3) ? 1 : 0;
+      int MaxAbsEtaThresholdHLT = ((fabs(dsJetEta[0]) < maxAbsEtaThreshold) && (fabs(dsJetEta[1]) < maxAbsEtaThreshold));
+      int MinPtThresholdHLT     = ((dsJetPt[0] > minPtThreshold) && (dsJetPt[1] > minPtThreshold));
+      int allHLTDijetSelection  = (DeltaEtaHLT && MinPtThresholdHLT && MaxAbsEtaThresholdHLT);     
 
-        //Dijet RECO Selection
-        int matchindex0 = dsJetMatchIndex[0];
-        int matchindex1 = dsJetMatchIndex[1];
-        int allRECODijetSelection;
-        if(matchindex0 >=0 && matchindex1 >=0)
-        {
-          int DeltaEtaRECO           = (fabs(recoJetEta[matchindex0]-recoJetEta[matchindex1]) < 1.3) ? 1 : 0;
-          int MinPtThresholdRECO     = ((recoJetPt[matchindex0] > minPtThreshold) && (recoJetPt[matchindex1] > minPtThreshold));
-          int MaxAbsEtaThresholdRECO = ((fabs(recoJetEta[matchindex0]) < maxAbsEtaThreshold) && (fabs(recoJetEta[matchindex1]) < maxAbsEtaThreshold));
-          allRECODijetSelection= (DeltaEtaRECO && MinPtThresholdRECO && MaxAbsEtaThresholdRECO);  
-        }
-        else  allRECODijetSelection = 0;
-        //RECO Event Filters
-        int DeltaPhiRECO  = (fabs(recoJetPhi[0]-recoJetPhi[1]) > TMath::Pi()/3) ? 1 : 0;
-        int RecoFlagsGood = (DeltaPhiRECO && HBHENoiseFilterResultFlag && hcalLaserEventFilterFlag && eeBadScFilterFlag);
+      //Dijet RECO Selection
+      int matchindex0 = dsJetMatchIndex[0];
+      int matchindex1 = dsJetMatchIndex[1];
+      int recoJetID;
+      int allRECODijetSelection;
+      if(matchindex0 >=0 && matchindex1 >=0)
+      {
+        int DeltaEtaRECO           = (fabs(recoJetEta[matchindex0]-recoJetEta[matchindex1]) < 1.3) ? 1 : 0;
+        int MinPtThresholdRECO     = ((recoJetPt[matchindex0] > minPtThreshold) && (recoJetPt[matchindex1] > minPtThreshold));
+        int MaxAbsEtaThresholdRECO = ((fabs(recoJetEta[matchindex0]) < maxAbsEtaThreshold) && (fabs(recoJetEta[matchindex1]) < maxAbsEtaThreshold));
+        int recoJetID              = (recoJetFracHad[matchindex0] < 0.95 && recoJetFracHad[matchindex1] < 0.95 && recoJetFracEm[matchindex0] < 0.95 && recoJetFracEm[matchindex1] < 0.95) ? 1 : 0;
+        allRECODijetSelection      = (DeltaEtaRECO && MinPtThresholdRECO && MaxAbsEtaThresholdRECO);  
+      }
+      else  allRECODijetSelection = 0;
+      //RECO Event Filters
+      int DeltaPhiRECO  = (fabs(recoJetPhi[0]-recoJetPhi[1]) > TMath::Pi()/3) ? 1 : 0;
+      int RecoFlagsGood = (DeltaPhiRECO && HBHENoiseFilterResultFlag && hcalLaserEventFilterFlag && eeBadScFilterFlag);
 
-        //HLT Event Filters
-        int DeltaPhiHLT         = (fabs(dsJetPhi[0]-dsJetPhi[1]) > TMath::Pi()/3) ? 1 : 0;
-        int MET_vs_METCleanFlag = (dsMetPt != dsMetCleanPt) ? 0 : 1;
-        int JetIDHLT            = (dsJetFracHad[0] < 0.95 && dsJetFracHad[1] < 0.95 && dsJetFracEm[0] < 0.95 && dsJetFracEm[1] < 0.95) ? 1 : 0;
-        int HLTFlagsGood        = (JetIDHLT && MET_vs_METCleanFlag && DeltaPhiHLT);
+      //HLT Event Filters
+      int DeltaPhiHLT         = (fabs(dsJetPhi[0]-dsJetPhi[1]) > TMath::Pi()/3) ? 1 : 0;
+      int MET_vs_METCleanFlag = (dsMetPt != dsMetCleanPt) ? 0 : 1;
+      int dsJetID             = (dsJetFracHad[0] < 0.95 && dsJetFracHad[1] < 0.95 && dsJetFracEm[0] < 0.95 && dsJetFracEm[1] < 0.95) ? 1 : 0;
+      int HLTFlagsGood        = (dsJetID && MET_vs_METCleanFlag && DeltaPhiHLT);
 
-        int keepEvent = (allHLTDijetSelection && allRECODijetSelection);
+      int keepEvent = (allHLTDijetSelection && allRECODijetSelection);
 
-        if (!keepEvent)
-        {
-          continue; 
-        }
+      if (!keepEvent)
+      {
+        continue; 
+      }
 
-        // Fill the HLT vs RECO Filter Table
-        if(HLTFlagsGood && RecoFlagsGood)        h_HLT_RECO_Table->Fill(0,0);
-        else if(!HLTFlagsGood && !RecoFlagsGood) h_HLT_RECO_Table->Fill(1,1);
-        else if(!HLTFlagsGood && RecoFlagsGood)  h_HLT_RECO_Table->Fill(1,0);
-        else                                     h_HLT_RECO_Table->Fill(0,1);
+      // Fill the HLT vs RECO Filter Table
+      if(HLTFlagsGood && RecoFlagsGood)        h_HLT_RECO_Table->Fill(0,0);
+      else if(!HLTFlagsGood && !RecoFlagsGood) h_HLT_RECO_Table->Fill(1,1);
+      else if(!HLTFlagsGood && RecoFlagsGood)  h_HLT_RECO_Table->Fill(1,0);
+      else                                     h_HLT_RECO_Table->Fill(0,1);
 
         // Filters //
 
       // Dijet mass difference
-      int , pTbin, etabin;
-      double dsMjj, recoMjj,
-      dsX0, dsY0, dsZ0, dsE0, dsX1, dsY1, dsZ1, dsE1,
-      recoX0, recoY0, recoZ0, recoE0, recoX1, recoY1, recoZ1, recoE1;
+      int pTbin, etabin;
+      double dsX0, dsY0, dsZ0, dsX1, dsY1, dsZ1,
+      recoX0, recoY0, recoZ0, recoX1, recoY1, recoZ1;
       if(matchindex0 >=0 && matchindex1 >=0)
       {
-        dsE0 = dsJetE[0];                           
-        dsE1 = dsJetE[1];
-        dsX0 = dsJetPt[0]*TMath::Cos(dsJetPhi[0]);
-        dsX1 = dsJetPt[1]*TMath::Cos(dsJetPhi[1]);
-        dsY0 = dsJetPt[0]*TMath::Sin(dsJetPhi[0]);
-        dsY1 = dsJetPt[1]*TMath::Sin(dsJetPhi[1]);
-        dsZ0 = dsJetPt[0]*TMath::SinH(dsJetEta[0]);
-        dsZ1 = dsJetPt[1]*TMath::SinH(dsJetEta[1]);
+        // ds Jets
+        dsJetPt0  = dsJetPt[0];
+        dsJetPt1  = dsJetPt[1];
+        dsJetEta0 = dsJetEta[0];
+        dsJetEta1 = dsJetEta[1];
+        dsJetPhi0 = dsJetPhi[0];
+        dsJetPhi1 = dsJetPhi[1];
 
-        recoE0 = recoJetE[0];
-        recoE1 = recoJetE[1];
-        recoX0 = recoJetPt[0]*TMath::Cos(recoJetPhi[matchindex0]);
-        recoX1 = recoJetPt[1]*TMath::Cos(recoJetPhi[matchindex1]);
-        recoY0 = recoJetPt[0]*TMath::Sin(recoJetPhi[matchindex0]);
-        recoY1 = recoJetPt[1]*TMath::Sin(recoJetPhi[matchindex1]);
-        recoZ0 = recoJetPt[0]*TMath::SinH(recoJetEta[matchindex0]);
-        recoZ1 = recoJetPt[1]*TMath::SinH(recoJetEta[matchindex1]);
+        dsJetE0 = dsJetE[0];                           
+        dsJetE1 = dsJetE[1];
 
-        dsMjj   = TMath::Sqrt((dsE0+dsE1)**2 - (dsX0+dsX1)**2 - (dsY0+dsY1)**2 - (dsZ0+dsZ1)**2);
-        recoMjj = TMath::Sqrt((recoE0+recoE1)**2 - (recoX0+recoX1)**2 - (recoY0+recoY1)**2 - (recoZ0+recoZ1)**2);
+        dsX0 = dsJetPt[0]*TMath::Cos(dsJetPhi0);
+        dsX1 = dsJetPt[1]*TMath::Cos(dsJetPhi1);
+        dsY0 = dsJetPt[0]*TMath::Sin(dsJetPhi0);
+        dsY1 = dsJetPt[1]*TMath::Sin(dsJetPhi1);
+        dsZ0 = dsJetPt[0]*TMath::SinH(dsJetEta0);
+        dsZ1 = dsJetPt[1]*TMath::SinH(dsJetEta1);
+
+        // RECO Jets
+        recoJetPt0  = recoJetPt[matchindex0];
+        recoJetPt1  = recoJetPt[matchindex1];
+        recoJetEta0 = recoJetEta[matchindex0];
+        recoJetEta1 = recoJetEta[matchindex1];
+        recoJetPhi0 = recoJetPhi[matchindex0];
+        recoJetPhi1 = recoJetPhi[matchindex1];
+
+        recoJetE0 = recoJetE[matchindex0];
+        recoJetE1 = recoJetE[matchindex1];
+
+        recoX0 = recoJetPt0*TMath::Cos(recoJetPhi0);
+        recoX1 = recoJetPt1*TMath::Cos(recoJetPhi1);
+        recoY0 = recoJetPt0*TMath::Sin(recoJetPhi0);
+        recoY1 = recoJetPt1*TMath::Sin(recoJetPhi1);
+        recoZ0 = recoJetPt0*TMath::SinH(recoJetEta0);
+        recoZ1 = recoJetPt1*TMath::SinH(recoJetEta1);
+
+        dsMjj   = TMath::Sqrt((dsJetE0+dsJetE1)**2 - (dsX0+dsX1)**2 - (dsY0+dsY1)**2 - (dsZ0+dsZ1)**2);
+        recoMjj = TMath::Sqrt((recoJetE0+recoJetE1)**2 - (recoX0+recoX1)**2 - (recoY0+recoY1)**2 - (recoZ0+recoZ1)**2);
 
         pTbin     = Get_ij(pTbins, n_pTbins, etaBins, n_etaBins, dsPt,dsEta).first;
         etabin    = Get_ij(pTbins, n_pTbins, etaBins, n_etaBins, dsPt,dsEta).second;
         hDeltapMjj[pTbin][etabin]->Fill((dsMjj-recoMjj)/recoMjj);
+        DijetMassTree->Fill();
       }
 
-       // Jet Loop//
-       for(Int_t i=0; i< nDSJets; i++)
-       {
-           Double_t frac_diff, dsPt, recoPt, dsEta, recoEta, dsPhi, recoPhi;
-           int matchindex;
-           
-           if( nDSJets<35)
-           {
-            matchindex = dsJetMatchIndex[i];
-            if( matchindex >= 0)
-            {
-              dsPt      = dsJetPt[i];
-              recoPt    = recoJetPt[matchindex];
-              dsEta     = dsJetEta[i];
-              recoEta   = recoJetEta[matchindex];
-              dsPhi     = dsJetPhi[i];
-              recoPhi   = recoJetPhi[matchindex];
+  // Jet Loop//
+  for(Int_t i=0; i< nDSJets; i++)
+  {
+     Double_t frac_diff, dsPt, recoPt, dsEta, recoEta, dsPhi, recoPhi;
+     int matchindex;
+     
+      if( nDSJets<35)
+      {
+        matchindex = dsJetMatchIndex[i];
+        if( matchindex >= 0)
+        {
+          dsPt      = dsJetPt[i];
+          recoPt    = recoJetPt[matchindex];
+          dsEta     = dsJetEta[i];
+          recoEta   = recoJetEta[matchindex];
+          dsPhi     = dsJetPhi[i];
+          recoPhi   = recoJetPhi[matchindex];
 
-              frac_diff = (dsPt-recoPt)/recoPt;
+          frac_diff = (dsPt-recoPt)/recoPt;
 
-              h_dsJetRawE   -> Fill(dsJetRawE[i]);
-              h_recoJetRawE -> Fill(recoJetRawE[i]);
+          h_dsJetRawE   -> Fill(dsJetRawE[i]);
+          h_recoJetRawE -> Fill(recoJetRawE[i]);
 
-              h_dsJetE      -> Fill(dsJetE[i]);
-              h_recoJetE    -> Fill(recoJetE[i]);
+          h_dsJetE      -> Fill(dsJetE[i]);
+          h_recoJetE    -> Fill(recoJetE[i]);
 
-              h_recoHLTEtadiff -> Fill((dsEta - recoEta)/recoEta);
-              h_recoHLTPhidiff -> Fill((dsPhi - recoPhi)/recoPhi);
-              h_recoHLTpTdiff  -> Fill(frac_diff);
+          h_recoHLTEtadiff -> Fill((dsEta - recoEta)/recoEta);
+          h_recoHLTPhidiff -> Fill((dsPhi - recoPhi)/recoPhi);
+          h_recoHLTpTdiff  -> Fill(frac_diff);
 
 
-              pTbin     = Get_ij(pTbins, n_pTbins, etaBins, n_etaBins, dsPt,dsEta).first;
-              etabin    = Get_ij(pTbins, n_pTbins, etaBins, n_etaBins, dsPt,dsEta).second;
+          pTbin     = Get_ij(pTbins, n_pTbins, etaBins, n_etaBins, dsPt,dsEta).first;
+          etabin    = Get_ij(pTbins, n_pTbins, etaBins, n_etaBins, dsPt,dsEta).second;
 
-              hDeltapT[pTbin][etabin]->Fill(frac_diff);
+          hDeltapT[pTbin][etabin]->Fill(frac_diff);
 
-              hdspileupCorr[pTbin][etabin] -> Fill(dspileupCorr[i]);
-              hdsJECL2L3Res[pTbin][etabin] -> Fill(dsJECL2L3Res[i]);
-              hrecoJEC[pTbin][etabin]      -> Fill(recoJEC[i]);
-            }
-          }
+          hdspileupCorr[pTbin][etabin] -> Fill(dspileupCorr[i]);
+          hdsJECL2L3Res[pTbin][etabin] -> Fill(dsJECL2L3Res[i]);
+          hrecoJEC[pTbin][etabin]      -> Fill(recoJEC[i]);
         }
+      }
+  }
         // Jet Loop//
-   }
+  }
    // Tree Loop
 
-    TString name;
-
-    Double_t maxVal, mean, RMS;
-    for (int i = 0; i < n_pTbins; ++i)
+  TString name;
+  f->cd();
+  Double_t maxVal, mean, RMS;
+  for (int i = 0; i < n_pTbins; ++i)
+  {
+    for (int j=0; j<n_etaBins; ++j)
     {
-        for (int j=0; j<n_etaBins; ++j)
-        {
-            name = "Delta_pT_"+TString::Format("%.0f",pTbins[i])+"_"+TString::Format("%.0f",pTbins[i+1])+"_eta_"+TString::Format("%2.1f",j*0.5)+"_"+TString::Format("%2.1f",(j+1)*0.5);
+      name = "Delta_pT_"+TString::Format("%.0f",pTbins[i])+"_"+TString::Format("%.0f",pTbins[i+1])+"_eta_"+TString::Format("%2.1f",j*0.5)+"_"+TString::Format("%2.1f",(j+1)*0.5);
             
-            hDeltapT[i][j]  ->Scale(1./hDeltapT[i][j]->GetEntries());
-            hDeltapMjj[i][j]->Scale(1./hDeltapMjj[i][j]->GetEntries());
-            f->cd();
+      hDeltapT[i][j]  ->Scale(1./hDeltapT[i][j]->GetEntries());
+      hDeltapMjj[i][j]->Scale(1./hDeltapMjj[i][j]->GetEntries());
             
-            hDeltapT[i][j]      ->Write();
-            hDeltapMjj[i][j]    ->Write();
-            hdspileupCorr[i][j] ->Write();
-            hdsJECL2L3Res[i][j] ->Write();
-            hrecoJEC[i][j]      ->Write();
-        }  
+      hDeltapT[i][j]      ->Write();
+      hDeltapMjj[i][j]    ->Write();
+      hdspileupCorr[i][j] ->Write();
+      hdsJECL2L3Res[i][j] ->Write();
+      hrecoJEC[i][j]      ->Write();
+    }  
            
-    }
+  }
   h_HLT_RECO_Table ->Write();
-
-  f -> cd();
   h_dsJetRawE   -> Write();
   h_recoJetRawE -> Write();
   h_dsJetE      -> Write();
   h_recoJetE    -> Write();
-  f -> Write();
-  
-}
-
-
-Double_t CrystalBallFunctionL(Double_t *xx, Double_t *par) {
-    
-    // variable x
-    Double_t x = xx[0];
-    
-    // parameters alpha, n, x0, sigma
-    Double_t A = par[0];
-    Double_t alpha = par[1];
-    Double_t n = par[2];
-    Double_t x0 = par[3];
-    Double_t sigma = par[4];
-    
-    Double_t t = (x-x0)/sigma;
-    if (alpha < 0) t = -t;
-
-    Double_t absAlpha = fabs((Double_t)alpha);
-
-    if (t >= -absAlpha) {
-        return A*exp(-0.5*t*t);
-    }
-    else {
-        Double_t a = A*TMath::Power(n/absAlpha,n)*exp(-0.5*absAlpha*absAlpha);
-        Double_t b = n/absAlpha - absAlpha; 
-
-        return a/TMath::Power(b - t, n);
-    }
-}
-
-Double_t CrystalBallFunctionR(Double_t *xx, Double_t *par) {
-    
-    // variable x
-    Double_t x = xx[0];
-    
-    // parameters alpha, n, x0, sigma
-    Double_t A = par[0];
-    Double_t alpha = par[1];
-    Double_t n = par[2];
-    Double_t x0 = par[3];
-    Double_t sigma = par[4];
-    
-    Double_t t = -(x-x0)/sigma;
-    if (alpha < 0) t = -t;
-
-    Double_t absAlpha = fabs((Double_t)alpha);
-
-    if (t >= -absAlpha) {
-        return A*exp(-0.5*t*t);
-    }
-    else {
-        Double_t a = A*TMath::Power(n/absAlpha,n)*exp(-0.5*absAlpha*absAlpha);
-        Double_t b = n/absAlpha - absAlpha; 
-
-        return a/TMath::Power(b - t, n);
-    }
-}
-
-Double_t DoubleCrystalBallFunction(Double_t *xx, Double_t *par) {
-    
-   // variable x
-   Double_t x = xx[0];
-    
-   // parameters alpha, n, x0, sigma
-   Double_t A      = par[0];
-   Double_t alpha1 = par[1];
-   Double_t alpha2 = par[2];
-   Double_t n1     = par[3];
-   Double_t n2     = par[4];
-   Double_t mean   = par[5];
-   Double_t width  = par[6];
-
-   double A1 = pow(n1/fabs(alpha1),n1)*exp(-alpha1*alpha1/2);
-   double A2 = pow(n2/fabs(alpha2),n2)*exp(-alpha2*alpha2/2);
-   double B1 = n1/fabs(alpha1)-fabs(alpha1);
-   double B2 = n2/fabs(alpha2)-fabs(alpha2);
-
-   if((x-mean)/width>-alpha1 && (x-mean)/width<alpha2)
-   {
-     return A*exp(-(x-mean)*(x-mean)/(2*width*width));
-   }
-   else if((x-mean)/width<-alpha1)
-   {
-     return A*A1*pow(B1-(x-mean)/width,-n1);
-   }
-   else if((x-mean)/width>alpha2)
-   {
-     return A*A2*pow(B2+(x-mean)/width,-n2);
-   }
-   else
-   {
-     cout << "ERROR evaluating range..." << endl;
-     return 99;
-   }
-}
-
-Double_t CrystalBallFunctionL_plus_CrystalBallFunctionR(Double_t *x, Double_t *par)
-{
-  par[0]=par[5];
-  par[3]=par[8];
-  par[4]=par[9];
-
-  Double_t y = 0.5*(CrystalBallFunctionL(x,par)+CrystalBallFunctionR(x,&par[5]));
-  return y;
-}
-
-Double_t G1(Double_t *x, Double_t *par)
-{
-   Double_t arg = 0;
-   if (par[2]) arg = (x[0] - par[1])/par[2];
-
-   Double_t y = par[0]*TMath::Exp(-0.5*arg*arg);
-   return y;
-}
-
-
-Double_t G2(Double_t *x, Double_t *par)
-{
-   Double_t arg = 0;
-   if (par[2]) arg = (x[0] - par[1])/par[2];
-
-   Double_t y = par[0]*TMath::Exp(-0.5*arg*arg);
-   return y;
-}
-
-Double_t G3(Double_t *x, Double_t *par)
-{
-   Double_t arg = 0;
-   if (par[2]) arg = (x[0] - par[1])/par[2];
-
-   Double_t y = par[0]*TMath::Exp(-0.5*arg*arg);
-   return y;
-}
-
-Double_t G4(Double_t *x, Double_t *par)
-{
-   Double_t arg = 0;
-   if (par[2]) arg = (x[0] - par[1])/par[2];
-
-   Double_t y = par[0]*TMath::Exp(-0.5*arg*arg);
-   return y;
-}
-
-
-Double_t Total(Double_t *x, Double_t *par)
-{
-   Double_t y = G1(x,par) + G2(x,&par[3])+G3(x,&par[6]);
-   return y;
-}
-
-Double_t CB_plus_Gaussian(Double_t *x, Double_t *par)
-{
-   Double_t y = CrystalBallFunction(x,par) + G1(x,&par[5]);
-   return y;
+  f-> Write();  
+  mjjtree->cd();
+  DijetMassTree->Write();
+  mjjtree->Close();
 }
 
 std::pair <int,int> Get_ij(float array1[], int length1, float array2[], int length2, double num1, double num2)
@@ -440,48 +341,3 @@ std::pair <int,int> Get_ij(float array1[], int length1, float array2[], int leng
     }
     return std::make_pair(i,j);
 }
-
-Double_t CrystalBallFunction(Double_t *xx, Double_t *par) {
-    
-    // variable x
-    Double_t x = xx[0];
-    
-    // parameters alpha, n, x0, sigma
-    Double_t A = par[0];
-    Double_t alpha = par[1];
-    Double_t n = par[2];
-    Double_t x0 = par[3];
-    Double_t sigma = par[4];
-    
-    Double_t t = (x-x0)/sigma;
-    if (alpha < 0) t = -t;
-
-    Double_t absAlpha = fabs((Double_t)alpha);
-
-    if (t >= -absAlpha) {
-        return A*exp(-0.5*t*t);
-    }
-    else {
-        Double_t a = A*TMath::Power(n/absAlpha,n)*exp(-0.5*absAlpha*absAlpha);
-        Double_t b = n/absAlpha - absAlpha; 
-
-        return a/TMath::Power(b - t, n);
-    }
-}
-
-Double_t Gaussian(Double_t *x, Double_t *par)
-{
-   Double_t arg = 0;
-   if (par[2]) arg = (x[0] - par[1])/par[2];
-
-   Double_t y = par[0]*TMath::Exp(-0.5*arg*arg);
-   return y;
-}
-
-
-Double_t CrystalBallFunction_plus_Gaussian(Double_t *x, Double_t *par)
-{
-   Double_t y = CrystalBallFunction(x,par) + Gaussian(x,&par[5]);
-   return y;
-}
-
