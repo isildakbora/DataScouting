@@ -142,8 +142,8 @@ void DijetMassTree()
       
       // TLorentzVector is extremely slow in CINT, so using by hand calculation
 
-      dsMjj   = CalculateDijetMass(dsJetPt0, dsJetPt1, dsJetE0,  dsJetE1, dsJetEta0, dsJetEta1, dsJetPhi0, dsJetPhi1);
-      recoMjj = CalculateDijetMass(recoJetPt0, recoJetPt1, recoJetE0,  recoJetE1, recoJetEta0, recoJetEta1, recoJetPhi0, recoJetPhi1);
+      dsMjj   = CalculateDijetMass(dsJetE0, dsJetPt0, dsJetEta0,  dsJetPhi0, dsJetE1, dsJetPt1, dsJetEta1, dsJetPhi1);
+      recoMjj = CalculateDijetMass(recoJetE0, recoJetPt0, recoJetEta0,  recoJetPhi0, recoJetE1, recoJetPt1, recoJetEta1, recoJetPhi1);
 
       // smearing factor should be applied as (1+smearpT)*recopT
       // since;
@@ -151,7 +151,7 @@ void DijetMassTree()
       // (dspT-recopT) = recopT*smearpT
       // dspT =recopT*smearpT+recopT = (1+smearpT)*recopT
 
-      reco_smeared_Mjj = CalculateDijetMass((1.+smearPt0)*recoJetPt0, (1.+smearPt1)*recoJetPt1, (1.+smearPt0)*recoJetE0, (1.+smearPt1)*recoJetE1, recoJetEta0, recoJetEta1, recoJetPhi0, recoJetPhi1);
+      reco_smeared_Mjj = CalculateDijetMass((1.+smearPt0)*recoJetE0, (1.+smearPt0)*recoJetPt0, recoJetEta0, recoJetPhi0, (1.+smearPt1)*recoJetE1, (1.+smearPt1)*recoJetPt1, recoJetEta1, recoJetPhi1);
       
       h_dsMjj->Fill(dsMjj);
       h_recoMjj->Fill(recoMjj);
@@ -184,13 +184,13 @@ void DijetMassTree()
    h_dsMjj->Draw("HIST");
 }
 
-Float_t CalculateDijetMass(Float_t JetPt0, Float_t JetPt1, Float_t JetE0, Float_t JetE1, Float_t JetEta0, Float_t JetEta1,Float_t JetPhi0, Float_t JetPhi1)
+Float_t CalculateDijetMass( Float_t JetE0, Float_t JetPt0, Float_t JetEta0, Float_t JetPhi0, Float_t JetE1, Float_t JetPt1, Float_t JetEta1, Float_t JetPhi1)
 {
    Float_t E0 = JetE0;
    Float_t X0 = JetPt0*TMath::Cos(JetPhi0);
    Float_t Y0 = JetPt0*TMath::Sin(JetPhi0);
    Float_t Z0 = JetPt0*TMath::SinH(JetEta0);
-   
+
    Float_t E1 = JetE1;
    Float_t X1 = JetPt1*TMath::Cos(JetPhi1);
    Float_t Y1 = JetPt1*TMath::Sin(JetPhi1);
