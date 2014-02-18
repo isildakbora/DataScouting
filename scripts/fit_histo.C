@@ -35,8 +35,8 @@ void fit_histo()
         for (int j=0; j< n_etaBins; ++j)
         {
             histoname      = "Delta_pT_"+TString::Format("%.0f",pTbins[i])+"_"+TString::Format("%.0f",pTbins[i+1])+"_eta_"+TString::Format("%2.1f",j*0.5)+"_"+TString::Format("%2.1f",(j+1)*0.5);
-            hDeltapT[i][j] = (TH1F*)f->FindObjectAny(histoname);
-            i_can[i][j] =  new TCanvas(histoname);
+            hDeltapT[i][j] = (TH1F*)f->FindObjectAny(histoname+"pT12");
+            i_can[i][j] =  new TCanvas(histoname+"pT12");
             if(hDeltapT[i][j]->GetEntries()>1000)hDeltapT[i][j]->Rebin(4);
             else hDeltapT[i][j]->Rebin(2);
         }   
@@ -94,11 +94,6 @@ void fit_histo()
     can->SaveAs("DSCompAllInOne.pdf");   
 }
 
-
-double calculate_Mjj(double )
-{
-
-}
 
 Double_t DoubleCrystalBallFunction(Double_t *xx, Double_t *par) {
     
