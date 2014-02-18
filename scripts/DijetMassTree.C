@@ -187,12 +187,13 @@ void DijetMassTree()
 Float_t CalculateDijetMass(Float_t JetPt0, Float_t JetPt1, Float_t JetE0, Float_t JetE1, Float_t JetEta0, Float_t JetEta1,Float_t JetPhi0, Float_t JetPhi1)
 {
    Float_t E0 = JetE0;
-   Float_t E1 = JetE1;
    Float_t X0 = JetPt0*TMath::Cos(JetPhi0);
-   Float_t X1 = JetPt1*TMath::Cos(JetPhi1);
    Float_t Y0 = JetPt0*TMath::Sin(JetPhi0);
-   Float_t Y1 = JetPt1*TMath::Sin(JetPhi1);
    Float_t Z0 = JetPt0*TMath::SinH(JetEta0);
+   
+   Float_t E1 = JetE1;
+   Float_t X1 = JetPt1*TMath::Cos(JetPhi1);
+   Float_t Y1 = JetPt1*TMath::Sin(JetPhi1);
    Float_t Z1 = JetPt1*TMath::SinH(JetEta1);
 
    Float_t Mjj= TMath::Sqrt((E0+E1)**2 - (X0+X1)**2 - (Y0+Y1)**2 - (Z0+Z1)**2);
