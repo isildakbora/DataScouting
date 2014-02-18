@@ -145,6 +145,12 @@ void DijetMassTree()
       dsMjj   = CalculateDijetMass(dsJetPt0, dsJetPt1, dsJetE0,  dsJetE1, dsJetEta0, dsJetEta1, dsJetPhi0, dsJetPhi1);
       recoMjj = CalculateDijetMass(recoJetPt0, recoJetPt1, recoJetE0,  recoJetE1, recoJetEta0, recoJetEta1, recoJetPhi0, recoJetPhi1);
 
+      // smearing factor should be applied as (1+smearpT)*recopT
+      // since;
+      // (dspT-recopT)/recopT = smearpT
+      // (dspT-recopT) = recopT*smearpT
+      // dspT =recopT*smearpT+recopT = (1+smearpT)*recopT
+
       reco_smeared_Mjj = CalculateDijetMass((1.+smearPt0)*recoJetPt0, (1.+smearPt1)*recoJetPt1, (1.+smearPt0)*recoJetE0, (1.+smearPt1)*recoJetE1, recoJetEta0, recoJetEta1, recoJetPhi0, recoJetPhi1);
       
       h_dsMjj->Fill(dsMjj);
