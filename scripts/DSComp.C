@@ -27,7 +27,8 @@ void DSComp::Loop()
   TH1F* h_recoHLTPhidiff = new TH1F("recoHLTPhidiff","recoHLTPhidiff",4800,-TMath::Pi(), TMath::Pi());
 
 
-  Float_t recoMjj, dsMjj, dsJetPt0, dsJetE0, dsJetE1, dsJetPt1, dsJetEta0, dsJetEta1, dsJetPhi0, dsJetPhi1, recoJetPt0, recoJetPt1, recoJetE0, recoJetE1, recoJetEta0, recoJetEta1, recoJetPhi0, recoJetPhi1;
+  Float_t recoMjj, dsMjj, dsJetPt0, dsJetE0, dsJetE1, dsJetPt1, dsJetEta0, dsJetEta1, dsJetPhi0, dsJetPhi1,
+   recoJetPt0, recoJetPt1, recoJetE0, recoJetE1, recoJetEta0, recoJetEta1, recoJetPhi0, recoJetPhi1;
 
   DijetMassTree->Branch("runNo",&runNo,"runNo/I");   
   DijetMassTree->Branch("evtNo",&evtNo,"evtNo/I");
@@ -84,7 +85,8 @@ void DSComp::Loop()
     const Int_t   n_etaBins = sizeof(etaBins)/sizeof(float)-1;
     TString histoname;
     TH1F *hDeltapT[8][5];
-    TH1F *hDeltapMjj[8][5];
+    TH1F *hDeltaMjj[8][5];
+    TH1F *hDeltapT12[8][5];
     TH1F *hdspileupCorr[8][5];
     TH1F *hdsJECL2L3Res[8][5];
     TH1F *hrecoJEC[8][5];
@@ -101,8 +103,11 @@ void DSComp::Loop()
           hDeltapT[i][j]= new TH1F(histoname, histoname, 1200, -1.2, 1.2);
           hDeltapT[i][j]->Sumw2();
 
-          hDeltapMjj[i][j]= new TH1F(histoname+"Mjj", histoname+"Mjj", 1200, -1.2, 1.2);
-          hDeltapMjj[i][j]->Sumw2();
+          hDeltaMjj[i][j]= new TH1F(histoname+"Mjj", histoname+"Mjj", 1200, -1.2, 1.2);
+          hDeltaMjj[i][j]->Sumw2();
+
+          hDeltapT12[i][j]= new TH1F(histoname+"pT12", histoname+"pT12", 1200, -1.2, 1.2);
+          hDeltapT12[i][j]->Sumw2();
 
           histoname = "dspileopCorr"+TString::Format("%.0f",pTbins[i])+"_"+TString::Format("%.0f",pTbins[i+1])+"_eta_"+TString::Format("%2.1f",j*0.5)+"_"+TString::Format("%2.1f",(j+1)*0.5);
           hdspileupCorr[i][j]= new TH1F(histoname, histoname, 1000, 0, 10);
@@ -233,8 +238,11 @@ void DSComp::Loop()
 
         pTbin     = Get_ij(pTbins, n_pTbins, etaBins, n_etaBins, dsPt,dsEta).first;
         etabin    = Get_ij(pTbins, n_pTbins, etaBins, n_etaBins, dsPt,dsEta).second;
-        hDeltapMjj[pTbin][etabin]->Fill((dsMjj-recoMjj)/recoMjj);
+        hDeltaMjj[pTbin][etabin]->Fill((dsMjj-recoMjj)/recoMjj);
         DijetMassTree->Fill();
+
+        hDeltapT12[pTbin][etabin]->Fill((dsJetPt0-recoJetPt0)/recoJetPt0);
+        hDeltapT12[pTbin][etabin]->Fill((dsJetPt1-recoJetPt0)/recoJetPt1);
       }
 
   // Jet Loop//
@@ -293,10 +301,10 @@ void DSComp::Loop()
       name = "Delta_pT_"+TString::Format("%.0f",pTbins[i])+"_"+TString::Format("%.0f",pTbins[i+1])+"_eta_"+TString::Format("%2.1f",j*0.5)+"_"+TString::Format("%2.1f",(j+1)*0.5);
             
       hDeltapT[i][j]  ->Scale(1./hDeltapT[i][j]->GetEntries());
-      hDeltapMjj[i][j]->Scale(1./hDeltapMjj[i][j]->GetEntries());
+      hDeltaMjj[i][j]->Scale(1./hDeltaMjj[i][j]->GetEntries());
             
       hDeltapT[i][j]      ->Write();
-      hDeltapMjj[i][j]    ->Write();
+      hDeltaMjj[i][j]    ->Write();
       hdspileupCorr[i][j] ->Write();
       hdsJECL2L3Res[i][j] ->Write();
       hrecoJEC[i][j]      ->Write();
