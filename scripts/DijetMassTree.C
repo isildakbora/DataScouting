@@ -131,7 +131,7 @@ void DijetMassTree()
       int pTbin1     = Get_ij(pTbins, n_pTbins, etaBins, n_etaBins, dsJetPt1, dsJetEta1).first;
       int etabin1    = Get_ij(pTbins, n_pTbins, etaBins, n_etaBins, dsJetPt1, dsJetEta1).second;
 
-      std::cout << pTbin0 << "\t" << etabin0 << "\t" << cbfit[pTbin0][etabin0]->GetParameter(0) << "\t" << cbfit[pTbin0][etabin0]->GetParameter(1) << "\t" << cbfit[pTbin0][etabin0]->GetParameter(2) << "\t" << pTbin1 << "\t" << etabin1 << "\t" << cbfit[pTbin1][etabin1]->GetParameter(0) << "\t" << cbfit[pTbin1][etabin1]->GetParameter(1) << "\t" << cbfit[pTbin1][etabin1]->GetParameter(2) << std::endl;
+      //std::cout << pTbin0 << "\t" << etabin0 << "\t" << cbfit[pTbin0][etabin0]->GetParameter(0) << "\t" << cbfit[pTbin0][etabin0]->GetParameter(1) << "\t" << cbfit[pTbin0][etabin0]->GetParameter(2) << "\t" << pTbin1 << "\t" << etabin1 << "\t" << cbfit[pTbin1][etabin1]->GetParameter(0) << "\t" << cbfit[pTbin1][etabin1]->GetParameter(1) << "\t" << cbfit[pTbin1][etabin1]->GetParameter(2) << std::endl;
 
       double x_min0 = cbfit[pTbin0][etabin0]->GetMinimumX();
       double x_max0 = cbfit[pTbin0][etabin0]->GetMaximumX();
@@ -139,8 +139,13 @@ void DijetMassTree()
       double x_min1 = cbfit[pTbin1][etabin1]->GetMinimumX();
       double x_max1 = cbfit[pTbin1][etabin1]->GetMaximumX();
 
-      Float_t smearPt0 = GetRand(cbfit[pTbin0][etabin0], x_min0, x_max0, r->Integer(1e+10));
-      Float_t smearPt1 = GetRand(cbfit[pTbin1][etabin1], x_min1, x_max1, r->Integer(1e+10));
+      /*Float_t smearPt0 = GetRand(cbfit[pTbin0][etabin0], x_min0, x_max0, r->Integer(1e+10));
+      Float_t smearPt1 = GetRand(cbfit[pTbin1][etabin1], x_min1, x_max1, r->Integer(1e+10));*/
+
+      cbfit[pTbin0][etabin0]->SetNpx(1e+4);
+      cbfit[pTbin1][etabin1]->SetNpx(1e+4);
+      Float_t smearPt0 = cbfit[pTbin0][etabin0]->GetRandom();
+      Float_t smearPt1 = cbfit[pTbin1][etabin1]->GetRandom();
       
       // TLorentzVector is extremely slow in CINT, so using by hand calculation
 
@@ -165,7 +170,7 @@ void DijetMassTree()
       h_delta_Mjj->Fill((dsMjj-recoMjj)/(recoMjj));
       h_delta_Mjj_after_smearing->Fill((dsMjj-reco_smeared_Mjj)/(reco_smeared_Mjj));
 
-      //std::cout << smearPt0 << "\t" << smearPt1 << "\t" <<dsMjj<< "\t" << recoMjj << "\t" << reco_smeared_Mjj << "\t" << (dsMjj-reco_smeared_Mjj)/reco_smeared_Mjj <<   "\t" << (dsMjj-recoMjj)/recoMjj << std::endl;
+      std::cout << smearPt0 << "\t" << smearPt1 << "\t" <<dsMjj<< "\t" << recoMjj << "\t" << reco_smeared_Mjj << "\t" << (dsMjj-reco_smeared_Mjj)/reco_smeared_Mjj <<   "\t" << (dsMjj-recoMjj)/recoMjj << std::endl;
    }
    ///////////////////////////////////////////////////////////////////////////
 
