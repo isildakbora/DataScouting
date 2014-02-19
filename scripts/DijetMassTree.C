@@ -1,5 +1,3 @@
-
-
 void DijetMassTree()
 {
    gROOT->ProcessLine(".L DSComp.C");
@@ -19,6 +17,7 @@ void DijetMassTree()
    TH1F *h_dsMjj              = new TH1F("ds Mjj", "ds Mjj", n_massBins, massBins);
    TH1F *h_recoMjj            = new TH1F("reco Mjj", "reco Mjj", n_massBins, massBins);
    TH1F *h_reco_smeared_Mjj   = new TH1F("reco_smeared Mjj", "reco_smeared Mjj", n_massBins, massBins);
+
    h_dsMjj->Sumw2();
    h_recoMjj->Sumw2();
    h_reco_smeared_Mjj->Sumw2();
@@ -31,6 +30,7 @@ void DijetMassTree()
    TFile *f   = new TFile("dijet.root");
    TFile *res = new TFile("Delta_pT_Resolution.root");
    TTree *t_dijemass = f->FindObjectAny("DijetMassTree");
+
    // Declaration of leaf types
    Float_t         dsMjj;
    Float_t         recoMjj;
@@ -38,7 +38,7 @@ void DijetMassTree()
    Int_t           runNo;
    Int_t           evtNo;
 
-  Float_t recoMjj, dsMjj, dsJetPt0, dsJetE0, dsJetE1, dsJetPt1, dsJetEta0, dsJetEta1, dsJetPhi0, dsJetPhi1, recoJetPt0, recoJetPt1, recoJetE0, recoJetE1, recoJetEta0, recoJetEta1, recoJetPhi0, recoJetPhi1;
+  Float_t dsJetPt0, dsJetE0, dsJetE1, dsJetPt1, dsJetEta0, dsJetEta1, dsJetPhi0, dsJetPhi1, recoJetPt0, recoJetPt1, recoJetE0, recoJetE1, recoJetEta0, recoJetEta1, recoJetPhi0, recoJetPhi1;
 
    // List of branches
    TBranch        *b_dsMjj;   //!
@@ -114,8 +114,8 @@ void DijetMassTree()
    Long64_t nbytes = 0, nb = 0;
    for (Long64_t jentry=0; jentry<nentries/100;jentry++) 
    {
-   	nb = t_dijemass->GetEntry(jentry);
-   	nbytes += nb;
+      nb = t_dijemass->GetEntry(jentry);
+      nbytes += nb;
       
       //----------- progress report -------------
       double progress = 100.*jentry/nentries;
@@ -151,7 +151,10 @@ void DijetMassTree()
       // (dspT-recopT) = recopT*smearpT
       // dspT =recopT*smearpT+recopT = (1+smearpT)*recopT
 
-      reco_smeared_Mjj = CalculateDijetMass((1.+smearPt0)*recoJetE0, (1.+smearPt0)*recoJetPt0, recoJetEta0, recoJetPhi0, (1.+smearPt1)*recoJetE1, (1.+smearPt1)*recoJetPt1, recoJetEta1, recoJetPhi1);
+      double scale0 = 1.+smearPt0;
+      double scale1 = 1.+smearPt1;
+
+      reco_smeared_Mjj = CalculateDijetMass(scale0*recoJetE0, scale0*recoJetPt0, recoJetEta0, recoJetPhi0, scale1*recoJetE1, scale1*recoJetPt1, recoJetEta1, recoJetPhi1);
       
       h_dsMjj->Fill(dsMjj);
       h_recoMjj->Fill(recoMjj);
