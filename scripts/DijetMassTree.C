@@ -112,7 +112,7 @@ void DijetMassTree()
    int decade = 0;
    Long64_t nentries = t_dijemass->GetEntriesFast();
    Long64_t nbytes = 0, nb = 0;
-   for (Long64_t jentry=0; jentry<nentries/10;jentry++) 
+   for (Long64_t jentry=0; jentry<nentries/100;jentry++) 
    {
    	nb = t_dijemass->GetEntry(jentry);
    	nbytes += nb;
@@ -160,7 +160,7 @@ void DijetMassTree()
       h_delta_Mjj->Fill((dsMjj-recoMjj)/(recoMjj));
       h_delta_Mjj_after_smearing->Fill((dsMjj-reco_smeared_Mjj)/(reco_smeared_Mjj));
 
-      std::cout << dsMjj<< "\t" << recoMjj << "\t" << reco_smeared_Mjj << "\t" << (dsMjj-reco_smeared_Mjj)/reco_smeared_Mjj <<   "\t" << (dsMjj-recoMjj)/recoMjj << std::endl;
+      std::cout << smearPt0 << "\t" << smearPt1 << "\t" <<dsMjj<< "\t" << recoMjj << "\t" << reco_smeared_Mjj << "\t" << (dsMjj-reco_smeared_Mjj)/reco_smeared_Mjj <<   "\t" << (dsMjj-recoMjj)/recoMjj << std::endl;
    }
    
    std::cout << nentries << std::endl;
@@ -180,8 +180,9 @@ void DijetMassTree()
 
    TCanvas *c3 = new TCanvas("can3");
    c3->cd();
-   h_dsMjj->Divide(h_reco_smeared_Mjj);
    h_dsMjj->Draw("HIST");
+   h_reco_smeared_Mjj->Draw("HISTSAME");
+   h_recoMjj->Draw("HISTSAME");
 }
 
 Float_t CalculateDijetMass( Float_t JetE0, Float_t JetPt0, Float_t JetEta0, Float_t JetPhi0, Float_t JetE1, Float_t JetPt1, Float_t JetEta1, Float_t JetPhi1)
@@ -202,6 +203,8 @@ Float_t CalculateDijetMass( Float_t JetE0, Float_t JetPt0, Float_t JetEta0, Floa
 
 Double_t GetRand(TF1 *func, Double_t X_MIN, Double_t X_MAX, int seed )
 {
+   //http://pdg.lbl.gov/2012/reviews/rpp2012-rev-monte-carlo-techniques.pdf
+   //37.3 Acceptance-rejection method (Von Neumann)
    Double_t Y_MAX;
    Y_MAX = func->GetMaximum();
    TRandom3* r = new TRandom3(seed);
