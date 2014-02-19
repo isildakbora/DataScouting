@@ -41,11 +41,12 @@ void DijetMassTree()
   Float_t dsJetPt0, dsJetE0, dsJetE1, dsJetPt1, dsJetEta0, dsJetEta1, dsJetPhi0, dsJetPhi1, recoJetPt0, recoJetPt1, recoJetE0, recoJetE1, recoJetEta0, recoJetEta1, recoJetPhi0, recoJetPhi1;
 
    // List of branches
+   ///////////////////////////////////////////////////////////////////////////
    TBranch        *b_dsMjj;   //!
    TBranch        *b_recoMjj;   //!
    TBranch        *b_runNo;   //!
    TBranch        *b_evtNo;
-
+   ///////////////////////////////////////////////////////////////////////////
    TBranch        *b_dsJetEta0;  //!
    TBranch        *b_dsJetEta1;   //!
    TBranch        *b_dsJetPhi0;   //!
@@ -54,7 +55,7 @@ void DijetMassTree()
    TBranch        *b_dsJetPt1;   //!
    TBranch        *b_dsJetE0;  //!
    TBranch        *b_dsJetE1;   //!
-
+   ///////////////////////////////////////////////////////////////////////////
    TBranch        *b_recoJetEta0;  //!
    TBranch        *b_recoJetEta1;   //!
    TBranch        *b_recoJetPhi0;   //!
@@ -63,40 +64,35 @@ void DijetMassTree()
    TBranch        *b_recoJetPt1;   //!
    TBranch        *b_recoJetE0;  //!
    TBranch        *b_recoJetE1;   //!
-
-
+   ///////////////////////////////////////////////////////////////////////////
    t_dijemass->SetBranchAddress("dsMjj", &dsMjj, &b_dsMjj);
    t_dijemass->SetBranchAddress("recoMjj", &recoMjj, &b_recoMjj);
    t_dijemass->SetBranchAddress("runNo", &runNo, &b_runNo);
    t_dijemass->SetBranchAddress("evtNo", &evtNo, &b_evtNo);
-
+   ///////////////////////////////////////////////////////////////////////////
    t_dijemass->SetBranchAddress("dsJetEta0", &dsJetEta0, &b_dsJetEta0);
    t_dijemass->SetBranchAddress("dsJetEta1", &dsJetEta1, &b_dsJetEta1);
-
    t_dijemass->SetBranchAddress("dsJetPhi0", &dsJetPhi0, &b_dsJetPhi0);
    t_dijemass->SetBranchAddress("dsJetPhi1", &dsJetPhi1, &b_dsJetPhi1);
-
    t_dijemass->SetBranchAddress("dsJetPt0", &dsJetPt0, &b_dsJetPt0);
    t_dijemass->SetBranchAddress("dsJetPt1", &dsJetPt1, &b_dsJetPt1);
-
    t_dijemass->SetBranchAddress("dsJetPt0", &dsJetE0, &b_dsJetE0);
    t_dijemass->SetBranchAddress("dsJetPt1", &dsJetE1, &b_dsJetE1);
-
+   ///////////////////////////////////////////////////////////////////////////
    t_dijemass->SetBranchAddress("recoJetEta0", &recoJetEta0, &b_recoJetEta0);
    t_dijemass->SetBranchAddress("recoJetEta1", &recoJetEta1, &b_recoJetEta1);
-
    t_dijemass->SetBranchAddress("recoJetPhi0", &recoJetPhi0, &b_recoJetPhi0);
    t_dijemass->SetBranchAddress("recoJetPhi1", &recoJetPhi1, &b_recoJetPhi1);
-
    t_dijemass->SetBranchAddress("recoJetPt0", &recoJetPt0, &b_recoJetPt0);
    t_dijemass->SetBranchAddress("recoJetPt1", &recoJetPt1, &b_recoJetPt1);
-
    t_dijemass->SetBranchAddress("recoJetPt0", &recoJetE0, &b_recoJetE0);
    t_dijemass->SetBranchAddress("recoJetPt1", &recoJetE1, &b_recoJetE1);
+   ///////////////////////////////////////////////////////////////////////////
 
    if (t_dijemass == 0) return;
 
-   // Get the smearing functions and hold in the mem
+   // Get the smearing functions and hold in the memory
+   ///////////////////////////////////////////////////////////////////////////
    TF1 *cbfit[8][5];
    TString name;
    for (int i = 0; i < n_pTbins; ++i)
@@ -108,10 +104,14 @@ void DijetMassTree()
          cbfit[i][j] = (TF1*)res->FindObjectAny(name);
       }
    }
+   ///////////////////////////////////////////////////////////////////////////
 
+   //Event Loop
+   ///////////////////////////////////////////////////////////////////////////
    int decade = 0;
    Long64_t nentries = t_dijemass->GetEntriesFast();
    Long64_t nbytes = 0, nb = 0;
+
    for (Long64_t jentry=0; jentry<nentries/100;jentry++) 
    {
       nb = t_dijemass->GetEntry(jentry);
@@ -130,6 +130,8 @@ void DijetMassTree()
 
       int pTbin1     = Get_ij(pTbins, n_pTbins, etaBins, n_etaBins, dsJetPt1, dsJetEta1).first;
       int etabin1    = Get_ij(pTbins, n_pTbins, etaBins, n_etaBins, dsJetPt1, dsJetEta1).second;
+
+      std::cout << pTbin0 << "\t" << etabin0 << "\t" << cbfit[pTbin0][etabin0]->GetParameter(0) << "\t" << cbfit[pTbin0][etabin0]->GetParameter(1) << "\t" << cbfit[pTbin0][etabin0]->GetParameter(2) << "\t" << pTbin1 << "\t" << etabin1 << "\t" << cbfit[pTbin1][etabin1]->GetParameter(0) << "\t" << cbfit[pTbin1][etabin1]->GetParameter(1) << "\t" << cbfit[pTbin1][etabin1]->GetParameter(2) << std::endl;
 
       double x_min0 = cbfit[pTbin0][etabin0]->GetMinimumX();
       double x_max0 = cbfit[pTbin0][etabin0]->GetMaximumX();
@@ -163,9 +165,10 @@ void DijetMassTree()
       h_delta_Mjj->Fill((dsMjj-recoMjj)/(recoMjj));
       h_delta_Mjj_after_smearing->Fill((dsMjj-reco_smeared_Mjj)/(reco_smeared_Mjj));
 
-      std::cout << smearPt0 << "\t" << smearPt1 << "\t" <<dsMjj<< "\t" << recoMjj << "\t" << reco_smeared_Mjj << "\t" << (dsMjj-reco_smeared_Mjj)/reco_smeared_Mjj <<   "\t" << (dsMjj-recoMjj)/recoMjj << std::endl;
+      //std::cout << smearPt0 << "\t" << smearPt1 << "\t" <<dsMjj<< "\t" << recoMjj << "\t" << reco_smeared_Mjj << "\t" << (dsMjj-reco_smeared_Mjj)/reco_smeared_Mjj <<   "\t" << (dsMjj-recoMjj)/recoMjj << std::endl;
    }
-   
+   ///////////////////////////////////////////////////////////////////////////
+
    std::cout << nentries << std::endl;
 
    h_dsMjj->SetLineColor(kBlack);
@@ -188,6 +191,7 @@ void DijetMassTree()
    h_recoMjj->Draw("HISTSAME");
 }
 
+///////////////////////////////////////////////////////////////////////////
 Float_t CalculateDijetMass( Float_t JetE0, Float_t JetPt0, Float_t JetEta0, Float_t JetPhi0, Float_t JetE1, Float_t JetPt1, Float_t JetEta1, Float_t JetPhi1)
 {
    Float_t E0 = JetE0;
@@ -204,6 +208,7 @@ Float_t CalculateDijetMass( Float_t JetE0, Float_t JetPt0, Float_t JetEta0, Floa
    return Mjj;
 }
 
+///////////////////////////////////////////////////////////////////////////
 Double_t GetRand(TF1 *func, Double_t X_MIN, Double_t X_MAX, int seed )
 {
    //http://pdg.lbl.gov/2012/reviews/rpp2012-rev-monte-carlo-techniques.pdf
