@@ -1,17 +1,3 @@
-#ifndef __CINT__
-#include "RooGlobalFunc.h"
-#endif
-#include "RooRealVar.h"
-#include "RooDataSet.h"
-#include "RooGaussian.h"
-#include "TCanvas.h"
-#include "RooPlot.h"
-#include "TAxis.h"
-#include <TH1.h>
-#include <TCanvas.h>
-#include <utility>
-#include "DSComp.C"
-
 using namespace RooFit ;
 
 void fit_histo()
@@ -20,7 +6,7 @@ void fit_histo()
     //gROOT->ProcessLine(".L DSComp.C");
     TString histoname;
     TH1F *hDeltapT[8][5];
-    TFile *f = new TFile("Delta_pT_histograms_legends.root");
+    TFile *f = new TFile("Delta_pT_histograms.root");
     TFile *fresolution = new TFile("Delta_pT_Resolution.root", "RECREATE");
     TCanvas *i_can[8][5];
     TString name;
@@ -35,8 +21,8 @@ void fit_histo()
         for (int j=0; j< n_etaBins; ++j)
         {
             histoname      = "Delta_pT_"+TString::Format("%.0f",pTbins[i])+"_"+TString::Format("%.0f",pTbins[i+1])+"_eta_"+TString::Format("%2.1f",j*0.5)+"_"+TString::Format("%2.1f",(j+1)*0.5);
-            hDeltapT[i][j] = (TH1F*)f->FindObjectAny(histoname+"pT12");
-            i_can[i][j] =  new TCanvas(histoname+"pT12");
+            hDeltapT[i][j] = (TH1F*)f->FindObjectAny(histoname);
+            i_can[i][j] =  new TCanvas(histoname);
             if(hDeltapT[i][j]->GetEntries()>1000)hDeltapT[i][j]->Rebin(4);
             else hDeltapT[i][j]->Rebin(2);
         }   
@@ -81,6 +67,7 @@ void fit_histo()
             hDeltapT[i][j]->GetXaxis()->SetRangeUser(mean-2*RMS, mean+2*RMS);
             hDeltapT[i][j]->GetXaxis()->SetTitle("#Deltap_{T}/p_{T}");
             hDeltapT[i][j]->GetXaxis()->SetLabelSize(0.04);
+            hDeltapT[i][j]->SetMarkerStyle(20);
             hDeltapT[i][j]->GetYaxis()->SetLabelSize(0.04);
 
             i_can[i][j]   ->cd();
