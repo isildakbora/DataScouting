@@ -41,22 +41,22 @@ RooMsgService.instance().setStreamStatus(1,ROOT.kFALSE)
 ## ---- FNAL -------
 # PATH = ''
 ## ---- LOCAL ------
-PATH = '~/Desktop/DataScouting/test/'
+PATH = '~/Dropbox/DataScouting/test/'
 
 filenameSig = PATH+'dijetHisto_RS'+str(mass)+'_signal.root'
-filenameDat = PATH+'dijetHisto_data.root'
+filenameDat = PATH+'dijetHisto_data_RUNB.root'
 
 inputHistName = 'h1_MjjWide_finalSel_varbin'
 
 if fitSig: 
     infSig = TFile.Open(filenameSig)
-    hSig   = infSig.Get(inputHistName)
-    hSig.Rebin(20)
+    hSig   = infSig.FindObjectAny(inputHistName)
+    #hSig.Rebin(20)
 
 if fitDat:
     infDat = TFile.Open(filenameDat)
     hDat   = infDat.FindObjectAny(inputHistName)
-
+hDat.Draw()
 # -----------------------------------------
 # define observable
 x = RooRealVar('mjj','mjj',300,4500)
@@ -129,12 +129,12 @@ if fitDat:
     frame1.SetMinimum(0.5)
     frame1.GetXaxis().SetTitle('')
 
-    frame1.GetXaxis().SetLabelSize(0.0)
+    frame1.GetXaxis().SetLabelSize(0.02)
     frame1.GetYaxis().SetTickLength(0.06)
     frame1.Draw()
 
-    pad = TPad('pad','pad',0.,0.,1.,1.)
-    pad.SetTopMargin(0.6)
+    pad = TPad('pad','pad',0.,0.,1.,0.35)
+    pad.SetTopMargin(0.1)
     pad.SetFillColor(0)
     pad.SetFillStyle(0)
     pad.Draw()
