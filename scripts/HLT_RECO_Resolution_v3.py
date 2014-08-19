@@ -47,7 +47,6 @@ for i in range(len(res_bins)-1):
 
 print len(h_res), len(res_bins)-1
 
-entries = entries/int(sys.argv[1])
 for jentry in range(entries):
 	ientry = mychain.LoadTree( jentry )
 	progress = math.floor(50*jentry/entries)
