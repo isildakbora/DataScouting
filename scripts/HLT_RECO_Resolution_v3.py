@@ -198,26 +198,12 @@ for i in range(len(res_bins)-1):
 		r  = h_res[i].Fit(res_func[i].GetName(), 'RQN+')
 	r  = h_res[i].Fit(res_func[i].GetName(), 'SRQ+')
 
-	if int(r) >= 0:
-		mean.append(array('d', r.Parameters())[1])
-		sigma.append(array('d', r.Parameters())[2])
-		mean_err.append(r.ParError(1))
-		sigma_err.append(r.ParError(2))
 
 	h_res[i].SetMarkerStyle(20)
 	h_res[i].SetDrawOption('E1][')
 	gPad.SetLogy()
 	can[i].Update()
-print mean, mean_err, sigma
 
-mean_graph = TGraphErrors(len(mean), mass_points, mean, mass_point_errors, mean_err)
-sigma_graph = TGraphErrors(len(sigma), mass_points, sigma, mass_point_errors, sigma_err)
-
-canMeangraph = TCanvas("mean graph","mean graph", 600, 600)
-mean_graph.Draw('APZ')
-
-canSigmagraph = TCanvas("sigma graph","sigma graph", 600, 600)
-sigma_graph.Draw('APZ')
 
 file_to_write.cd()
 for i in xrange(len(h_res)):
@@ -225,6 +211,10 @@ for i in xrange(len(h_res)):
 	h_res[i].Write()
 	can[i].Write()
 
-keepGUIalive()
+#keepGUIalive
+rep = ''
+while not rep in ['q','Q']:
+	rep = raw_input('enter "q" to quit: ')
+	if 1 < len(rep):
+		rep = rep[0]
 
-print mass_points, mass_point_errors
