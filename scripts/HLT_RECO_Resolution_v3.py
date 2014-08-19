@@ -4,7 +4,10 @@ from rootutils import *
 import math, sys, numpy as np
 from bisect import bisect_left
 file_to_write = TFile('HLT_RECO_Smearing_Functions.root', 'RECREATE')
+#if working local
 myfile  = TFile( 'test_Calo.root' )
+#if working in lxplus
+#myfile  = TFile( '/afs/cern.ch/user/i/isildak/public/DataScouting' )
 mychain = gDirectory.Get( 'DSComp' )
 entries = mychain.GetEntriesFast()
 print entries
