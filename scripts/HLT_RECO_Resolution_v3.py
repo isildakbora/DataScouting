@@ -1,13 +1,18 @@
 import ROOT, sys
 from ROOT import *
-from rootutils import *
 import math, sys, numpy as np
 from bisect import bisect_left
+from array import array
+
+def progressbar(progress):
+	sys.stdout.write('\r['+int(progress)*'|'+'%'+str(2*progress)+(50-int(progress))*' '+']')
+	sys.stdout.flush()
+
 file_to_write = TFile('HLT_RECO_Smearing_Functions.root', 'RECREATE')
 #if working local
-myfile  = TFile( 'test_Calo.root' )
+#myfile  = TFile( 'test_Calo.root' )
 #if working in lxplus
-#myfile  = TFile( '/afs/cern.ch/user/i/isildak/public/DataScouting' )
+myfile  = TFile( '/afs/cern.ch/user/i/isildak/public/DataScouting/test_Calo.root' )
 mychain = gDirectory.Get( 'DSComp' )
 entries = mychain.GetEntriesFast()
 print entries
