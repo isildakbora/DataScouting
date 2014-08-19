@@ -5,7 +5,6 @@ from ROOT import TFile, TH1F, TCanvas, TPad, TRandom3, gRandom
 from ROOT import gROOT, gPad 
 from ROOT import *
 from rootutils import *
-from setTDRStyle import setTDRStyle
 import math, sys, numpy as np
 from bisect import bisect_left
 
