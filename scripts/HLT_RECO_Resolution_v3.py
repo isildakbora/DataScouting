@@ -191,7 +191,7 @@ can      = []
 
 for i in range(len(res_bins)-1):
 	c_name = "c_res_" + str(int(res_bins[i])) + "_" + str(int(res_bins[i+1]))
-	can.append(TCanvas(c_name, 600, 600))
+	can.append(TCanvas(c_name, c_name, 600, 600))
 	can[i].cd()
 
 	for j in xrange(20):
