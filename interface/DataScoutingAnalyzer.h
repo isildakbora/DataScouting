@@ -34,41 +34,43 @@ class DataScoutingAnalyzer : public edm::EDAnalyzer {
       // ----------member data ---------------------------
   
   edm::InputTag tag_recoJet;
+  bool apply_corrections_reco;
+  bool apply_corrections_DS;
   std::string s_recoJetCorrector;
+  std::string s_dsJetCorrector;
   edm::InputTag tag_recoRho;
+  double jetThreshold;
   edm::InputTag tag_recoMet;
   edm::InputTag tag_recoElectrons;
   edm::InputTag tag_recoMuons;
   edm::InputTag tag_hcalNoise;
   std::string s_outputFile;
 
-  //Optional MET filters
-  // 1 means we KEEP the event
-  bool ECALTPFilterFlag;
-  bool HBHENoiseFilterResultFlag;
-  bool hcalLaserEventFilterFlag;
-  bool eeBadScFilterFlag;
-  int  ECALDeadDRFilterFlag;
-  int  ECALBoundaryDRFilterFlag;
-  
-  double jetThreshold;
-
   TFile *outputFile;
   TTree *outputTree;
 
   static const int _kMaxJets = 200;
 
+  int runNo;
+  int evtNo;
+  int lumiBlock;
   int nDSJets;
+  
+  float recoJEC[_kMaxJets];
+  float dsJECL2L3Res[_kMaxJets];
+  float dspileupCorr[_kMaxJets];
+
   float dsJetPt[_kMaxJets];
   float dsJetEta[_kMaxJets];
   float dsJetPhi[_kMaxJets];
   float dsJetE[_kMaxJets];
+  float dsJetRawE[_kMaxJets];
   float dsJetFracHad[_kMaxJets];
-  int dsJetMatchIndex[_kMaxJets];
+  float dsJetFracEm[_kMaxJets];
+  int   dsJetMatchIndex[_kMaxJets];
 
 
   float dsRho;
-
   float dsMetPt;
   float dsMetPhi;
   float dsMetCleanPt;
@@ -79,17 +81,22 @@ class DataScoutingAnalyzer : public edm::EDAnalyzer {
   float recoJetEta[_kMaxJets];
   float recoJetPhi[_kMaxJets];
   float recoJetE[_kMaxJets];
+  float recoJetRawE[_kMaxJets];
+  float recoJetFracHad[_kMaxJets];
+  float recoJetFracEm[_kMaxJets];
+
   //  float recoJetFracHad[_kMaxJets];
 
   float recoRho;
-
   float recoMetPt;
   float recoMetPhi;
   float recoMetCleanPt;
   float recoMetCleanPhi;
-  
-
+  bool  HBHENoiseFilterResultFlag;
+  bool  eeBadScFilterFlag;
+  bool  hcalLaserEventFilterFlag;
 };
 
 
 #endif
+
