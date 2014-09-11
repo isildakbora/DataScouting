@@ -156,6 +156,7 @@ DataScoutingAnalyzer<jettype,mettype>::analyze(const edm::Event& iEvent, const e
   iEvent.getByLabel("hltMet",h_dsMet);
   iEvent.getByLabel("hltMetClean",h_dsMetClean);
   iEvent.getByLabel("hltKT6CaloJets","rho",h_dsRho);
+  std::cout << "Hello. My name is Mahir." << std::endl;
   /*
   iEvent.getByLabel("hltPixelMatchElectronsActivity",h_dsElectrons);
   iEvent.getByLabel("hltRecoEcalSuperClusterActivityCandidate",h_dsSC);
@@ -258,7 +259,7 @@ DataScoutingAnalyzer<jettype,mettype>::analyze(const edm::Event& iEvent, const e
         dsJet.scaleEnergy(correctorL2L3->correction(dsJet,iEvent,iSetup));
         dsJECL2L3Res[nDSJets] = dsJet.pt()/ds_tmp_pT;
       }
-       else continue;
+       //else continue;
      }
       dsJetPt[nDSJets]      = dsJet.pt();
       dsJetEta[nDSJets]     = dsJet.eta();
@@ -275,7 +276,7 @@ DataScoutingAnalyzer<jettype,mettype>::analyze(const edm::Event& iEvent, const e
     for( int iRECOJet=0; iRECOJet < nRECOJets; iRECOJet++)
     {
       dR= reco::deltaR(dsJet.eta(),dsJet.phi(),recoJetEta[iRECOJet],recoJetPhi[iRECOJet]);
-      //std::cout << "DeltaR: " << reco::deltaR(i_dsJet->eta(),i_dsJet->phi(),recoJetEta[iRECOJet],recoJetPhi[iRECOJet]) << std::endl;
+      std::cout << "DeltaR: " << reco::deltaR(i_dsJet->eta(),i_dsJet->phi(),recoJetEta[iRECOJet],recoJetPhi[iRECOJet]) << std::endl;
       if( dR> 0.5) continue; //require DR match
       
       if (dR < minDeltaR) 
