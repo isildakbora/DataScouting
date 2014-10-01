@@ -1,23 +1,3 @@
-// -*- C++ -*-
-//
-// Package:    DataScoutingAnalyzer
-// Class:      DataScoutingAnalyzer
-// 
-/**\class DataScoutingAnalyzer DataScoutingAnalyzer.cc tmp/DataScoutingAnalyzer/src/DataScoutingAnalyzer.cc
-
- Description: [one line class summary]
-
- Implementation:
-     [Notes on implementation]
-*/
-//
-// Original Author:  Alex Mott
-//         Created:  Wed Sep  5 16:25:41 CEST 2012
-// $Id: DataScoutingAnalyzer.cc,v 1.6 2012/10/04 16:18:17 amott Exp $
-//
-//
-
-
 // system include files
 #include <memory>
 #include <typeinfo>
