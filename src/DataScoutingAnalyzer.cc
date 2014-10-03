@@ -54,11 +54,8 @@ DataScoutingAnalyzer<jettype,mettype>::DataScoutingAnalyzer(const edm::Parameter
 
 }
 
-
-
 template <typename jettype, typename mettype>
 DataScoutingAnalyzer<jettype,mettype>::~DataScoutingAnalyzer(){
-
 }
 
 // ------------ method called for each event  ------------
@@ -159,7 +156,7 @@ DataScoutingAnalyzer<jettype,mettype>::analyze(const edm::Event& iEvent, const e
     float pileupCorr      = 1-((1.08 - dsRho)*dsJet.jetArea()/dsJet.pt());
 
     if(dsJet.pt()*pileupCorr < jetThreshold) continue;
-    
+
     if(apply_corrections_DS){
 
       if(pileupCorr > 0. && pileupCorr < 1.){
