@@ -15,16 +15,18 @@ N = mass_high-mass_low
 file_type1 = TFile.Open("../FisherStudies/dijetFitResults_FuncType5_nParFit6_Run2012BCD.root")
 func_type1 = file_type1.FindObjectAny("M1Bkg").Clone("M1Bkg_func_type_1")
 
-gen_type1 = TH1F("Generated_by_Type_1_Function","Generated_by_Type_1_Function", len(massBins)-1, massBins)
+gen_type1  = TH1F("Generated_by_Type_1_Function","Generated_by_Type_1_Function", len(massBins)-1, massBins)
 gen_type1.Sumw2()
 
 
 
 #Generate by type 1
 for i in xrange(0, len(massBins)-1):
-	r = TRandom1()
-	mjj_y = func_type1.Integral(massBins[i], massBins[i+1])
+	
+	r         = TRandom1()
+	mjj_y     = func_type1.Integral(massBins[i], massBins[i+1])
 	bin_width = massBins[i+1] - massBins[i]
+
 	gen_type1.SetBinContent(i+1, r.Poisson(mjj_y))
 	gen_type1.SetBinError(i+1, TMath.Sqrt(gen_type1.GetBinContent(i+1)))
 	print mjj_y, gen_type1.GetBinLowEdge(i+1), gen_type1.GetBinContent(i+1)
@@ -46,9 +48,9 @@ s = RooRealVar("sigma", "sigma", 20.)
 a = RooRealVar("alpha", "alpha", 1)
 n = RooRealVar("n", "n", 1)
 
-frac = RooRealVar("frac" ,"Signal fraction" , 0.1 , 0.0, 1.0)
+frac      = RooRealVar("frac" ,"Signal fraction" , 0.1 , 0.0, 1.0)
 true_frac = RooRealVar("true_frac" ,"True Signal fraction" , 0.5)
-hist1 = RooDataHist ("hist1","hist1", RooArgList(x), gen_type1)
+hist1     = RooDataHist ("hist1","hist1", RooArgList(x), gen_type1)
 #hist2 = RooDataHist ("hist2","hist2", RooArgList(x), hist_mass_varbin)
 
 scale = 100.
