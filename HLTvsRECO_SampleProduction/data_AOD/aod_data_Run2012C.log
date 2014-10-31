@@ -1,0 +1,106 @@
+04-Sep-2014 13:26:37 CEST  Initiating request to open file file:../data_HLT_RAW/hlt_data_Run2012C.root
+04-Sep-2014 13:26:37 CEST  Successfully opened file file:../data_HLT_RAW/hlt_data_Run2012C.root
+Begin processing the 1st record. Run 199812, Event 102278741, LumiSection 119 at 04-Sep-2014 13:26:50.221 CEST
+Begin processing the 2nd record. Run 199812, Event 102304917, LumiSection 119 at 04-Sep-2014 13:27:31.860 CEST
+Begin processing the 3rd record. Run 199812, Event 102246773, LumiSection 119 at 04-Sep-2014 13:27:40.040 CEST
+Begin processing the 4th record. Run 199812, Event 102389993, LumiSection 119 at 04-Sep-2014 13:28:16.938 CEST
+Begin processing the 5th record. Run 199812, Event 102461139, LumiSection 119 at 04-Sep-2014 13:28:29.018 CEST
+Begin processing the 6th record. Run 199812, Event 102400072, LumiSection 119 at 04-Sep-2014 13:28:35.366 CEST
+Begin processing the 7th record. Run 199812, Event 102380285, LumiSection 119 at 04-Sep-2014 13:28:49.110 CEST
+Begin processing the 8th record. Run 199812, Event 102727400, LumiSection 119 at 04-Sep-2014 13:29:22.817 CEST
+Begin processing the 9th record. Run 199812, Event 102698084, LumiSection 119 at 04-Sep-2014 13:29:28.846 CEST
+Begin processing the 10th record. Run 199812, Event 102669158, LumiSection 119 at 04-Sep-2014 13:29:42.815 CEST
+Begin processing the 11th record. Run 199812, Event 102618457, LumiSection 119 at 04-Sep-2014 13:29:52.202 CEST
+Begin processing the 12th record. Run 199812, Event 102821454, LumiSection 119 at 04-Sep-2014 13:30:12.792 CEST
+Begin processing the 13th record. Run 199812, Event 102900008, LumiSection 119 at 04-Sep-2014 13:30:20.937 CEST
+Begin processing the 14th record. Run 199812, Event 103003831, LumiSection 119 at 04-Sep-2014 13:30:31.428 CEST
+%MSG-w BasicTrajectoryState:  TrackProducer:convStepTracks  04-Sep-2014 13:30:35 CEST Run: 199812 Event: 103003831
+local error not pos-def
+[  2.24595e-08 3.14608e-09 4.91784e-07 9.98462e-10-1.70178e-07
+   3.14608e-09  3.0057e-06-4.82983e-07 3.76177e-07 1.22933e-05
+   4.91784e-07-4.82983e-07-8.70969e-06 -9.6701e-07-2.21556e-05
+   9.98462e-10 3.76177e-07 -9.6701e-07 3.33221e-06 3.10674e-05
+  -1.70178e-07 1.22933e-05-2.21556e-05 3.10674e-05 0.000832887 ]
+%MSG
+%MSG-w BasicTrajectoryState:  TrackProducer:convStepTracks  04-Sep-2014 13:30:35 CEST Run: 199812 Event: 103003831
+curv error not pos-def
+[  2.24595e-08-1.05167e-07-1.74449e-06 1.65151e-07 3.97042e-08
+  -1.05167e-07 2.22278e-06-7.65201e-06-1.56482e-05-3.12049e-06
+  -1.74449e-06-7.65201e-06-0.000109978-6.67302e-05-1.25655e-05
+   1.65151e-07-1.56482e-05-6.67302e-05 0.000801058  0.00015705
+   3.97042e-08-3.12049e-06-1.25655e-05  0.00015705 3.28904e-05 ]
+%MSG
+%MSG-w BasicTrajectoryState:  TrackProducer:convStepTracks  04-Sep-2014 13:30:35 CEST Run: 199812 Event: 103003831
+local error not pos-def
+[  2.24435e-08 5.25975e-08-4.86296e-07 1.12678e-08 -1.8192e-07
+   5.25975e-08 2.78915e-06 1.60759e-06-3.96263e-07 9.08689e-06
+  -4.86296e-07 1.60759e-06 -8.8357e-06 -8.6061e-07 8.44995e-06
+   1.12678e-08-3.96263e-07 -8.6061e-07 4.59876e-06-3.37372e-05
+   -1.8192e-07 9.08689e-06 8.44995e-06-3.37372e-05 0.000357626 ]
+%MSG
+%MSG-w BasicTrajectoryState:  TrackProducer:convStepTracks  04-Sep-2014 13:30:35 CEST Run: 199812 Event: 103003831
+curv error not pos-def
+[  2.24435e-08-1.04548e-07-1.73416e-06 1.75295e-07 4.82128e-08
+  -1.04548e-07 2.16622e-06-8.13024e-06-1.01804e-05 -2.8415e-06
+  -1.73416e-06-8.13024e-06-0.000113539-1.78011e-05-3.53504e-06
+   1.75295e-07-1.01804e-05-1.78011e-05 0.000339683 8.16594e-05
+   4.82128e-08 -2.8415e-06-3.53504e-06 8.16594e-05 2.10164e-05 ]
+%MSG
+Begin processing the 15th record. Run 199812, Event 102972852, LumiSection 119 at 04-Sep-2014 13:30:37.818 CEST
+Begin processing the 16th record. Run 199812, Event 102952680, LumiSection 119 at 04-Sep-2014 13:30:48.051 CEST
+Begin processing the 17th record. Run 199812, Event 103074984, LumiSection 119 at 04-Sep-2014 13:30:57.391 CEST
+Begin processing the 18th record. Run 199812, Event 103080288, LumiSection 119 at 04-Sep-2014 13:31:07.169 CEST
+Begin processing the 19th record. Run 199812, Event 103176586, LumiSection 119 at 04-Sep-2014 13:31:21.029 CEST
+Begin processing the 20th record. Run 199812, Event 103124747, LumiSection 119 at 04-Sep-2014 13:31:25.300 CEST
+Begin processing the 21st record. Run 199812, Event 103238670, LumiSection 119 at 04-Sep-2014 13:31:40.692 CEST
+Begin processing the 22nd record. Run 199812, Event 103180141, LumiSection 119 at 04-Sep-2014 13:31:57.733 CEST
+Begin processing the 23rd record. Run 199812, Event 103220021, LumiSection 119 at 04-Sep-2014 13:32:09.367 CEST
+Begin processing the 24th record. Run 199812, Event 103184799, LumiSection 119 at 04-Sep-2014 13:32:16.572 CEST
+Begin processing the 25th record. Run 199812, Event 103274904, LumiSection 119 at 04-Sep-2014 13:32:28.603 CEST
+Begin processing the 26th record. Run 199812, Event 103323648, LumiSection 119 at 04-Sep-2014 13:32:40.679 CEST
+Begin processing the 27th record. Run 199812, Event 103327184, LumiSection 119 at 04-Sep-2014 13:32:50.529 CEST
+Begin processing the 28th record. Run 199812, Event 103341758, LumiSection 119 at 04-Sep-2014 13:32:56.662 CEST
+Begin processing the 29th record. Run 199812, Event 103387586, LumiSection 119 at 04-Sep-2014 13:33:04.678 CEST
+Begin processing the 30th record. Run 199812, Event 103358282, LumiSection 119 at 04-Sep-2014 13:33:11.889 CEST
+Begin processing the 31st record. Run 199812, Event 103431905, LumiSection 119 at 04-Sep-2014 13:33:18.909 CEST
+Begin processing the 32nd record. Run 199812, Event 103308584, LumiSection 119 at 04-Sep-2014 13:33:24.636 CEST
+Begin processing the 33rd record. Run 199812, Event 103716374, LumiSection 119 at 04-Sep-2014 13:33:49.385 CEST
+Begin processing the 34th record. Run 199812, Event 103226186, LumiSection 119 at 04-Sep-2014 13:33:56.666 CEST
+Begin processing the 35th record. Run 199812, Event 103727307, LumiSection 119 at 04-Sep-2014 13:34:14.679 CEST
+Begin processing the 36th record. Run 199812, Event 103714165, LumiSection 119 at 04-Sep-2014 13:34:21.805 CEST
+Begin processing the 37th record. Run 199812, Event 102212651, LumiSection 119 at 04-Sep-2014 13:34:38.654 CEST
+Begin processing the 38th record. Run 199812, Event 102199199, LumiSection 119 at 04-Sep-2014 13:34:41.827 CEST
+Begin processing the 39th record. Run 199812, Event 102276706, LumiSection 119 at 04-Sep-2014 13:34:49.045 CEST
+Begin processing the 40th record. Run 199812, Event 102261626, LumiSection 119 at 04-Sep-2014 13:34:58.385 CEST
+Begin processing the 41st record. Run 199812, Event 102469668, LumiSection 119 at 04-Sep-2014 13:35:18.214 CEST
+Begin processing the 42nd record. Run 199812, Event 102448087, LumiSection 119 at 04-Sep-2014 13:35:25.785 CEST
+Begin processing the 43rd record. Run 199812, Event 102416208, LumiSection 119 at 04-Sep-2014 13:35:34.214 CEST
+Begin processing the 44th record. Run 199812, Event 102736370, LumiSection 119 at 04-Sep-2014 13:35:46.692 CEST
+Begin processing the 45th record. Run 199812, Event 102711234, LumiSection 119 at 04-Sep-2014 13:35:51.939 CEST
+Begin processing the 46th record. Run 199812, Event 102712881, LumiSection 119 at 04-Sep-2014 13:36:13.011 CEST
+Begin processing the 47th record. Run 199812, Event 102840769, LumiSection 119 at 04-Sep-2014 13:36:25.503 CEST
+Begin processing the 48th record. Run 199812, Event 102898134, LumiSection 119 at 04-Sep-2014 13:36:33.796 CEST
+Begin processing the 49th record. Run 199812, Event 102874181, LumiSection 119 at 04-Sep-2014 13:36:40.087 CEST
+Begin processing the 50th record. Run 199812, Event 102969259, LumiSection 119 at 04-Sep-2014 13:36:52.072 CEST
+04-Sep-2014 13:37:02 CEST  Closed file file:../data_HLT_RAW/hlt_data_Run2012C.root
+
+=============================================
+
+MessageLogger Summary
+
+ type     category        sev    module        subroutine        count    total
+ ---- -------------------- -- ---------------- ----------------  -----    -----
+    1 BasicTrajectoryState -w TrackProducer:co                       4        4
+    2 fileAction           -s file_close                             1        1
+    3 fileAction           -s file_open                              2        2
+
+ type    category    Examples: run/evt        run/evt          run/evt
+ ---- -------------------- ---------------- ---------------- ----------------
+    1 BasicTrajectoryState 199812/103003831 199812/103003831 199812/103003831
+    2 fileAction           PostEndRun                        
+    3 fileAction           pre-events       pre-events       
+
+Severity    # Occurrences   Total Occurrences
+--------    -------------   -----------------
+Warning                 4                   4
+System                  3                   3
