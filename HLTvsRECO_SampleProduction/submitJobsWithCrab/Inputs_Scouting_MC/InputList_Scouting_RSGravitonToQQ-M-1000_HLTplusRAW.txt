@@ -1,0 +1,1 @@
+/RSGravitonToQQbar_kMpl01_M_1000_Tune4C_8TeV_pythia8_v2/santanas-DataScouting-RSGravitonToQQ-M-1000-HLT8e33v2-HLTplusGENSIMRAW-5411b92efb5400dfcb68708071d10090/USER -1 100
