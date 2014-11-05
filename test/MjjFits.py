@@ -14,7 +14,7 @@ parser.add_option("-d","--fitDat",action="store_true",default=False,dest="fitDat
 parser.add_option("-m","--mass",action="store",type="int",dest="mass",default=2000)
 
 
-parser.add_option("--lumi",action="store",type="float",dest="lumi",default=19.8)
+parser.add_option("--lumi",action="store",type="float",dest="lumi",default=18.694)
 parser.add_option("--sigEff",action="store",type="float",dest="sigEff",default=0.2941)
 parser.add_option("--sigXS",action="store",type="float",dest="sigXS",default=0.004083e3)
 
@@ -43,35 +43,35 @@ RooMsgService.instance().setStreamStatus(1,ROOT.kFALSE)
 ## ---- LOCAL ------
 PATH = '~/Dropbox/DataScouting/test/'
 
-filenameSig = PATH+'dijetHisto_RS'+str(mass)+'_signal.root'
-filenameDat = PATH+'dijetHisto_data_RUNB.root'
+filenameSig = PATH+'RSGravitonToQQbar_M_'+str(mass)+'.root'
+filenameDat = PATH+'DataScouting_Bora040214_Run2012BCD_runrange_193834-208686_dijet.root'
 
 inputHistName = 'h1_MjjWide_finalSel_varbin'
 
 if fitSig: 
     infSig = TFile.Open(filenameSig)
-    hSig   = infSig.FindObjectAny(inputHistName)
-    #hSig.Rebin(20)
+    hSig   = infSig.FindObjectAny('h1_MjjWide_finalSel')
+    hSig.Rebin(20)
 
 if fitDat:
     infDat = TFile.Open(filenameDat)
     hDat   = infDat.FindObjectAny(inputHistName)
-hDat.Draw()
+
 # -----------------------------------------
 # define observable
-x = RooRealVar('mjj','mjj',300,4500)
+x = RooRealVar('mjj','mjj',354.,5455.)
 
 if fitSig: 
 
     # define parameters for signal fit
-    m = RooRealVar('mean','mean',float(mass),float(mass)-200,float(mass)+200)
-    s = RooRealVar('sigma','sigma',0.1*float(mass),0,10000)
-    a = RooRealVar('alpha','alpha',1,-10,10)
-    n = RooRealVar('n','n',1,0,100)
+    m   = RooRealVar('#mu','mean',float(mass),float(mass)-200,float(mass)+200)
+    s   = RooRealVar('#sigma','sigma',0.1*float(mass),0,10000)
+    a   = RooRealVar('#alpha','alpha',1,-10,10)
+    n   = RooRealVar('n','n',1,0,100)
     sig = RooCBShape('sig','sig',x,m,s,a,n)        
 
     p  = RooRealVar('p','p',1,0,5)
-    x0 = RooRealVar('x0','x0',1000,100,5000)
+    x0 = RooRealVar('x0','x0',0,5000)
 
     bkg = RooGenericPdf('bkg','1/(exp(pow(@0/@1,@2))+1)',RooArgList(x,x0,p))
 
@@ -83,7 +83,7 @@ if fitSig:
     canSname = 'can_Mjj'+str(mass)
 
     canS = TCanvas(canSname,canSname,900,600)
-    #gPad.SetLogy() 
+    gPad.SetLogy() 
 
     roohistSig = RooDataHist('roohist','roohist',RooArgList(x),hSig)
 
@@ -92,7 +92,8 @@ if fitSig:
     roohistSig.plotOn(frame)
     signal.plotOn(frame)
     signal.plotOn(frame,RooFit.Components('bkg'),RooFit.LineColor(ROOT.kRed),RooFit.LineWidth(2),RooFit.LineStyle(ROOT.kDashed))
-    frame.GetXaxis().SetRangeUser(900,4500)
+    signal.paramOn(frame)
+    frame.GetXaxis().SetRangeUser(354,1000)
     frame.GetXaxis().SetTitle('m_{jj} (GeV)')
     frame.Draw()
 
@@ -104,11 +105,21 @@ if fitDat:
     # -----------------------------------------
     # define parameters for background
     NBINS = 180
-    p1 = RooRealVar('p1','p1',7,1,10)
-    p2 = RooRealVar('p2','p2',5,1,10)
-    p3 = RooRealVar('p3','p3',0.03,0.01,0.07)
+    #p1 = RooRealVar('p1','p1',7,1,10)
+    #p2 = RooRealVar('p2','p2',5,1,10)
+    #p3 = RooRealVar('p3','p3',0.03,0.01,0.07)
 
-    background = RooGenericPdf('background', '(pow(1-@0/8000,@1)/pow(@0/8000,@2+@3*log(@0/8000)))', RooArgList(x, p1, p2, p3))
+    p1 = RooRealVar('p1','p1', 0.1554)
+    p2 = RooRealVar('p2','p2', 7.31)
+    p3 = RooRealVar('p3','p3', 6.467)
+    p4 = RooRealVar('p4','p4', 0.3718)
+    p5 = RooRealVar('p5','p5', 0.06696)
+    p6 = RooRealVar('p6','p6', 0.01064)
+ 
+    #background = RooGenericPdf('background', '(pow(1-@0/8000,@1)/pow(@0/8000,@2+@3*log(@0/8000)))', RooArgList(x, p1, p2, p3))
+    background = RooGenericPdf('background','(@1*TMath::Power(1-@0/8000,@2))/(pow(@0/8000,@3+@4*log(@0/8000)+@5*pow(log(@0/8000),2)+@6*pow(log(@0/8000),3)))', RooArgList(x, p1, p2, p3, p4, p5, p6))
+
+
     roohistBkg = RooDataHist('roohist', 'roohist', RooArgList(x), hDat)
     res = background.fitTo(roohistBkg)
 
@@ -123,6 +134,7 @@ if fitDat:
     frame2 = x.frame()
     roohistBkg.plotOn(frame1)
     background.plotOn(frame1)
+    background.paramOn(frame1)
     hpull = frame1.pullHist()
     frame2.addPlotable(hpull,'p')
 
@@ -139,8 +151,8 @@ if fitDat:
     pad.SetFillStyle(0)
     pad.Draw()
     pad.cd(0)
-    frame2.SetMinimum(-5)
-    frame2.SetMaximum(5)
+    frame2.SetMinimum(-100)
+    frame2.SetMaximum(100)
     frame2.GetYaxis().SetNdivisions(505)
     frame2.GetXaxis().SetTitleOffset(0.9)
     frame2.GetYaxis().SetTitleOffset(0.8)
