@@ -71,7 +71,7 @@ DataScoutingAnalyzer<jettype,mettype>::analyze(const edm::Event& iEvent, const e
 
   Handle<std::vector<jettype> > h_recoJet;
   const JetCorrector* correctorL1L2L3 = JetCorrector::getJetCorrector (s_recoJetCorrector, iSetup);
-  const JetCorrector* correctorL2L3     = JetCorrector::getJetCorrector (s_dsJetCorrector, iSetup); 
+  const JetCorrector* correctorL2L3   = JetCorrector::getJetCorrector (s_dsJetCorrector, iSetup); 
  
   Handle<double> h_recoRho;
   edm::Handle<reco::JetIDValueMap> recoJetIDMap;
@@ -123,7 +123,9 @@ DataScoutingAnalyzer<jettype,mettype>::analyze(const edm::Event& iEvent, const e
     reco::CaloJet* p1 = dynamic_cast<reco::CaloJet*>(&recoJet);
     //reco::PFJet*   p2 = dynamic_cast<reco::PFJet*>(&recoJet);
 
-    recoJetRawE[nRECOJets] = recoJet.energy();
+    recoJetRawE[nRECOJets]  = recoJet.energy();
+    recoJetRawPt[nRECOJets] = recoJet.pt();
+    
     float tmp_pT = recoJet.pt();
     double scale = correctorL1L2L3->correction(recoJet,iEvent,iSetup);
     if(apply_corrections_reco)
@@ -218,6 +220,7 @@ DataScoutingAnalyzer<jettype,mettype>::beginJob(){
   outputTree->Branch("recoJEC",recoJEC,"recoJEC[nDSJets]");
   outputTree->Branch("dsJECL2L3Res",dsJECL2L3Res,"dsJECL2L3Res[nDSJets]");
   outputTree->Branch("dsJetPt",dsJetPt,"dsJetPt[nDSJets]");
+  outputTree->Branch("dsJetRawPt",dsJetRawPt,"dsJetRawPt[nDSJets]");
   outputTree->Branch("dsJetEta",dsJetEta,"dsJetEta[nDSJets]");
   outputTree->Branch("dsJetPhi",dsJetPhi,"dsJetPhi[nDSJets]");
   outputTree->Branch("dsJetE",dsJetE,"dsJetE[nDSJets]");
@@ -234,6 +237,7 @@ DataScoutingAnalyzer<jettype,mettype>::beginJob(){
 
   outputTree->Branch("nRECOJets",&nRECOJets,"nRECOJets/I");
   outputTree->Branch("recoJetPt",recoJetPt,"recoJetPt[nRECOJets]");
+  outputTree->Branch("recoJetRawPt",recoJetRawPt,"recoJetRawPt[nRECOJets]");
   outputTree->Branch("recoJetEta",recoJetEta,"recoJetEta[nRECOJets]");
   outputTree->Branch("recoJetPhi",recoJetPhi,"recoJetPhi[nRECOJets]");
   outputTree->Branch("recoJetE",recoJetE,"recoJetE[nRECOJets]");
