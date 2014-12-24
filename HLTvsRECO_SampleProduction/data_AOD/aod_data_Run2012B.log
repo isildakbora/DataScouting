@@ -1,0 +1,78 @@
+04-Sep-2014 13:26:30 CEST  Initiating request to open file file:../data_HLT_RAW/hlt_data_Run2012B.root
+04-Sep-2014 13:26:31 CEST  Successfully opened file file:../data_HLT_RAW/hlt_data_Run2012B.root
+Begin processing the 1st record. Run 194533, Event 53241070, LumiSection 64 at 04-Sep-2014 13:26:44.000 CEST
+Begin processing the 2nd record. Run 194533, Event 53267758, LumiSection 64 at 04-Sep-2014 13:27:11.718 CEST
+Begin processing the 3rd record. Run 194533, Event 53149598, LumiSection 64 at 04-Sep-2014 13:27:37.765 CEST
+Begin processing the 4th record. Run 194533, Event 53405870, LumiSection 64 at 04-Sep-2014 13:27:51.721 CEST
+Begin processing the 5th record. Run 194533, Event 53410798, LumiSection 64 at 04-Sep-2014 13:28:06.251 CEST
+Begin processing the 6th record. Run 194533, Event 53467390, LumiSection 64 at 04-Sep-2014 13:28:17.141 CEST
+Begin processing the 7th record. Run 194533, Event 53585687, LumiSection 64 at 04-Sep-2014 13:28:30.114 CEST
+Begin processing the 8th record. Run 194533, Event 53777479, LumiSection 64 at 04-Sep-2014 13:28:43.544 CEST
+Begin processing the 9th record. Run 194533, Event 53783055, LumiSection 64 at 04-Sep-2014 13:28:50.974 CEST
+Begin processing the 10th record. Run 194533, Event 53803847, LumiSection 64 at 04-Sep-2014 13:29:00.760 CEST
+Begin processing the 11th record. Run 194533, Event 53830903, LumiSection 64 at 04-Sep-2014 13:29:12.034 CEST
+Begin processing the 12th record. Run 194533, Event 53852783, LumiSection 64 at 04-Sep-2014 13:29:22.817 CEST
+Begin processing the 13th record. Run 194533, Event 54059719, LumiSection 64 at 04-Sep-2014 13:29:33.426 CEST
+Begin processing the 14th record. Run 194533, Event 54025327, LumiSection 64 at 04-Sep-2014 13:29:48.024 CEST
+Begin processing the 15th record. Run 194533, Event 54253631, LumiSection 64 at 04-Sep-2014 13:30:00.561 CEST
+Begin processing the 16th record. Run 194533, Event 54409823, LumiSection 64 at 04-Sep-2014 13:30:31.794 CEST
+Begin processing the 17th record. Run 194533, Event 53324158, LumiSection 64 at 04-Sep-2014 13:30:40.349 CEST
+%MSG-e TooManySeeds:   SeedGeneratorFromRegionHitsEDProducer:regionalCosmicTrackerSeeds  04-Sep-2014 13:31:20 CEST Run: 194533 Event: 53324158
+Found too many seeds (10002 > 10000), bailing out.
+
+%MSG
+Begin processing the 18th record. Run 194533, Event 54270783, LumiSection 64 at 04-Sep-2014 13:31:25.467 CEST
+Begin processing the 19th record. Run 194533, Event 53695711, LumiSection 64 at 04-Sep-2014 13:31:46.674 CEST
+Begin processing the 20th record. Run 194533, Event 54456519, LumiSection 64 at 04-Sep-2014 13:32:02.992 CEST
+Begin processing the 21st record. Run 194533, Event 54370607, LumiSection 64 at 04-Sep-2014 13:32:15.728 CEST
+Begin processing the 22nd record. Run 194533, Event 53798903, LumiSection 64 at 04-Sep-2014 13:32:33.418 CEST
+Begin processing the 23rd record. Run 194533, Event 54384895, LumiSection 64 at 04-Sep-2014 13:32:38.321 CEST
+Begin processing the 24th record. Run 194533, Event 54443519, LumiSection 64 at 04-Sep-2014 13:33:38.597 CEST
+Begin processing the 25th record. Run 194533, Event 54649767, LumiSection 64 at 04-Sep-2014 13:33:54.521 CEST
+Begin processing the 26th record. Run 194533, Event 54547807, LumiSection 64 at 04-Sep-2014 13:34:00.121 CEST
+Begin processing the 27th record. Run 194533, Event 54375967, LumiSection 64 at 04-Sep-2014 13:34:08.459 CEST
+Begin processing the 28th record. Run 194533, Event 53144803, LumiSection 64 at 04-Sep-2014 13:34:19.632 CEST
+Begin processing the 29th record. Run 194533, Event 53515395, LumiSection 64 at 04-Sep-2014 13:34:30.755 CEST
+Begin processing the 30th record. Run 194533, Event 53423291, LumiSection 64 at 04-Sep-2014 13:34:37.089 CEST
+Begin processing the 31st record. Run 194533, Event 53481355, LumiSection 64 at 04-Sep-2014 13:34:45.605 CEST
+Begin processing the 32nd record. Run 194533, Event 53972444, LumiSection 64 at 04-Sep-2014 13:35:08.881 CEST
+Begin processing the 33rd record. Run 194533, Event 54055308, LumiSection 64 at 04-Sep-2014 13:35:16.008 CEST
+Begin processing the 34th record. Run 194533, Event 53794556, LumiSection 64 at 04-Sep-2014 13:35:23.913 CEST
+Begin processing the 35th record. Run 194533, Event 54006956, LumiSection 64 at 04-Sep-2014 13:35:42.801 CEST
+Begin processing the 36th record. Run 194533, Event 54168436, LumiSection 64 at 04-Sep-2014 13:35:54.698 CEST
+Begin processing the 37th record. Run 194533, Event 54393252, LumiSection 64 at 04-Sep-2014 13:36:19.923 CEST
+Begin processing the 38th record. Run 194533, Event 54207252, LumiSection 64 at 04-Sep-2014 13:36:30.422 CEST
+Begin processing the 39th record. Run 194533, Event 54580028, LumiSection 64 at 04-Sep-2014 13:36:41.688 CEST
+Begin processing the 40th record. Run 194533, Event 54695252, LumiSection 64 at 04-Sep-2014 13:36:51.411 CEST
+Begin processing the 41st record. Run 194533, Event 54246164, LumiSection 64 at 04-Sep-2014 13:37:11.793 CEST
+Begin processing the 42nd record. Run 194533, Event 54213524, LumiSection 64 at 04-Sep-2014 13:37:16.990 CEST
+Begin processing the 43rd record. Run 194533, Event 53437479, LumiSection 64 at 04-Sep-2014 13:37:28.270 CEST
+Begin processing the 44th record. Run 194533, Event 53855432, LumiSection 64 at 04-Sep-2014 13:37:34.784 CEST
+Begin processing the 45th record. Run 194533, Event 53908096, LumiSection 64 at 04-Sep-2014 13:37:41.312 CEST
+Begin processing the 46th record. Run 194533, Event 53724712, LumiSection 64 at 04-Sep-2014 13:37:52.840 CEST
+Begin processing the 47th record. Run 194533, Event 54217928, LumiSection 64 at 04-Sep-2014 13:37:58.596 CEST
+Begin processing the 48th record. Run 194533, Event 53629336, LumiSection 64 at 04-Sep-2014 13:38:07.059 CEST
+Begin processing the 49th record. Run 194533, Event 53878208, LumiSection 64 at 04-Sep-2014 13:38:20.514 CEST
+Begin processing the 50th record. Run 194533, Event 54332864, LumiSection 64 at 04-Sep-2014 13:38:29.267 CEST
+04-Sep-2014 13:38:53 CEST  Closed file file:../data_HLT_RAW/hlt_data_Run2012B.root
+
+=============================================
+
+MessageLogger Summary
+
+ type     category        sev    module        subroutine        count    total
+ ---- -------------------- -- ---------------- ----------------  -----    -----
+    1 TooManySeeds         -e SeedGeneratorFro                       1        1
+    2 fileAction           -s file_close                             1        1
+    3 fileAction           -s file_open                              2        2
+
+ type    category    Examples: run/evt        run/evt          run/evt
+ ---- -------------------- ---------------- ---------------- ----------------
+    1 TooManySeeds         194533/53324158                   
+    2 fileAction           PostEndRun                        
+    3 fileAction           pre-events       pre-events       
+
+Severity    # Occurrences   Total Occurrences
+--------    -------------   -----------------
+Error                   1                   1
+System                  3                   3

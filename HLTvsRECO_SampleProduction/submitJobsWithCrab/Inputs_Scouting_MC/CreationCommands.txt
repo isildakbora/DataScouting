@@ -1,0 +1,37 @@
+#------------------------------------------------------------
+# Signal Resonance Samples GEN-SIM-RAW-->HLT+GEN-SIM-RAW
+#------------------------------------------------------------
+
+./createJobsWithCrab_CopyToT2.pl -d Outputs_Scouting_MC -v DataScouting-QstarToJJ-M-300-HLT8e33v2-HLTplusGENSIMRAW -i Inputs_Scouting_MC/InputList_Scouting_QstarToJJ-M-300.txt -t Inputs_Scouting_MC/template_crab_CopyToRomeT2_MC.cfg -c Inputs_Scouting_MC/hlt_mc_Run2012.py -n $USER -p DataScouting-QstarToJJ-M-300-HLT8e33v2-HLTplusGENSIMRAW
+
+./createJobsWithCrab_CopyToT2.pl -d Outputs_Scouting_MC -v DataScouting-QstarToJJ-M-1000-HLT8e33v2-HLTplusGENSIMRAW -i Inputs_Scouting_MC/InputList_Scouting_QstarToJJ-M-1000.txt -t Inputs_Scouting_MC/template_crab_CopyToRomeT2_MC.cfg -c Inputs_Scouting_MC/hlt_mc_Run2012.py -n $USER -p DataScouting-QstarToJJ-M-1000-HLT8e33v2-HLTplusGENSIMRAW
+
+./createJobsWithCrab_CopyToT2.pl -d Outputs_Scouting_MC -v DataScouting-RSGravitonToQQ-M-300-HLT8e33v2-HLTplusGENSIMRAW -i Inputs_Scouting_MC/InputList_Scouting_RSGravitonToQQ-M-300.txt -t Inputs_Scouting_MC/template_crab_CopyToRomeT2_MC.cfg -c Inputs_Scouting_MC/hlt_mc_Run2012.py -n $USER -p DataScouting-RSGravitonToQQ-M-300-HLT8e33v2-HLTplusGENSIMRAW
+
+./createJobsWithCrab_CopyToT2.pl -d Outputs_Scouting_MC -v DataScouting-RSGravitonToQQ-M-1000-HLT8e33v2-HLTplusGENSIMRAW -i Inputs_Scouting_MC/InputList_Scouting_RSGravitonToQQ-M-1000.txt -t Inputs_Scouting_MC/template_crab_CopyToRomeT2_MC.cfg -c Inputs_Scouting_MC/hlt_mc_Run2012.py -n $USER -p DataScouting-RSGravitonToQQ-M-1000-HLT8e33v2-HLTplusGENSIMRAW
+
+./createJobsWithCrab_CopyToT2.pl -d Outputs_Scouting_MC -v DataScouting-RSGravitonToGG-M-300-HLT8e33v2-HLTplusGENSIMRAW -i Inputs_Scouting_MC/InputList_Scouting_RSGravitonToGG-M-300.txt -t Inputs_Scouting_MC/template_crab_CopyToRomeT2_MC.cfg -c Inputs_Scouting_MC/hlt_mc_Run2012.py -n $USER -p DataScouting-RSGravitonToGG-M-300-HLT8e33v2-HLTplusGENSIMRAW
+
+./createJobsWithCrab_CopyToT2.pl -d Outputs_Scouting_MC -v DataScouting-RSGravitonToGG-M-1000-HLT8e33v2-HLTplusGENSIMRAW -i Inputs_Scouting_MC/InputList_Scouting_RSGravitonToGG-M-1000.txt -t Inputs_Scouting_MC/template_crab_CopyToRomeT2_MC.cfg -c Inputs_Scouting_MC/hlt_mc_Run2012.py -n $USER -p DataScouting-RSGravitonToGG-M-1000-HLT8e33v2-HLTplusGENSIMRAW
+
+
+
+========================================================================================
+
+#------------------------------------------------------------
+# Signal Resonance Samples HLT+GEN-SIM-RAW-->HLT+AOD
+#------------------------------------------------------------
+
+TO BE UPDATED
+
+./createJobsWithCrab_CopyToT2.pl -d Outputs_Scouting_MC -v DataScouting-QstarToJJ-M-300-HLT8e33v2-HLTplusAOD -i Inputs_Scouting_MC/InputList_Scouting_QstarToJJ-M-300_HLTplusRAW.txt -t Inputs_Scouting_MC/template_crab_CopyToRomeT2_MC_phys03.cfg -c Inputs_Scouting_MC/aod_mc_Run2012.py -n $USER -p DataScouting-QstarToJJ-M-300-HLT8e33v2-HLTplusAOD
+
+./createJobsWithCrab_CopyToT2.pl -d Outputs_Scouting_MC -v DataScouting-QstarToJJ-M-1000-HLT8e33v2-HLTplusAOD -i Inputs_Scouting_MC/InputList_Scouting_QstarToJJ-M-1000_HLTplusRAW.txt -t Inputs_Scouting_MC/template_crab_CopyToRomeT2_MC_phys03.cfg -c Inputs_Scouting_MC/aod_mc_Run2012.py -n $USER -p DataScouting-QstarToJJ-M-1000-HLT8e33v2-HLTplusAOD
+
+./createJobsWithCrab_CopyToT2.pl -d Outputs_Scouting_MC -v DataScouting-RSGravitonToQQ-M-300-HLT8e33v2-HLTplusAOD -i Inputs_Scouting_MC/InputList_Scouting_RSGravitonToQQ-M-300_HLTplusRAW.txt -t Inputs_Scouting_MC/template_crab_CopyToRomeT2_MC_phys03.cfg -c Inputs_Scouting_MC/aod_mc_Run2012.py -n $USER -p DataScouting-RSGravitonToQQ-M-300-HLT8e33v2-HLTplusAOD
+
+./createJobsWithCrab_CopyToT2.pl -d Outputs_Scouting_MC -v DataScouting-RSGravitonToQQ-M-1000-HLT8e33v2-HLTplusAOD -i Inputs_Scouting_MC/InputList_Scouting_RSGravitonToQQ-M-1000_HLTplusRAW.txt -t Inputs_Scouting_MC/template_crab_CopyToRomeT2_MC_phys03.cfg -c Inputs_Scouting_MC/aod_mc_Run2012.py -n $USER -p DataScouting-RSGravitonToQQ-M-1000-HLT8e33v2-HLTplusAOD
+
+./createJobsWithCrab_CopyToT2.pl -d Outputs_Scouting_MC -v DataScouting-RSGravitonToGG-M-300-HLT8e33v2-HLTplusAOD -i Inputs_Scouting_MC/InputList_Scouting_RSGravitonToGG-M-300_HLTplusRAW.txt -t Inputs_Scouting_MC/template_crab_CopyToRomeT2_MC_phys03.cfg -c Inputs_Scouting_MC/aod_mc_Run2012.py -n $USER -p DataScouting-RSGravitonToGG-M-300-HLT8e33v2-HLTplusAOD
+
+./createJobsWithCrab_CopyToT2.pl -d Outputs_Scouting_MC -v DataScouting-RSGravitonToGG-M-1000-HLT8e33v2-HLTplusAOD -i Inputs_Scouting_MC/InputList_Scouting_RSGravitonToGG-M-1000_HLTplusRAW.txt -t Inputs_Scouting_MC/template_crab_CopyToRomeT2_MC_phys03.cfg -c Inputs_Scouting_MC/aod_mc_Run2012.py -n $USER -p DataScouting-RSGravitonToGG-M-1000-HLT8e33v2-HLTplusAOD

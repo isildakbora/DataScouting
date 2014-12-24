@@ -1,0 +1,359 @@
+=== Data Scouting 2012 ===
+
+##########################
+## RAW --> HLT+RAW step ##
+##########################
+
+
+--
+
+
+scram p -n CMSSW_5_3_20_Scouting-HLT CMSSW CMSSW_5_3_20
+cd CMSSW_5_3_20_Scouting-HLT/src
+cmsenv
+
+
+==== DATA ====
+
+
+Run2012B: 193752-197044 :     
+  --> hltGetConfiguration --full --offline --data --unprescale --process TEST --globaltag auto:hltonline orcoff:/cdaq/physics/Run2012/7e33/v2.5/HLT/V1 > hlt_data_Run2012B.py
+      testing with Run2012B_JetHT_RAW_v1_000_194_533_5483484F-E2A2-E111-A6F9-001D09F2512C.root
+      NOTE: with this code we can process runs >= 194533 && run <= 197044 (in this range we used L1Menu_Collisions2012_v1/L1T_Scales_20101224 )
+
+Run2012C: 197885-203755 : 
+  --> hltGetConfiguration --full --offline --data --unprescale --process TEST --globaltag auto:hltonline orcoff:/cdaq/physics/Run2012/7e33/v4.1/HLT/V1 > hlt_data_Run2012C.py
+      testing with Run2012C_JetHT_RAW_v1_000_199_812_8065ADDF-9ED8-E111-9014-5404A638868F.root
+      NOTE: with this code we can process runs >= 199812 && run <= 203002 (in this range we used L1Menu_Collisions2012_v2/L1T_Scales_20101224 )
+
+Run2012D: 203773-208686 :
+  --> hltGetConfiguration --full --offline --data --unprescale --process TEST --globaltag auto:hltonline orcoff:/cdaq/physics/Run2012/8e33/v2.1/HLT/V7 > hlt_data_Run2012D.py
+      testing with Run2012D_JetHT_RAW_v1_000_208_307_5AF38E1E-E63A-E211-A7B2-003048D2BD28.root
+      NOTE: with this code we can process runs >= 203773 && run <= 208686 (in this range we used L1Menu_Collisions2012_v3/L1T_Scales_20101224 )
+
+
+--
+
+
+Edit the config files:
+- add input file name:
+  process.source ...  
+  (for example 'rfio:/castor/cern.ch/cms/store/data/Run2012B/JetHT/RAW/v1/000/193/999/265915A1-789B-E111-80B6-0025901D5DB8.root') --> typically the RAW data is on castor (*not* on eos) so the files should be "staged" before running for an efficient processing.
+
+- add max number of events to process:
+  process.maxEvents ...  
+
+- add TrgReport (add above global tag for example): <----- should be present BY DEFAULT (please check..)
+  # enable the TrigReport and TimeReport                                                                     
+  process.options = cms.untracked.PSet(
+    wantSummary = cms.untracked.bool( True )
+  )
+
+- process.MessageLogger:
+  reportEvery = cms.untracked.int32( 100 )
+  limit = cms.untracked.int32( 10 ) 
+
+- comment out all output modules except process.PhysicsDSTOutput
+   #process.AOutput = cms.EndPath( process.hltPreAOutput + process.hltOutputA )                                   
+   #process.BOutput = cms.EndPath( process.hltPreBOutput + process.hltOutputB )                      
+   #process.ALCAP0Output = cms.EndPath( process.hltPreALCAP0Output + process.hltOutputALCAP0 )
+   ...
+   ...
+   #process.NanoDSTOutput = cms.EndPath( process.hltPreNanoDSTOutput + process.hltOutputNanoDST )   
+
+   process.PhysicsDSTOutput = cms.EndPath( process.hltPrePhysicsDSTOutputSmart + process.hltOutputPhysicsDST )
+
+   #process.RPCMONOutput = cms.EndPath( process.hltPreRPCMONOutput + process.hltOutputRPCMON )                    
+   #process.TrackerCalibrationOutput = cms.EndPath( process.hltPreTrackerCalibrationOutput + process.hltOutputTrackerCalibration )
+   ...
+
+- edit process.hltOutputPhysicsDST:
+  - comment out SelectEvents: 
+    #    SelectEvents = cms.untracked.PSet(  SelectEvents = cms.vstring( 'DST_Ele8_CaloIdL_CaloIsoVL_TrkIdVL_TrkIsoVL_HT250_v1',
+    #  'DST_HT250_v1', 	
+    #  'DST_L1HTT_Or_L1MultiJet_v1',
+    #  'DST_Mu5_HT250_v1' ) ),     
+  - add RAW data in the output:  
+    outputCommands = cms.untracked.vstring( 'drop *',
+      'keep *_hltActivityPhotonClusterShape_*_*',
+      'keep *_hltActivityPhotonEcalIso_*_*',
+      'keep *_hltActivityPhotonHcalForHE_*_*',
+      'keep *_hltActivityPhotonHcalIso_*_*',
+      'keep *_hltCaloJetIDPassed_*_*',
+      'keep *_hltElectronActivityDetaDphi_*_*',
+      'keep *_hltHitElectronActivityTrackIsol_*_*',
+      'keep *_hltKT6CaloJets_rho*_*',
+      'keep *_hltL3MuonCandidates_*_*',
+      'keep *_hltL3MuonCombRelIsolations_*_*',
+      'keep *_hltMetClean_*_*',
+      'keep *_hltMet_*_*',
+      'keep *_hltPixelMatchElectronsActivity_*_*',
+      'keep *_hltPixelVertices_*_*',
+      'keep *_hltRecoEcalSuperClusterActivityCandidate_*_*',
+      'keep L1GlobalTriggerReadoutRecord_hltGtDigis_*_*',
+      'keep edmTriggerResults_*_*_*',
+      ## RAW data
+      'keep FEDRawDataCollection_rawDataCollector_*_*',
+      'keep FEDRawDataCollection_source_*_*',
+      'keep triggerTriggerEvent_*_*_*',
+      'keep *_hltL1GtObjectMap_*_*'                                      
+                                           )
+
+
+--
+
+
+Run the code:
+
+cmsRun hlt_data_Run2012B.py > & hlt_data_Run2012B.log &
+cmsRun hlt_data_Run2012C.py > & hlt_data_Run2012C.log &
+cmsRun hlt_data_Run2012D.py > & hlt_data_Run2012D.log &
+( the output file name will be: outputPhysicsDST.root )
+
+
+
+=== MC ===
+
+
+hltGetConfiguration --full --offline --mc --l1-emulator --l1 L1GtTriggerMenu_L1Menu_Collisions2012_v3_mc --unprescale --process TEST --globaltag auto:startup_GRun orcoff:/cdaq/physics/Run2012/8e33/v2.1/HLT/V7 > hlt_mc_Run2012.py
+
+
+--
+
+
+Edit the config files:
+
+- add the event content definition at the beginning of the python file 
+(just after process = cms.Process( "TEST" ) ):
+
+process.load('Configuration.EventContent.EventContent_cff')
+
+- add input file name:
+  process.source ...  
+  (for example 'rfio:/castor/cern.ch/cms/store/data/Run2012B/JetHT/RAW/v1/000/193/999/265915A1-789B-E111-80B6-0025901D5DB8.root') --> typically the RAW data is on castor (*not* on eos) so the files should be "staged" before running for an efficient processing.
+
+- add max number of events to process:
+  process.maxEvents ...  
+
+- add TrgReport (add above global tag for example): <----- should be present BY DEFAULT (please check..)
+  # enable the TrigReport and TimeReport                                                                     
+  process.options = cms.untracked.PSet(
+    wantSummary = cms.untracked.bool( True )
+  )
+
+- process.MessageLogger:
+  reportEvery = cms.untracked.int32( 100 )
+  limit = cms.untracked.int32( 10 ) 
+
+- comment out all output modules except process.PhysicsDSTOutput
+   #process.AOutput = cms.EndPath( process.hltPreAOutput + process.hltOutputA )                                   
+   #process.BOutput = cms.EndPath( process.hltPreBOutput + process.hltOutputB )                      
+   #process.ALCAP0Output = cms.EndPath( process.hltPreALCAP0Output + process.hltOutputALCAP0 )
+   ...
+   ...
+   #process.NanoDSTOutput = cms.EndPath( process.hltPreNanoDSTOutput + process.hltOutputNanoDST )   
+
+   process.PhysicsDSTOutput = cms.EndPath( process.hltPrePhysicsDSTOutputSmart + process.hltOutputPhysicsDST )
+
+   #process.RPCMONOutput = cms.EndPath( process.hltPreRPCMONOutput + process.hltOutputRPCMON )                    
+   #process.TrackerCalibrationOutput = cms.EndPath( process.hltPreTrackerCalibrationOutput + process.hltOutputTrackerCalibration )
+   ...
+
+- edit process.hltOutputPhysicsDST:
+
+  - change dataTier:
+    dataTier = cms.untracked.string( "GEN-SIM-RAW" )
+
+  - comment out SelectEvents and old outputCommands, and add RAWSIMEventContent:
+
+#    SelectEvents = cms.untracked.PSet(  SelectEvents = cms.vstring( 'DST_Ele8_CaloIdL_CaloIsoVL_TrkIdVL_TrkIsoVL_HT250_v4',
+#  'DST_HT250_v4',
+#  'DST_L1HTT_Or_L1MultiJet_v4',
+#  'DST_Mu5_HT250_v4' ) ),
+
+    outputCommands = process.RAWSIMEventContent.outputCommands,
+
+#    outputCommands = cms.untracked.vstring( #'drop *',
+#      'keep *_hltActivityPhotonClusterShape_*_*',
+#      'keep *_hltActivityPhotonEcalIso_*_*',
+#      'keep *_hltActivityPhotonHcalForHE_*_*',
+#      'keep *_hltActivityPhotonHcalIso_*_*',
+#      'keep *_hltCaloJetIDPassed_*_*',
+#      'keep *_hltElectronActivityDetaDphi_*_*',
+#      'keep *_hltHitElectronActivityTrackIsol_*_*',
+#      'keep *_hltKT6CaloJets_rho*_*',
+#      'keep *_hltL3MuonCandidates_*_*',
+#      'keep *_hltL3MuonCombRelIsolations_*_*',
+#      'keep *_hltMetClean_*_*',
+#      'keep *_hltMet_*_*',
+#      'keep *_hltPixelMatchElectronsActivity_*_*',
+#      'keep *_hltPixelVertices_*_*',
+#      'keep *_hltRecoEcalSuperClusterActivityCandidate_*_*',
+#      'keep L1GlobalTriggerReadoutRecord_hltGtDigis_*_*',
+#      'keep edmTriggerResults_*_*_*',
+#      ## RAW data
+#      'keep FEDRawDataCollection_rawDataCollector_*_*',
+#      'keep FEDRawDataCollection_source_*_*',
+#      'keep triggerTriggerEvent_*_*_*',
+#      'keep *_hltL1GtObjectMap_*_*' 
+# )
+
+  - also add the physicsDST event content just below:
+
+process.hltOutputPhysicsDST.outputCommands.extend(
+        cms.untracked.vstring(
+      'keep *_hltActivityPhotonClusterShape_*_*',
+      'keep *_hltActivityPhotonEcalIso_*_*',
+      'keep *_hltActivityPhotonHcalForHE_*_*',
+      'keep *_hltActivityPhotonHcalIso_*_*',
+      'keep *_hltCaloJetIDPassed_*_*',
+      'keep *_hltElectronActivityDetaDphi_*_*',
+      'keep *_hltHitElectronActivityTrackIsol_*_*',
+      'keep *_hltKT6CaloJets_rho*_*',
+      'keep *_hltL3MuonCandidates_*_*',
+      'keep *_hltL3MuonCombRelIsolations_*_*',
+      'keep *_hltMetClean_*_*',
+      'keep *_hltMet_*_*',
+      'keep *_hltPixelMatchElectronsActivity_*_*',
+      'keep *_hltPixelVertices_*_*',
+      'keep *_hltRecoEcalSuperClusterActivityCandidate_*_*',
+      'keep L1GlobalTriggerReadoutRecord_hltGtDigis_*_*',
+      'keep edmTriggerResults_*_*_*',
+      ## RAW data
+      'keep FEDRawDataCollection_rawDataCollector_*_*',
+      'keep FEDRawDataCollection_source_*_*',
+      'keep triggerTriggerEvent_*_*_*',
+      'keep *_hltL1GtObjectMap_*_*' 
+ )
+)
+
+
+--
+
+Run the code:
+
+cmsRun hlt_mc_Run2012.py > & hlt_mc_Run2012.log &
+( the output file name will be: outputPhysicsDST.root )
+
+
+
+
+###################################
+## HLT+RAW --> RECO --> AOD step ##
+###################################
+
+
+--
+
+Following:
+https://twiki.cern.ch/twiki/bin/view/CMS/PdmVDataReprocessing53Winter13#Generate_Configurations
+https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideFrontierConditions#Winter13_2012_A_B_C_D_datasets_r
++ suggestions from Giovanni Franzoni
+
+scram p -n CMSSW_5_3_20_Scouting-RECO CMSSW CMSSW_5_3_20
+cd CMSSW_5_3_20_Scouting-RECO/src
+cmsenv
+
+
+=== DATA ===
+
+cmsDriver.py reco --step RAW2DIGI,RECO --conditions FT53_V21A_AN6::All --eventcontent AOD --no_exec --data --filein file:../data_HLT_RAW/hlt_data_Run2012B.root --fileout aod_data_Run2012B.root --python_filename aod_data_Run2012B.py --number -1
+ cmsDriver.py reco --step RAW2DIGI,RECO --conditions FT53_V21A_AN6::All --eventcontent AOD --no_exec --data --filein file:../data_HLT_RAW/hlt_data_Run2012C.root --fileout aod_data_Run2012C.root --python_filename aod_data_Run2012C.py --number -1
+cmsDriver.py reco --step RAW2DIGI,RECO --conditions FT53_V21A_AN6::All --eventcontent AOD --no_exec --data --filein file:../data_HLT_RAW/hlt_data_Run2012D.root --fileout aod_data_Run2012D.root --python_filename aod_data_Run2012D.py --number -1
+
+
+NOTE 1 : the global tag is correct for Run2012B. If you analyze other periods, the appropriate global tag used for prompt reco shoudl be used
+
+NOTE 2 : the input file must be the output of the previous step
+
+
+--
+
+
+Edit to add the DataScouting event content:
+
+process.AODoutput.outputCommands.extend(
+        cms.untracked.vstring(
+       'keep *_hltActivityPhotonClusterShape_*_*',
+       'keep *_hltActivityPhotonEcalIso_*_*',
+       'keep *_hltActivityPhotonHcalForHE_*_*',
+       'keep *_hltActivityPhotonHcalIso_*_*',
+       'keep *_hltCaloJetIDPassed_*_*',
+       'keep *_hltElectronActivityDetaDphi_*_*',
+       'keep *_hltHitElectronActivityTrackIsol_*_*',
+       'keep *_hltKT6CaloJets_rho*_*',
+       'keep *_hltL3MuonCandidates_*_*',
+       'keep *_hltL3MuonCombRelIsolations_*_*',
+       'keep *_hltMetClean_*_*',
+       'keep *_hltMet_*_*',
+       'keep *_hltPixelMatchElectronsActivity_*_*',
+       'keep *_hltPixelVertices_*_*',
+       'keep *_hltRecoEcalSuperClusterActivityCandidate_*_*',
+       'keep L1GlobalTriggerReadoutRecord_hltGtDigis_*_*',
+       'keep edmTriggerResults_*_*_*',
+       ## RAW data                                                                                                    
+       #'keep FEDRawDataCollection_rawDataCollector_*_*',           
+       #'keep FEDRawDataCollection_source_*_*', 
+       'keep triggerTriggerEvent_*_*_*',
+       'keep *_hltL1GtObjectMap_*_*'
+            )
+          )
+
+--
+
+Run the code:
+
+cmsRun aod_data_Run2012B.py > & aod_data_Run2012B.log &
+cmsRun aod_data_Run2012C.py > & aod_data_Run2012C.log &
+cmsRun aod_data_Run2012D.py > & aod_data_Run2012D.log &
+
+
+The output files are : aod_data_Run2012B.root aod_data_Run2012C.root aod_data_Run2012D.root
+  - This file contains both AOD data format + PhysicsDST data format
+  and can be used for HLT vs RECO comparisons on event-by-event base.
+
+
+=== MC ===
+
+cmsDriver.py reco --step RAW2DIGI,RECO --conditions START53_V27::All --eventcontent AODSIM --no_exec --mc --filein file:../mc_HLT_RAW/hlt_mc_Run2012.root --fileout aod_mc_Run2012.root --python_filename aod_mc_Run2012.py --number -1
+
+Edit to add the DataScouting event content:
+
+process.AODSIMoutput.outputCommands.extend(
+        cms.untracked.vstring(
+       'keep *_hltActivityPhotonClusterShape_*_*',
+       'keep *_hltActivityPhotonEcalIso_*_*',
+       'keep *_hltActivityPhotonHcalForHE_*_*',
+       'keep *_hltActivityPhotonHcalIso_*_*',
+       'keep *_hltCaloJetIDPassed_*_*',
+       'keep *_hltElectronActivityDetaDphi_*_*',
+       'keep *_hltHitElectronActivityTrackIsol_*_*',
+       'keep *_hltKT6CaloJets_rho*_*',
+       'keep *_hltL3MuonCandidates_*_*',
+       'keep *_hltL3MuonCombRelIsolations_*_*',
+       'keep *_hltMetClean_*_*',
+       'keep *_hltMet_*_*',
+       'keep *_hltPixelMatchElectronsActivity_*_*',
+       'keep *_hltPixelVertices_*_*',
+       'keep *_hltRecoEcalSuperClusterActivityCandidate_*_*',
+       'keep L1GlobalTriggerReadoutRecord_hltGtDigis_*_*',
+       'keep edmTriggerResults_*_*_*',
+       ## RAW data                                                                                                    
+       #'keep FEDRawDataCollection_rawDataCollector_*_*',           
+       #'keep FEDRawDataCollection_source_*_*', 
+       'keep triggerTriggerEvent_*_*_*',
+       'keep *_hltL1GtObjectMap_*_*'
+            )
+          )
+
+--
+
+Run the code:
+
+cmsRun aod_mc_Run2012.py > & aod_mc_Run2012.log &
+
+The output file is : aod_mc_Run2012.root 
+  - This file contains both AODSIM data format + PhysicsDST data format
+  and can be used for HLT vs RECO comparisons on event-by-event base.
+
+
