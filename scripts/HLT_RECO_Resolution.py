@@ -17,7 +17,7 @@ useWideJets = options.useWideJets
 run_period  = options.run_period
 
 eta_bins    = np.arange(0.0, 3.0, 0.5)
-nPVzbins    = [0, 7, 15, 25]
+nPVzbins    = [0, 7, 15, 2500]
 scale       = 1
 
 res_bins_low  = np.arange(0., 1400., 200.)
@@ -31,7 +31,7 @@ def progressbar(progress):
 	sys.stdout.flush()
 
 #file_to_write = TFile('HLT_RECO_pT_Comp_nPVz_pT_'+str(res_bins[0]).replace('.', '')+'_'+str(res_bins[1]).replace('.', '')+'.root', 'RECREATE')
-file_to_write = TFile('HLT_RECO_Comp_nPVz.root', 'RECREATE')
+file_to_write = TFile('HLT_RECO_Comp_nPVz_test.root', 'RECREATE')
 #if working local
 myfile  = TFile( 'test_Calo_Run' + run_period + '_latest.root' )
 print myfile.GetName()
@@ -69,16 +69,16 @@ for k in range(len(eta_bins)-1):
 			common_suffixes    = run_period + "_" + str(nPVzbins[j]) + '_' + str(nPVzbins[j+1]) + '_' + str(int(res_bins[i])) + "_" + str(int(res_bins[i+1])) + "_" + str(eta_bins[k]) + "_" + str(eta_bins[k+1])
 			h_name = "h_res_" + common_suffixes
 			f_name = "f_res_" + common_suffixes
-			#print "k =", k, " j =", j, " i =", i, " global =", i + j * (len(res_bins)-1) + k * (len(nPVzbins)-1) * (len(res_bins)-1), " h_name:", h_name 
+			print "k =", k, " j =", j, " i =", i, " global =", i + j * (len(res_bins)-1) + k * (len(nPVzbins)-1) * (len(res_bins)-1), " h_name:", h_name 
 			#h = TH1F(h_name, h_name, 250, 0., 2.)
 			#h_res.append(h)
 
 			h_name = "h_resPt_" + common_suffixes
-			h = TH1F(h_name, h_name, 250, 0., 2.)
+			h = TH1F(h_name, h_name, 500, -2., 2.)
 			h_resPt.append(h)
 
 			h_name = "h_resRawPt_" + common_suffixes
-			h = TH1F(h_name, h_name, 250, 0., 2.)
+			h = TH1F(h_name, h_name, 500, -2., 2.)
 			h_resRawPt.append(h)
 
 			h_name = "h_balance_" + common_suffixes
@@ -157,7 +157,7 @@ for jentry in range(entries):
 		allRECODijetSelection = bool(0)
 
 	#RECO Event Filters
-	DeltaPhiRECO  = fabs(recoJetPhi[0]-recoJetPhi[1]) > TMath.Pi()/3.0
+	DeltaPhiRECO  = fabs(recoJetPhi[matchindex0]-recoJetPhi[matchindex1]) > TMath.Pi()/3.0
 	RecoFlagsGood = DeltaPhiRECO and mychain.HBHENoiseFilterResultFlag and mychain.hcalLaserEventFilterFlag and mychain.eeBadScFilterFlag
 
 	#Event Filter
@@ -242,147 +242,16 @@ for jentry in range(entries):
 	indexk1 = bisect_left(eta_bins, abs(recoJetEta[matchindex1])) - residue
 
 	indexj  = bisect_left(nPVzbins, nPVz) - residue
-
-	# print len(h_resPt)
-	# print res_bins
-	# print eta_bins
-	# print nPVzbins
-	if len(recoJetPt) > 2:
-		soft_third_jet_reco = 0.1*((recoJetPt[0] + recoJetPt[1])/2) < recoJetPt[2]
-	else:
-		soft_third_jet_reco = False
-
-	#sufficient balance in the azimuthal plane (back-to-back: DeltaPhi_jj > 2.7)
-	if abs(recoJetPhi[matchindex0] - recoJetPhi[matchindex1]) > 2.7 and soft_third_jet_reco: 
-
-		if abs(recoJetEta[matchindex0]) < 0.25 and abs(recoJetEta[matchindex1]) > 0.25:
-			ref_jet_pT    	  = recoJetPt[matchindex0]
-			ref_jet_eta   	  = recoJetEta[matchindex0]
-
-			probe_jet_pT  	  = recoJetPt[matchindex1]
-			probe_jet_eta 	  = recoJetEta[matchindex1]
-
-			probe_jet_pT_HLT  = dsJetPt[1]
-			probe_jet_eta_HLT = dsJetEta[1]
-
-			ref_jet_eta_raw 	  = recoJetEta[matchindex0]
-
-			probe_jet_pT_raw  	  = recoJetRawPt[matchindex1]
-			probe_jet_eta_raw 	  = recoJetEta[matchindex1]
-
-			probe_jet_pT_HLT_raw  = dsJetRawPt[1]
-			probe_jet_eta_HLT_raw = dsJetEta[1]
-
-			balance1          = (probe_jet_pT - ref_jet_pT) / (probe_jet_pT + ref_jet_pT)
-			balance2          = (probe_jet_pT_HLT - ref_jet_pT) / (probe_jet_pT_HLT + ref_jet_pT)
-			balance3          = (probe_jet_pT_raw - ref_jet_pT) / (probe_jet_pT_raw + ref_jet_pT)
-			balance4          = (probe_jet_pT_HLT_raw - ref_jet_pT) / (probe_jet_pT_HLT_raw + ref_jet_pT)
-			balance_index = (bisect_left(res_bins, probe_jet_pT) - residue) + (bisect_left(nPVzbins, nPVz) - residue) * (len(res_bins) - 1) + (bisect_left(eta_bins, abs(probe_jet_eta)) - residue) * (len(res_bins) - 1) * (len(nPVzbins) - 1)
-			if balance_index > -1 and balance_index < len(h_balance):
-				h_balance[balance_index].Fill(balance1)
-				h_balance_HLT[balance_index].Fill(balance2)
-				h_balance_raw[balance_index].Fill(balance3)
-				h_balance_HLT_raw[balance_index].Fill(balance4)
-
-		elif abs(recoJetEta[matchindex0]) > 0.25 and abs(recoJetEta[matchindex1]) < 0.25:
-			
-			ref_jet_pT    	  = recoJetPt[matchindex1]
-			ref_jet_eta   	  = recoJetEta[matchindex1]
-			
-			probe_jet_pT  	  = recoJetPt[matchindex0]
-			probe_jet_eta 	  = recoJetEta[matchindex0]
-
-			probe_jet_pT_HLT  = dsJetPt[0]
-			probe_jet_eta_HLT = dsJetEta[0]
-
-			ref_jet_eta_raw  	  = recoJetEta[matchindex1]
-
-			probe_jet_pT_raw  	  = recoJetRawPt[matchindex0]
-			probe_jet_eta_raw 	  = recoJetEta[matchindex0]
-
-			probe_jet_pT_HLT_raw  = dsJetRawPt[0]
-			probe_jet_eta_HLT_raw = dsJetEta[0]
-
-			balance1          = (probe_jet_pT - ref_jet_pT) / (probe_jet_pT + ref_jet_pT)
-			balance2          = (probe_jet_pT_HLT - ref_jet_pT) / (probe_jet_pT_HLT + ref_jet_pT)
-			balance3          = (probe_jet_pT_raw - ref_jet_pT) / (probe_jet_pT_raw + ref_jet_pT)
-			balance4          = (probe_jet_pT_HLT_raw - ref_jet_pT) / (probe_jet_pT_HLT_raw + ref_jet_pT)
-			balance_index = (bisect_left(res_bins, probe_jet_pT) - residue) + (bisect_left(nPVzbins, nPVz) - residue) * (len(res_bins) - 1) + (bisect_left(eta_bins, abs(probe_jet_eta)) - residue) * (len(res_bins) - 1) * (len(nPVzbins) - 1)
-			if balance_index > -1 and balance_index < len(h_balance):
-				h_balance[balance_index].Fill(balance1)
-				h_balance_HLT[balance_index].Fill(balance2)
-				h_balance_raw[balance_index].Fill(balance3)
-				h_balance_HLT_raw[balance_index].Fill(balance4)
-
-		elif abs(recoJetEta[matchindex0]) < 0.25 and abs(recoJetEta[matchindex1]) < 0.25:
-
-			if random.uniform(0., 1.) > 0.5: # if both jet are in the abs(eta)<0.25 region ref jet should be chosen randomly in order to eliminate the resolution bias.
-
-				ref_jet_pT    	  = recoJetPt[matchindex1]
-				ref_jet_eta   	  = recoJetEta[matchindex1]
-				
-				probe_jet_pT  	  = recoJetPt[matchindex0]
-				probe_jet_eta 	  = recoJetEta[matchindex0]
-
-				probe_jet_pT_HLT  = dsJetPt[0]
-				probe_jet_eta_HLT = dsJetEta[0]
-
-				ref_jet_eta_raw  	  = recoJetEta[matchindex1]
-
-				probe_jet_pT_raw  	  = recoJetRawPt[matchindex0]
-				probe_jet_eta_raw 	  = recoJetEta[matchindex0]
-
-				probe_jet_pT_HLT_raw  = dsJetRawPt[0]
-				probe_jet_eta_HLT_raw = dsJetEta[0]
-
-				balance1          = (probe_jet_pT - ref_jet_pT) / (probe_jet_pT + ref_jet_pT)
-				balance2          = (probe_jet_pT_HLT - ref_jet_pT) / (probe_jet_pT_HLT + ref_jet_pT)
-				balance3          = (probe_jet_pT_raw - ref_jet_pT) / (probe_jet_pT_raw + ref_jet_pT)
-				balance4          = (probe_jet_pT_HLT_raw - ref_jet_pT) / (probe_jet_pT_HLT_raw + ref_jet_pT)
-				balance_index = (bisect_left(res_bins, probe_jet_pT) - residue) + (bisect_left(nPVzbins, nPVz) - residue) * (len(res_bins) - 1) +(bisect_left(eta_bins, abs(probe_jet_eta)) - residue) * (len(res_bins) - 1) * (len(nPVzbins) - 1)
-				if balance_index > -1 and balance_index < len(h_balance):
-					h_balance[balance_index].Fill(balance1)
-					h_balance_HLT[balance_index].Fill(balance2)
-					h_balance_raw[balance_index].Fill(balance3)
-					h_balance_HLT_raw[balance_index].Fill(balance4)
-
-			else:
-				ref_jet_pT    	  = recoJetPt[matchindex0]
-				ref_jet_eta   	  = recoJetEta[matchindex0]
-				
-				probe_jet_pT  	  = recoJetPt[matchindex1]
-				probe_jet_eta 	  = recoJetEta[matchindex1]
-
-				probe_jet_pT_HLT  = dsJetPt[1]
-				probe_jet_eta_HLT = dsJetEta[1]
-
-				ref_jet_eta_raw  	  = recoJetEta[matchindex0]
-
-				probe_jet_pT_raw  	  = recoJetRawPt[matchindex1]
-				probe_jet_eta_raw 	  = recoJetEta[matchindex1]
-
-				probe_jet_pT_HLT_raw  = dsJetRawPt[1]
-				probe_jet_eta_HLT_raw = dsJetEta[1]
-
-				balance1          = (probe_jet_pT - ref_jet_pT) / (probe_jet_pT + ref_jet_pT)
-				balance2          = (probe_jet_pT_HLT - ref_jet_pT) / (probe_jet_pT_HLT + ref_jet_pT)
-				balance3          = (probe_jet_pT_raw - ref_jet_pT) / (probe_jet_pT_raw + ref_jet_pT)
-				balance4          = (probe_jet_pT_HLT_raw - ref_jet_pT) / (probe_jet_pT_HLT_raw + ref_jet_pT)
-				balance_index = (bisect_left(res_bins, probe_jet_pT) - residue) + (bisect_left(nPVzbins, nPVz) - residue) * (len(res_bins) - 1) + (bisect_left(eta_bins, abs(probe_jet_eta)) - residue) * (len(res_bins) - 1) * (len(nPVzbins) - 1)
-				if balance_index > -1 and balance_index < len(h_balance):
-					h_balance[balance_index].Fill(balance1)
-					h_balance_HLT[balance_index].Fill(balance2)
-					h_balance_raw[balance_index].Fill(balance3)
-					h_balance_HLT_raw[balance_index].Fill(balance4)
 	
-
-
 	global_index0 = indexi0 + indexj * (len(res_bins) - 1) + indexk0 * (len(res_bins) - 1) * (len(nPVzbins) - 1)
 	if global_index0 > -1 and global_index0 < len(h_resPt):
-		#print  "nPVz =", nPVz, " recoJetPt[matchindex0] =", recoJetPt[matchindex0] , " recoJetPt[matchindex1] =", recoJetPt[matchindex1] , " recoJetEta[matchindex0] =", recoJetEta[matchindex0], "recoJetEta[matchindex1] =", recoJetEta[matchindex1], " indexi0 =", indexi0, " indexi1 =", indexi1, " indexj =", indexj, " indexk0 =", indexk0, " indexk1 =", indexk1, "global_index0 =", global_index0
-		#print " histo name 0 =", h_resPt[global_index0].GetName()
+		#if recoJetPt[matchindex0] < 200.:
+			#print  "nPVz =", nPVz, " recoJetPt[matchindex0] =", recoJetPt[matchindex0] , " recoJetPt[matchindex1] =", recoJetPt[matchindex1] , " recoJetEta[matchindex0] =", recoJetEta[matchindex0], "recoJetEta[matchindex1] =", recoJetEta[matchindex1], " indexi0 =", indexi0, " indexi1 =", indexi1, " indexj =", indexj, " indexk0 =", indexk0, " indexk1 =", indexk1, "global_index0 =", global_index0
+		#print 'global_index0:', global_index0, 'histo name 0 =', h_resPt[global_index0].GetName()
 		ratioRawPt0   = dsJetRawPt[0] / recoJetRawPt[matchindex0]
+		#ratioPt0      = dsJetPt[0] / recoJetPt[matchindex0]
 		ratioPt0      = dsJetPt[0] / recoJetPt[matchindex0]
+		#print 'dsJetEta[0]', dsJetEta[0], 'recoJetEta[matchindex0]', recoJetEta[matchindex0],'dsJetPt[0]', dsJetPt[0], 'recoJetPt[matchindex0]', recoJetPt[matchindex0], 'ratioPt0', ratioPt0
 		h_resPt[global_index0].Fill(ratioPt0)
 		h_resRawPt[global_index0].Fill(ratioRawPt0)
 
@@ -392,11 +261,10 @@ for jentry in range(entries):
 		#print "global_index1", global_index1
 		#print " histo name 1", h_resPt[global_index1].GetName()
 		ratioRawPt1   = dsJetRawPt[1] / recoJetRawPt[matchindex1]
+		#ratioPt1      = dsJetPt[1] / recoJetPt[matchindex1]
 		ratioPt1      = dsJetPt[1] / recoJetPt[matchindex1]
 		h_resPt[global_index1].Fill(ratioPt1)
 		h_resRawPt[global_index1].Fill(ratioRawPt1)
-
-
 
 mean      = array('d')
 sigma     = array('d')
