@@ -1,7 +1,7 @@
 // system include files
 #include <memory>
 #include <typeinfo>
-
+#include <vector>
 // user include files
 #include "PhysicsTools/SelectorUtils/interface/JetIDSelectionFunctor.h"
 #include "FWCore/Framework/interface/Frameworkfwd.h"
@@ -9,9 +9,11 @@
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
 
-#include "amott/DataScoutingAnalyzer/interface/DataScoutingAnalyzer.h"
+#include "isildak/DataScoutingAnalyzer/interface/DataScoutingAnalyzer.h"
 
 //objects
+#include "DataFormats/VertexReco/interface/Vertex.h"
+#include "DataFormats/VertexReco/interface/VertexFwd.h"
 #include "DataFormats/JetReco/interface/CaloJetCollection.h"
 #include "DataFormats/JetReco/interface/PFJetCollection.h"
 #include "DataFormats/JetReco/interface/Jet.h"
@@ -52,7 +54,6 @@ DataScoutingAnalyzer<jettype,mettype>::DataScoutingAnalyzer(const edm::Parameter
     tag_hcalNoise(iConfig.getParameter<edm::InputTag>("noise")),
     s_outputFile(iConfig.getParameter<std::string>("outputFile"))
 {
-
 }
 
 template <typename jettype, typename mettype>
@@ -74,11 +75,12 @@ DataScoutingAnalyzer<jettype,mettype>::analyze(const edm::Event& iEvent, const e
 
     Handle<std::vector<jettype> > h_recoJet;
     const JetCorrector* correctorL1L2L3 = JetCorrector::getJetCorrector (s_recoJetCorrector, iSetup);
-    const JetCorrector* correctorL2L3     = JetCorrector::getJetCorrector (s_dsJetCorrector, iSetup);
+    const JetCorrector* correctorL2L3   = JetCorrector::getJetCorrector (s_dsJetCorrector, iSetup);
 
     Handle<double> h_recoRho;
     edm::Handle<reco::JetIDValueMap> recoJetIDMap;
 
+    Handle<std::vector<mettype> > h_recoMet;
     iEvent.getByLabel(tag_recoJet,h_recoJet);
     iEvent.getByLabel(tag_recoMet,h_recoMet);
     iEvent.getByLabel(tag_recoRho,h_recoRho);
@@ -95,26 +97,42 @@ DataScoutingAnalyzer<jettype,mettype>::analyze(const edm::Event& iEvent, const e
 
     edm::Handle< bool > HBHENoiseFilterResult;
     try
-        {
-            iEvent.getByLabel(edm::InputTag("HBHENoiseFilterResultProducer","HBHENoiseFilterResult"), HBHENoiseFilterResult);
-        }
+    {
+        iEvent.getByLabel(edm::InputTag("HBHENoiseFilterResultProducer","HBHENoiseFilterResult"), HBHENoiseFilterResult);
+    }
     catch ( cms::Exception& ex )
-        {
-            edm::LogWarning("CmsMetFiller") << "Can't get bool: " << HBHENoiseFilterResult;
-        }
+    {
+        edm::LogWarning("CmsMetFiller") << "Can't get bool: " << HBHENoiseFilterResult;
+    }
     HBHENoiseFilterResultFlag = *HBHENoiseFilterResult;
 
     edm::Handle< bool > hcalLaserEventFilter;
     try
-        {
-            iEvent.getByLabel("hcalLaserEventFilter", hcalLaserEventFilter);
-        }
+    {
+        iEvent.getByLabel("hcalLaserEventFilter", hcalLaserEventFilter);
+    }
     catch ( cms::Exception& ex )
-        {
-            edm::LogWarning("CmsMetFiller") << "Can't get bool: " << hcalLaserEventFilter;
-        }
+    {
+        edm::LogWarning("CmsMetFiller") << "Can't get bool: " << hcalLaserEventFilter;
+    }
     hcalLaserEventFilterFlag = *hcalLaserEventFilter;
 
+    edm::Handle<reco::VertexCollection> recVtxs;
+    iEvent.getByLabel("hltPixelVertices",recVtxs);
+    nPVz = 0;
+    if(recVtxs.isValid())
+    {
+        for(reco::VertexCollection::const_iterator i_vtx = recVtxs->begin(); i_vtx != recVtxs->end(); ++i_vtx)
+        {
+            //if(!i_vtx->isFake() && (fabs(i_vtx->z()) < 24))
+            //{
+                PVz[nPVz] = i_vtx->z();
+                //std::cout << "PVz=" << i_vtx->z() << "  ndof=" << i_vtx->ndof() << "  fake=" << i_vtx->isFake() << std::endl;
+                nPVz++;
+            //}
+        }
+    }
+    //std::cout << "nPVz=" << nPVz << std::endl;
     //fill the tree
 
     //MET
@@ -132,92 +150,98 @@ DataScoutingAnalyzer<jettype,mettype>::analyze(const edm::Event& iEvent, const e
     //std::vector<reco::Jet>::const_iterator i_recoJet;
     nRECOJets=0;
     for(i_recoJet = h_recoJet->begin(); i_recoJet != h_recoJet->end(); i_recoJet++)
+    {
+        jettype recoJet = *i_recoJet;
+
+        reco::CaloJet* p1 = dynamic_cast<reco::CaloJet*>(&recoJet);
+        //reco::PFJet*   p2 = dynamic_cast<reco::PFJet*>(&recoJet);
+
+        recoJetRawE[nRECOJets]  = recoJet.energy();
+        recoJetRawPt[nRECOJets] = recoJet.pt();
+
+        float tmp_pT = recoJet.pt();
+        double scale = correctorL1L2L3->correction(recoJet,iEvent,iSetup);
+        if(apply_corrections_reco)
         {
-            jettype recoJet = *i_recoJet;
-
-            reco::CaloJet* p1 = dynamic_cast<reco::CaloJet*>(&recoJet);
-            //reco::PFJet*   p2 = dynamic_cast<reco::PFJet*>(&recoJet);
-
-            recoJetRawE[nRECOJets] = recoJet.energy();
-            float tmp_pT = recoJet.pt();
-            double scale = correctorL1L2L3->correction(recoJet,iEvent,iSetup);
-            if(apply_corrections_reco)
-                {
-                    recoJet.scaleEnergy(scale);
-                    recoJEC[nRECOJets] = recoJet.pt()/tmp_pT;
-                }
-
-            if(recoJet.pt() < jetThreshold) continue;
-
-            recoJetPt[nRECOJets]    = recoJet.pt();
-            recoJetEta[nRECOJets]   = recoJet.eta();
-            recoJetPhi[nRECOJets]   = recoJet.phi();
-            recoJetE[nRECOJets]     = recoJet.energy();
-
-            if(p1)
-                {
-                    recoJetFracHad[nRECOJets] = p1->energyFractionHadronic();
-                    recoJetFracEm[nRECOJets]  = p1->emEnergyFraction();
-                }
-            nRECOJets++;
+            recoJet.scaleEnergy(scale);
+            recoJEC[nRECOJets] = recoJet.pt()/tmp_pT;
         }
+
+        if(recoJet.pt() < jetThreshold) continue;
+
+        recoJetPt[nRECOJets]    = recoJet.pt();
+        recoJetEta[nRECOJets]   = recoJet.eta();
+        recoJetPhi[nRECOJets]   = recoJet.phi();
+        recoJetE[nRECOJets]     = recoJet.energy();
+
+        if(p1)
+        {
+            recoJetFracHad[nRECOJets] = p1->energyFractionHadronic();
+            recoJetFracEm[nRECOJets]  = p1->emEnergyFraction();
+        }
+        nRECOJets++;
+    }
 
     std::vector<reco::CaloJet>::const_iterator i_dsJet;
     nDSJets=0;
     for(i_dsJet = h_dsJet->begin(); i_dsJet != h_dsJet->end(); i_dsJet++)
+    {
+        reco::CaloJet dsJet = *i_dsJet;
+        dsJetRawE[nDSJets]  = dsJet.energy();
+        dsJetRawPt[nDSJets] = dsJet.pt();
+
+        //apply pileup correction
+        float pileupCorr      = 1-((dsRho - 1.08)*dsJet.jetArea()/dsJet.pt());
+
+        if(dsJet.pt()*pileupCorr < jetThreshold) continue;
+        //std::cout << "pileup correction:" << pileupCorr << std::endl;
+        if(apply_corrections_DS)
         {
-            reco::CaloJet dsJet = *i_dsJet;
-            dsJetRawE[nDSJets]  = dsJet.energy();
-            //apply pileup correction
-            float pileupCorr      = 1-((1.08 - dsRho)*dsJet.jetArea()/dsJet.pt());
 
-            if(dsJet.pt()*pileupCorr < jetThreshold) continue;
+            if(pileupCorr > 0. && pileupCorr < 1.)
+            {
+                dspileupCorr[nDSJets] = pileupCorr;
+                dsJet.scaleEnergy(pileupCorr);
+            }
 
-            if(apply_corrections_DS)
-                {
-
-                    if(pileupCorr > 0. && pileupCorr < 1.)
-                        {
-                            dspileupCorr[nDSJets] = pileupCorr;
-                            dsJet.scaleEnergy(pileupCorr);
-                            float ds_tmp_pT = dsJet.pt();
-                            dsJet.scaleEnergy(correctorL2L3->correction(dsJet,iEvent,iSetup));
-                            dsJECL2L3Res[nDSJets] = dsJet.pt()/ds_tmp_pT;
-                        }
-                }
-            dsJetPt[nDSJets]      = dsJet.pt();
-            dsJetEta[nDSJets]     = dsJet.eta();
-            dsJetPhi[nDSJets]     = dsJet.phi();
-            dsJetE[nDSJets]       = dsJet.energy();
-            dsJetFracHad[nDSJets] = dsJet.energyFractionHadronic();
-            dsJetFracEm[nDSJets]  = dsJet.emEnergyFraction();
-
-            //do jet matching
-            float bestdEoE  = 9999;
-            int bestIndex   = -1;
-            float minDeltaR = 9999.;
-            float dR;
-            for( int iRECOJet=0; iRECOJet < nRECOJets; iRECOJet++)
-                {
-                    dR= reco::deltaR(dsJet.eta(),dsJet.phi(),recoJetEta[iRECOJet],recoJetPhi[iRECOJet]);
-                    if( dR> 0.5) continue; //require DR match
-                    if (dR < minDeltaR)
-                        {
-                            minDeltaR = dR;
-                            bestIndex = iRECOJet;
-                        }
-
-                    float dEoE = fabs(dsJet.energy() - recoJetE[iRECOJet])/recoJetE[iRECOJet];
-
-                    if(dEoE < 0.5 && dEoE < bestdEoE)
-                        {
-                            bestdEoE = dEoE;
-                            bestIndex = iRECOJet;
-                        }
-                }
-            dsJetMatchIndex[nDSJets] = bestIndex;
-            nDSJets++;
+            float ds_tmp_pT = dsJet.pt();
+            dsJet.scaleEnergy(correctorL2L3->correction(dsJet,iEvent,iSetup));
+            dsJECL2L3Res[nDSJets] = dsJet.pt()/ds_tmp_pT;
+            //std::cout << "corrected pT:"<<dsJet.pt()<< " raw pT"<< ds_tmp_pT<<" dsJECL2L3Res" << dsJECL2L3Res[nDSJets] << std::endl;
         }
+        dsJetPt[nDSJets]      = dsJet.pt();
+        dsJetEta[nDSJets]     = dsJet.eta();
+        dsJetPhi[nDSJets]     = dsJet.phi();
+        dsJetE[nDSJets]       = dsJet.energy();
+        dsJetFracHad[nDSJets] = dsJet.energyFractionHadronic();
+        dsJetFracEm[nDSJets]  = dsJet.emEnergyFraction();
+
+        //do jet matching
+        float bestdEoE  = 9999;
+        int bestIndex   = -1;
+        float minDeltaR = 9999.;
+        float dR;
+        for( int iRECOJet=0; iRECOJet < nRECOJets; iRECOJet++)
+        {
+            dR= reco::deltaR(dsJet.eta(),dsJet.phi(),recoJetEta[iRECOJet],recoJetPhi[iRECOJet]);
+            if( dR> 0.5) continue; //require DR match
+            if (dR < minDeltaR)
+            {
+                minDeltaR = dR;
+                bestIndex = iRECOJet;
+            }
+
+            float dEoE = fabs(dsJet.energy() - recoJetE[iRECOJet])/recoJetE[iRECOJet];
+
+            if(dEoE < 0.5 && dEoE < bestdEoE)
+            {
+                bestdEoE = dEoE;
+                bestIndex = iRECOJet;
+            }
+        }
+        dsJetMatchIndex[nDSJets] = bestIndex;
+        nDSJets++;
+    }
     outputTree->Fill();
 }
 
@@ -235,11 +259,15 @@ DataScoutingAnalyzer<jettype,mettype>::beginJob()
     outputTree->Branch("lumiBlock",&lumiBlock,"lumiBlock/I");
 
     outputTree->Branch("nDSJets",&nDSJets,"nDSJets/I");
+    outputTree->Branch("nPVz",&nPVz,"nPVz/I");
+
+    outputTree->Branch("PVz",&PVz,"PVz[nPVz]");
 
     outputTree->Branch("dspileupCorr",dspileupCorr,"dspileupCorr[nDSJets]");
     outputTree->Branch("recoJEC",recoJEC,"recoJEC[nDSJets]");
     outputTree->Branch("dsJECL2L3Res",dsJECL2L3Res,"dsJECL2L3Res[nDSJets]");
     outputTree->Branch("dsJetPt",dsJetPt,"dsJetPt[nDSJets]");
+    outputTree->Branch("dsJetRawPt",dsJetRawPt,"dsJetRawPt[nDSJets]");
     outputTree->Branch("dsJetEta",dsJetEta,"dsJetEta[nDSJets]");
     outputTree->Branch("dsJetPhi",dsJetPhi,"dsJetPhi[nDSJets]");
     outputTree->Branch("dsJetE",dsJetE,"dsJetE[nDSJets]");
@@ -256,6 +284,7 @@ DataScoutingAnalyzer<jettype,mettype>::beginJob()
 
     outputTree->Branch("nRECOJets",&nRECOJets,"nRECOJets/I");
     outputTree->Branch("recoJetPt",recoJetPt,"recoJetPt[nRECOJets]");
+    outputTree->Branch("recoJetRawPt",recoJetRawPt,"recoJetRawPt[nRECOJets]");
     outputTree->Branch("recoJetEta",recoJetEta,"recoJetEta[nRECOJets]");
     outputTree->Branch("recoJetPhi",recoJetPhi,"recoJetPhi[nRECOJets]");
     outputTree->Branch("recoJetE",recoJetE,"recoJetE[nRECOJets]");
