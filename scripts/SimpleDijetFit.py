@@ -8,7 +8,7 @@ gROOT.ProcessLine(".X ~/setTDRStyle.C")
 #gStyle.SetOptFit(1)
 gStyle.SetOptTitle(0)
 
-input_root_file   = "RUNBCD.root"
+input_root_file   = "/afs/cern.ch/user/i/isildak/public/DataScouting/RUNBCD.root"
 #input_root_file   = "histo.root"
 input_directory   = "scoutingDiJetVariables"
 fileNameSuffix    = "Run2012BCD"
