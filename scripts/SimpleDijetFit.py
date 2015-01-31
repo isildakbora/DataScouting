@@ -4,12 +4,11 @@ from rootutils import *
 import math, sys, numpy as np
 from setTDRStyle import setTDRStyle
 
+FunctionType = int(sys.argv[1])
 
-#gStyle.SetOptFit(1)
 gStyle.SetOptTitle(0)
 
 input_root_file   = "/afs/cern.ch/user/i/isildak/public/DataScouting/RUNBCD.root"
-#input_root_file   = "histo.root"
 input_directory   = "scoutingDiJetVariables"
 fileNameSuffix    = "Run2012BCD"
 input_2Dhistogram = "h2_DetajjVsMjjWide;1"
@@ -47,7 +46,6 @@ FunctionFormLatex = ["#frac{A(1-x/#sqrt{s})^{B}}{(x/#sqrt{s})^{C+D.log(x/#sqrt{s
 					 "#frac{A(1-x/#sqrt{s})^{B}}{(x/#sqrt{s})^{C+D.log(x/#sqrt{s})+E.log^{2}(x/#sqrt{s})+F.log^{3}(x/#sqrt{s})+G.log^{4}(x/#sqrt{s})}}",
 					 "#frac{A(1-x/#sqrt{s})^{B}}{(x/#sqrt{s})^{C+D.log(x/#sqrt{s})+E.log^{2}(x/#sqrt{s})+F.log^{3}(x/#sqrt{s})+G.log^{4}(x/#sqrt{s})}}"]
 
-FunctionType = int(sys.argv[1])
 FunctionForm = ["([0]*TMath::Power(1-x/8000,[1]))/(TMath::Power(x/8000,[2]+[3]*log(x/8000)))",
                 "([0]*TMath::Power(1-x/8000,[1])*(1+[4]*x/8000))/(TMath::Power(x/8000,[2]+[3]*log(x/8000)))",
  				"([0]*TMath::Power(1-x/8000,[1])*(1+[4]*x/8000+[5]*pow(x/8000,2)))/(TMath::Power(x/8000,[2]+[3]*log(x/8000)))",
@@ -55,8 +53,7 @@ FunctionForm = ["([0]*TMath::Power(1-x/8000,[1]))/(TMath::Power(x/8000,[2]+[3]*l
  				"([0]*TMath::Power(1-x/8000,[1])*exp([4]*x/8000)*TMath::Power(1+exp([5])*x/8000,[6]))/(TMath::Power(x/8000,[2]+[3]*log(x/8000)))",
  				"([0]*TMath::Power(1-x/8000,[1]))/(TMath::Power(x/8000,[2]+[3]*log(x/8000)+[4]*TMath::Power(log(x/8000),2)))",
  				"([0]*TMath::Power(1-x/8000,[1]))/(TMath::Power(x/8000,[2]+[3]*log(x/8000)+[4]*TMath::Power(log(x/8000),2)+[5]*TMath::Power(log(x/8000),3)))",
- 				"([0]*TMath::Power(1-x/8000,[1]))/(TMath::Power(x/8000,[2]+[3]*log(x/8000)+[4]*TMath::Power(log(x/8000),2)+[5]*TMath::Power(log(x/8000),3)+[6]*TMath::Power(log(x/8000),4)))",
- 				"([0]*TMath::Power(1-x/8000,[1])*(1+[4]*x/8000+[5]*pow(x/8000,2)+[6]*pow(x/8000,3)))/(TMath::Power(x/8000,[2]+[3]*log(x/8000)))"]
+ 				"([0]*TMath::Power(1-x/8000,[1]))/(TMath::Power(x/8000,[2]+[3]*log(x/8000)+[4]*TMath::Power(log(x/8000),2)+[5]*TMath::Power(log(x/8000),3)+[6]*TMath::Power(log(x/8000),4)))"]
 
 print "FunctionType:", FunctionType, " FunctionForm:", FunctionForm[FunctionType]
 
