@@ -4,7 +4,7 @@ from rootutils import *
 import math, sys, numpy as np
 from setTDRStyle import setTDRStyle
 
-gROOT.ProcessLine(".X ~/setTDRStyle.C")
+
 #gStyle.SetOptFit(1)
 gStyle.SetOptTitle(0)
 
