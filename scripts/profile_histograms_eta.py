@@ -14,7 +14,7 @@ res_bins_high = np.arange(1400., 4500., 500.)
 res_bins      = np.concatenate([res_bins_low, res_bins_high])
 
 
-file0 = TFile("HLT_RECO_pT_Comp_nPVz_pT.root")
+file0 = TFile("HLT_RECO_Comp_nPVz_test.root")
 file0.cd()
 dirList = gDirectory.GetListOfKeys()
 can = []
@@ -25,7 +25,7 @@ for eta in eta_bins[:-1]:
 	ex = array('d', [])
 	mean_new = array('d', [])
 	RMS_new = array('d', [])
-	
+	err_on_mean  = array('d', [])
 	
 	for i in xrange(len(res_bins) - 1):
 		x.append(0.5 * (res_bins[i] + res_bins[i+1]))
@@ -45,24 +45,25 @@ for eta in eta_bins[:-1]:
 		eta_bin_low   = histo.GetName().split('_')[7]
 		eta_bin_high  = histo.GetName().split('_')[8]
 
-		if (not is_raw) and float(eta_bin_low) == eta:
-			index = bisect_left(res_bins, float(pT_bin_low)) - 1
+		if (histo.GetName().split('_')[1] == 'resPt') and float(eta_bin_low) == eta:
+			index = bisect_left(res_bins, float(pT_bin_low))
+			print histo.GetName(), histo.GetEntries()
 			h[index].Add(histo)
 			h[index].SetName(histo.GetName())
-
 			print h[index].GetName()
 
 	for histo in h:
-		mean     = histo.GetMean()
-		RMS      = histo.GetRMS()
-		histo.GetXaxis().SetRangeUser(mean - 3 * RMS, mean + 3 * RMS)
-		mean_new.append(histo.GetMean())
-		RMS_new.append(histo.GetRMS())
-
+		if histo.GetEntries() > 100.:
+			mean     = histo.GetMean()
+			RMS      = histo.GetRMS()
+			histo.GetXaxis().SetRangeUser(mean - 3 * RMS, mean + 3 * RMS)
+			mean_new.append(histo.GetMean())
+			RMS_new.append(histo.GetRMS())
+			err_on_mean.append(histo.GetMeanError())
 	  
-	gr_pT_vs_eta = TGraphErrors( len(x), x, mean_new, ex, RMS_new )
+	gr_pT_vs_eta = TGraphErrors( len(x), x, mean_new, ex, err_on_mean )
 
-	gr_pT_vs_eta.SetTitle('pT_vs_ratio_in_eta_' + str(eta) + '_' + str(eta_bins[bisect_left(eta_bins, eta)+1]))
+	gr_pT_vs_eta.SetTitle('pT_vs_ratio_in_eta_' + str(int(10*eta)) + '_' + str(int(10*eta_bins[bisect_left(eta_bins, eta)+1])))
 
 	c_name = gr_pT_vs_eta.GetTitle()
 	canvas = TCanvas(c_name, c_name, 600, 600)
@@ -78,6 +79,8 @@ for eta in eta_bins[:-1]:
 	gr_pT_vs_eta.Draw( 'AP' )
 
 	can[-1].SaveAs(c_name + '.pdf')
+	can[-1].SaveAs(c_name + '.C')
+
 	del h[:], x[:], ex[:], mean_new[:], RMS_new[:]
  
 #keepGUIalive

@@ -17,7 +17,7 @@ useWideJets = options.useWideJets
 run_period  = options.run_period
 
 eta_bins    = np.arange(0.0, 3.0, 0.5)
-nPVzbins    = [0, 7, 15, 2500]
+nPVzbins    = [0, 7, 15, 25]
 scale       = 1
 
 res_bins_low  = np.arange(0., 1400., 200.)
@@ -74,11 +74,11 @@ for k in range(len(eta_bins)-1):
 			#h_res.append(h)
 
 			h_name = "h_resPt_" + common_suffixes
-			h = TH1F(h_name, h_name, 500, -2., 2.)
+			h = TH1F(h_name, h_name, 500, 0., 2.)
 			h_resPt.append(h)
 
 			h_name = "h_resRawPt_" + common_suffixes
-			h = TH1F(h_name, h_name, 500, -2., 2.)
+			h = TH1F(h_name, h_name, 500, 0., 2.)
 			h_resRawPt.append(h)
 
 			h_name = "h_balance_" + common_suffixes
@@ -157,7 +157,7 @@ for jentry in range(entries):
 		allRECODijetSelection = bool(0)
 
 	#RECO Event Filters
-	DeltaPhiRECO  = fabs(recoJetPhi[matchindex0]-recoJetPhi[matchindex1]) > TMath.Pi()/3.0
+	DeltaPhiRECO  = fabs(recoJetPhi[0]-recoJetPhi[matchindex1]) > TMath.Pi()/3.0
 	RecoFlagsGood = DeltaPhiRECO and mychain.HBHENoiseFilterResultFlag and mychain.hcalLaserEventFilterFlag and mychain.eeBadScFilterFlag
 
 	#Event Filter
@@ -242,6 +242,139 @@ for jentry in range(entries):
 	indexk1 = bisect_left(eta_bins, abs(recoJetEta[matchindex1])) - residue
 
 	indexj  = bisect_left(nPVzbins, nPVz) - residue
+
+
+	# print len(h_resPt)
+	# print res_bins
+	# print eta_bins
+	# print nPVzbins
+	if len(recoJetPt) > 2:
+		soft_third_jet_reco = 0.1*((recoJetPt[0] + recoJetPt[1])/2) < recoJetPt[2]
+	else:
+		soft_third_jet_reco = False
+
+	#sufficient balance in the azimuthal plane (back-to-back: DeltaPhi_jj > 2.7)
+	if abs(recoJetPhi[matchindex0] - recoJetPhi[matchindex1]) > 2.7 and soft_third_jet_reco: 
+
+		if abs(recoJetEta[matchindex0]) < 0.25 and abs(recoJetEta[matchindex1]) > 0.25:
+			ref_jet_pT    	  = recoJetPt[matchindex0]
+			ref_jet_eta   	  = recoJetEta[matchindex0]
+
+			probe_jet_pT  	  = recoJetPt[matchindex1]
+			probe_jet_eta 	  = recoJetEta[matchindex1]
+
+			probe_jet_pT_HLT  = dsJetPt[1]
+			probe_jet_eta_HLT = dsJetEta[1]
+
+			ref_jet_eta_raw 	  = recoJetEta[matchindex0]
+
+			probe_jet_pT_raw  	  = recoJetRawPt[matchindex1]
+			probe_jet_eta_raw 	  = recoJetEta[matchindex1]
+
+			probe_jet_pT_HLT_raw  = dsJetRawPt[1]
+			probe_jet_eta_HLT_raw = dsJetEta[1]
+
+			balance1          = (probe_jet_pT - ref_jet_pT) / (probe_jet_pT + ref_jet_pT)
+			balance2          = (probe_jet_pT_HLT - ref_jet_pT) / (probe_jet_pT_HLT + ref_jet_pT)
+			balance3          = (probe_jet_pT_raw - ref_jet_pT) / (probe_jet_pT_raw + ref_jet_pT)
+			balance4          = (probe_jet_pT_HLT_raw - ref_jet_pT) / (probe_jet_pT_HLT_raw + ref_jet_pT)
+			balance_index = (bisect_left(res_bins, probe_jet_pT) - residue) + (bisect_left(nPVzbins, nPVz) - residue) * (len(res_bins) - 1) + (bisect_left(eta_bins, abs(probe_jet_eta)) - residue) * (len(res_bins) - 1) * (len(nPVzbins) - 1)
+			if balance_index > -1 and balance_index < len(h_balance):
+				h_balance[balance_index].Fill(balance1)
+				h_balance_HLT[balance_index].Fill(balance2)
+				h_balance_raw[balance_index].Fill(balance3)
+				h_balance_HLT_raw[balance_index].Fill(balance4)
+
+		elif abs(recoJetEta[matchindex0]) > 0.25 and abs(recoJetEta[matchindex1]) < 0.25:
+			
+			ref_jet_pT    	  = recoJetPt[matchindex1]
+			ref_jet_eta   	  = recoJetEta[matchindex1]
+			
+			probe_jet_pT  	  = recoJetPt[matchindex0]
+			probe_jet_eta 	  = recoJetEta[matchindex0]
+
+			probe_jet_pT_HLT  = dsJetPt[0]
+			probe_jet_eta_HLT = dsJetEta[0]
+
+			ref_jet_eta_raw  	  = recoJetEta[matchindex1]
+
+			probe_jet_pT_raw  	  = recoJetRawPt[matchindex0]
+			probe_jet_eta_raw 	  = recoJetEta[matchindex0]
+
+			probe_jet_pT_HLT_raw  = dsJetRawPt[0]
+			probe_jet_eta_HLT_raw = dsJetEta[0]
+
+			balance1          = (probe_jet_pT - ref_jet_pT) / (probe_jet_pT + ref_jet_pT)
+			balance2          = (probe_jet_pT_HLT - ref_jet_pT) / (probe_jet_pT_HLT + ref_jet_pT)
+			balance3          = (probe_jet_pT_raw - ref_jet_pT) / (probe_jet_pT_raw + ref_jet_pT)
+			balance4          = (probe_jet_pT_HLT_raw - ref_jet_pT) / (probe_jet_pT_HLT_raw + ref_jet_pT)
+			balance_index = (bisect_left(res_bins, probe_jet_pT) - residue) + (bisect_left(nPVzbins, nPVz) - residue) * (len(res_bins) - 1) + (bisect_left(eta_bins, abs(probe_jet_eta)) - residue) * (len(res_bins) - 1) * (len(nPVzbins) - 1)
+			if balance_index > -1 and balance_index < len(h_balance):
+				h_balance[balance_index].Fill(balance1)
+				h_balance_HLT[balance_index].Fill(balance2)
+				h_balance_raw[balance_index].Fill(balance3)
+				h_balance_HLT_raw[balance_index].Fill(balance4)
+
+		elif abs(recoJetEta[matchindex0]) < 0.25 and abs(recoJetEta[matchindex1]) < 0.25:
+
+			if random.uniform(0., 1.) > 0.5: # if both jet are in the abs(eta)<0.25 region ref jet should be chosen randomly in order to eliminate the resolution bias.
+
+				ref_jet_pT    	  = recoJetPt[matchindex1]
+				ref_jet_eta   	  = recoJetEta[matchindex1]
+				
+				probe_jet_pT  	  = recoJetPt[matchindex0]
+				probe_jet_eta 	  = recoJetEta[matchindex0]
+
+				probe_jet_pT_HLT  = dsJetPt[0]
+				probe_jet_eta_HLT = dsJetEta[0]
+
+				ref_jet_eta_raw  	  = recoJetEta[matchindex1]
+
+				probe_jet_pT_raw  	  = recoJetRawPt[matchindex0]
+				probe_jet_eta_raw 	  = recoJetEta[matchindex0]
+
+				probe_jet_pT_HLT_raw  = dsJetRawPt[0]
+				probe_jet_eta_HLT_raw = dsJetEta[0]
+
+				balance1          = (probe_jet_pT - ref_jet_pT) / (probe_jet_pT + ref_jet_pT)
+				balance2          = (probe_jet_pT_HLT - ref_jet_pT) / (probe_jet_pT_HLT + ref_jet_pT)
+				balance3          = (probe_jet_pT_raw - ref_jet_pT) / (probe_jet_pT_raw + ref_jet_pT)
+				balance4          = (probe_jet_pT_HLT_raw - ref_jet_pT) / (probe_jet_pT_HLT_raw + ref_jet_pT)
+				balance_index = (bisect_left(res_bins, probe_jet_pT) - residue) + (bisect_left(nPVzbins, nPVz) - residue) * (len(res_bins) - 1) +(bisect_left(eta_bins, abs(probe_jet_eta)) - residue) * (len(res_bins) - 1) * (len(nPVzbins) - 1)
+				if balance_index > -1 and balance_index < len(h_balance):
+					h_balance[balance_index].Fill(balance1)
+					h_balance_HLT[balance_index].Fill(balance2)
+					h_balance_raw[balance_index].Fill(balance3)
+					h_balance_HLT_raw[balance_index].Fill(balance4)
+
+			else:
+				ref_jet_pT    	  = recoJetPt[matchindex0]
+				ref_jet_eta   	  = recoJetEta[matchindex0]
+				
+				probe_jet_pT  	  = recoJetPt[matchindex1]
+				probe_jet_eta 	  = recoJetEta[matchindex1]
+
+				probe_jet_pT_HLT  = dsJetPt[1]
+				probe_jet_eta_HLT = dsJetEta[1]
+
+				ref_jet_eta_raw  	  = recoJetEta[matchindex0]
+
+				probe_jet_pT_raw  	  = recoJetRawPt[matchindex1]
+				probe_jet_eta_raw 	  = recoJetEta[matchindex1]
+
+				probe_jet_pT_HLT_raw  = dsJetRawPt[1]
+				probe_jet_eta_HLT_raw = dsJetEta[1]
+
+				balance1          = (probe_jet_pT - ref_jet_pT) / (probe_jet_pT + ref_jet_pT)
+				balance2          = (probe_jet_pT_HLT - ref_jet_pT) / (probe_jet_pT_HLT + ref_jet_pT)
+				balance3          = (probe_jet_pT_raw - ref_jet_pT) / (probe_jet_pT_raw + ref_jet_pT)
+				balance4          = (probe_jet_pT_HLT_raw - ref_jet_pT) / (probe_jet_pT_HLT_raw + ref_jet_pT)
+				balance_index = (bisect_left(res_bins, probe_jet_pT) - residue) + (bisect_left(nPVzbins, nPVz) - residue) * (len(res_bins) - 1) + (bisect_left(eta_bins, abs(probe_jet_eta)) - residue) * (len(res_bins) - 1) * (len(nPVzbins) - 1)
+				if balance_index > -1 and balance_index < len(h_balance):
+					h_balance[balance_index].Fill(balance1)
+					h_balance_HLT[balance_index].Fill(balance2)
+					h_balance_raw[balance_index].Fill(balance3)
+					h_balance_HLT_raw[balance_index].Fill(balance4)
 	
 	global_index0 = indexi0 + indexj * (len(res_bins) - 1) + indexk0 * (len(res_bins) - 1) * (len(nPVzbins) - 1)
 	if global_index0 > -1 and global_index0 < len(h_resPt):

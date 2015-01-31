@@ -1,0 +1,92 @@
+{
+//=========Macro generated from canvas: pT_vs_ratio_in_eta_15_20/pT_vs_ratio_in_eta_15_20
+//=========  (Wed Jan  7 23:23:55 2015) by ROOT version5.34/05
+   TCanvas *pT_vs_ratio_in_eta_15_20 = new TCanvas("pT_vs_ratio_in_eta_15_20", "pT_vs_ratio_in_eta_15_20",60,82,600,600);
+   gStyle->SetOptFit(1);
+   gStyle->SetOptStat(0);
+   pT_vs_ratio_in_eta_15_20->SetHighLightColor(2);
+   pT_vs_ratio_in_eta_15_20->Range(-980.2531,0.8682927,5146.329,1.112195);
+   pT_vs_ratio_in_eta_15_20->SetFillColor(0);
+   pT_vs_ratio_in_eta_15_20->SetBorderMode(0);
+   pT_vs_ratio_in_eta_15_20->SetBorderSize(2);
+   pT_vs_ratio_in_eta_15_20->SetTickx(1);
+   pT_vs_ratio_in_eta_15_20->SetTicky(1);
+   pT_vs_ratio_in_eta_15_20->SetLeftMargin(0.16);
+   pT_vs_ratio_in_eta_15_20->SetRightMargin(0.05);
+   pT_vs_ratio_in_eta_15_20->SetTopMargin(0.05);
+   pT_vs_ratio_in_eta_15_20->SetBottomMargin(0.13);
+   pT_vs_ratio_in_eta_15_20->SetFrameFillStyle(0);
+   pT_vs_ratio_in_eta_15_20->SetFrameBorderMode(0);
+   pT_vs_ratio_in_eta_15_20->SetFrameFillStyle(0);
+   pT_vs_ratio_in_eta_15_20->SetFrameBorderMode(0);
+   
+   TGraphErrors *gre = new TGraphErrors(13);
+   gre->SetName("Graph");
+   gre->SetTitle("pT_vs_ratio_in_eta_15_20");
+   gre->SetFillColor(1);
+   gre->SetMarkerColor(4);
+   gre->SetMarkerStyle(21);
+   gre->SetPoint(0,100,0.9931325);
+   gre->SetPointError(0,100,0.0001643898);
+   gre->SetPoint(1,300,0.990174);
+   gre->SetPointError(1,100,8.83653e-05);
+   gre->SetPoint(2,500,0.9863476);
+   gre->SetPointError(2,100,0.0002337749);
+   gre->SetPoint(3,700,0.9862906);
+   gre->SetPointError(3,100,0.001182551);
+   gre->SetPoint(4,900,1.491668e-154);
+   gre->SetPointError(4,100,9.172407e+170);
+   gre->SetPoint(5,1100,6.940098e-310);
+   gre->SetPointError(5,100,7.105415e+20);
+   gre->SetPoint(6,1300,6.940098e-310);
+   gre->SetPointError(6,100,3.034478e-61);
+   gre->SetPoint(7,1650,6.940099e-310);
+   gre->SetPointError(7,250,1.401084e-76);
+   gre->SetPoint(8,2150,6.940098e-310);
+   gre->SetPointError(8,250,1.576345e-52);
+   gre->SetPoint(9,2650,2.14994e-314);
+   gre->SetPointError(9,250,0);
+   gre->SetPoint(10,3150,1.491668e-154);
+   gre->SetPointError(10,250,1.290741e-231);
+   gre->SetPoint(11,3650,6.940099e-310);
+   gre->SetPointError(11,250,1.290741e-231);
+   gre->SetPoint(12,4150,0);
+   gre->SetPointError(12,250,1.117085e+267);
+   
+   TH1F *Graph_Graph4 = new TH1F("Graph_Graph4","pT_vs_ratio_in_eta_15_20",100,0,4840);
+   Graph_Graph4->SetMinimum(0.9);
+   Graph_Graph4->SetMaximum(1.1);
+   Graph_Graph4->SetDirectory(0);
+   Graph_Graph4->SetStats(0);
+   Graph_Graph4->SetLineStyle(0);
+   Graph_Graph4->SetMarkerStyle(20);
+   Graph_Graph4->GetXaxis()->SetTitle("pT [GeV]");
+   Graph_Graph4->GetXaxis()->SetLabelFont(42);
+   Graph_Graph4->GetXaxis()->SetLabelOffset(0.007);
+   Graph_Graph4->GetXaxis()->SetLabelSize(0.035);
+   Graph_Graph4->GetXaxis()->SetTitleOffset(0.9);
+   Graph_Graph4->GetXaxis()->SetTitleFont(42);
+   Graph_Graph4->GetYaxis()->SetTitle("p_{T}^{HLT}/p_{T}^{RECO}");
+   Graph_Graph4->GetYaxis()->SetLabelFont(42);
+   Graph_Graph4->GetYaxis()->SetLabelOffset(0.007);
+   Graph_Graph4->GetYaxis()->SetLabelSize(0.035);
+   Graph_Graph4->GetYaxis()->SetTitleOffset(1.6);
+   Graph_Graph4->GetYaxis()->SetTitleFont(42);
+   Graph_Graph4->GetZaxis()->SetLabelFont(42);
+   Graph_Graph4->GetZaxis()->SetLabelOffset(0.007);
+   Graph_Graph4->GetZaxis()->SetLabelSize(0.035);
+   Graph_Graph4->GetZaxis()->SetTitleFont(42);
+   gre->SetHistogram(Graph_Graph4);
+   
+   gre->Draw("ap");
+   
+   TPaveText *pt = new TPaveText(0,0.9522378,0.3908054,0.99,"blNDC");
+   pt->SetName("title");
+   pt->SetBorderSize(2);
+   pt->SetFillColor(10);
+   TText *text = pt->AddText("pT_vs_ratio_in_eta_15_20");
+   pt->Draw();
+   pT_vs_ratio_in_eta_15_20->Modified();
+   pT_vs_ratio_in_eta_15_20->cd();
+   pT_vs_ratio_in_eta_15_20->SetSelected(pT_vs_ratio_in_eta_15_20);
+}
