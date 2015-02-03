@@ -4,11 +4,12 @@ from rootutils import *
 import math, sys, numpy as np
 from setTDRStyle import setTDRStyle
 
-FunctionType = int(sys.argv[1])
-
+gROOT.ProcessLine(".X ~/setTDRStyle.C")
+#gStyle.SetOptFit(1)
 gStyle.SetOptTitle(0)
 
-input_root_file   = "/afs/cern.ch/user/i/isildak/public/DataScouting/RUNBCD.root"
+input_root_file   = "RUNBCD.root"
+#input_root_file   = "histo.root"
 input_directory   = "scoutingDiJetVariables"
 fileNameSuffix    = "Run2012BCD"
 input_2Dhistogram = "h2_DetajjVsMjjWide;1"
@@ -37,23 +38,25 @@ maxX_mass = 5500.
 # 6: VARIATION 6 (7 par.) - "( [0]*TMath::Power(1-x/8000,[1]) ) / ( TMath::Power(x/8000,[2]+[3]*log(x/8000)+[4]*TMath::Power(log(x/8000),2)+[5]*TMath::Power(log(x/8000),3)+[6]*TMath::Power(log(x/8000),4)) )" 
 #    -. "log" extension wrt to DEFAULT  
 
+FunctionType = int(sys.argv[1])
+
 FunctionFormLatex = ["#frac{A(1-x/#sqrt{s})^{B}}{(x/#sqrt{s})^{C+D.log(x/#sqrt{s})}}",
 					 "#frac{A(1-x/#sqrt{s})^{B}(1+Ex/#sqrt{s})}{(x/#sqrt{s})^{C+D.log(x/#sqrt{s})}}",
 					 "#frac{A(1-x/#sqrt{s})^{B}(1+Ex/#sqrt{s}+F(x/#sqrt{s})^{2})}{(x/#sqrt{s})^{C+D.log(x/#sqrt{s})}}",
 					 "#frac{A(1-x/#sqrt{s})^{B}(1+Ex/#sqrt{s}+F(x/#sqrt{s})^{2})+G(x/#sqrt{s})^{3})}{(x/#sqrt{s})^{C+D.log(x/#sqrt{s})}}",
-					 "#frac{A(1-x/#sqrt{s})^{B}e^{E(x/#sqrt{s})}(1+e^{F})^G}{(x/#sqrt{s})^{C+D.log(x/#sqrt{s})}}",
+					 "#frac{A(1-x/#sqrt{s})^{B}e^{E(x/#sqrt{s})}(1+e^{F}x/#sqrt{s})^{G}}{(x/#sqrt{s})^{C+D.log(x/#sqrt{s})}}",
 					 "#frac{A(1-x/#sqrt{s})^{B}}{(x/#sqrt{s})^{C+D.log(x/#sqrt{s})+E.log^{2}(x/#sqrt{s})+F.log^{3}(x/#sqrt{s})}}",
 					 "#frac{A(1-x/#sqrt{s})^{B}}{(x/#sqrt{s})^{C+D.log(x/#sqrt{s})+E.log^{2}(x/#sqrt{s})+F.log^{3}(x/#sqrt{s})+G.log^{4}(x/#sqrt{s})}}",
 					 "#frac{A(1-x/#sqrt{s})^{B}}{(x/#sqrt{s})^{C+D.log(x/#sqrt{s})+E.log^{2}(x/#sqrt{s})+F.log^{3}(x/#sqrt{s})+G.log^{4}(x/#sqrt{s})}}"]
 
-FunctionForm = ["([0]*TMath::Power(1-x/8000,[1]))/(TMath::Power(x/8000,[2]+[3]*log(x/8000)))",
-                "([0]*TMath::Power(1-x/8000,[1])*(1+[4]*x/8000))/(TMath::Power(x/8000,[2]+[3]*log(x/8000)))",
- 				"([0]*TMath::Power(1-x/8000,[1])*(1+[4]*x/8000+[5]*pow(x/8000,2)))/(TMath::Power(x/8000,[2]+[3]*log(x/8000)))",
- 				"([0]*TMath::Power(1-x/8000,[1])*(1+[4]*x/8000+[5]*pow(x/8000,2)+[6]*pow(x/8000,3)))/(TMath::Power(x/8000,[2]+[3]*log(x/8000)))",
- 				"([0]*TMath::Power(1-x/8000,[1])*exp([4]*x/8000)*TMath::Power(1+exp([5])*x/8000,[6]))/(TMath::Power(x/8000,[2]+[3]*log(x/8000)))",
- 				"([0]*TMath::Power(1-x/8000,[1]))/(TMath::Power(x/8000,[2]+[3]*log(x/8000)+[4]*TMath::Power(log(x/8000),2)))",
- 				"([0]*TMath::Power(1-x/8000,[1]))/(TMath::Power(x/8000,[2]+[3]*log(x/8000)+[4]*TMath::Power(log(x/8000),2)+[5]*TMath::Power(log(x/8000),3)))",
- 				"([0]*TMath::Power(1-x/8000,[1]))/(TMath::Power(x/8000,[2]+[3]*log(x/8000)+[4]*TMath::Power(log(x/8000),2)+[5]*TMath::Power(log(x/8000),3)+[6]*TMath::Power(log(x/8000),4)))"]
+FunctionForm = ["([0]*pow(1-x/8000,[1]))/(pow(x/8000,[2]+[3]*log(x/8000)))",
+                "([0]*pow(1-x/8000,[1])*(1+[4]*x/8000))/(pow(x/8000,[2]+[3]*log(x/8000)))",
+ 				"([0]*pow(1-x/8000,[1])*(1+[4]*x/8000+[5]*pow(x/8000,2)))/(pow(x/8000,[2]+[3]*log(x/8000)))",
+ 				"([0]*pow(1-x/8000,[1])*(1+[4]*x/8000+[5]*pow(x/8000,2)+[6]*pow(x/8000,3)))/(pow(x/8000,[2]+[3]*log(x/8000)))",
+ 				"([0]*pow(1-x/8000,[1])*exp([4]*x/8000)*pow(1+exp([5])*x/8000,[6]))/(pow(x/8000,[2]+[3]*log(x/8000)))",
+ 				"([0]*pow(1-x/8000,[1]))/(pow(x/8000,[2]+[3]*log(x/8000)+[4]*pow(log(x/8000),2)))",
+ 				"([0]*pow(1-x/8000,[1]))/(pow(x/8000,[2]+[3]*log(x/8000)+[4]*pow(log(x/8000),2)+[5]*pow(log(x/8000),3)))",
+ 				"([0]*pow(1-x/8000,[1]))/(pow(x/8000,[2]+[3]*log(x/8000)+[4]*pow(log(x/8000),2)+[5]*pow(log(x/8000),3)+[6]*pow(log(x/8000),4)))"]
 
 print "FunctionType:", FunctionType, " FunctionForm:", FunctionForm[FunctionType]
 
