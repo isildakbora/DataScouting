@@ -49,7 +49,7 @@ FunctionFormLatex = ["#frac{A(1-x/#sqrt{s})^{B}}{(x/#sqrt{s})^{C+D.log(x/#sqrt{s
 FunctionForm = ["([0]*TMath::Power(1-x/8000,[1]))/(TMath::Power(x/8000,[2]+[3]*log(x/8000)))",
                 "([0]*TMath::Power(1-x/8000,[1])*(1+[4]*x/8000))/(TMath::Power(x/8000,[2]+[3]*log(x/8000)))",
  				"([0]*TMath::Power(1-x/8000,[1])*(1+[4]*x/8000+[5]*pow(x/8000,2)))/(TMath::Power(x/8000,[2]+[3]*log(x/8000)))",
- 				"([0]*TMath::Power(1-x/8000,[1])*(1+[4]*x/8000+[5]*pow(x/8000,2)++[6]*pow(x/8000,3)))/(TMath::Power(x/8000,[2]+[3]*log(x/8000)))",
+ 				"([0]*TMath::Power(1-x/8000,[1])*(1+[4]*x/8000+[5]*pow(x/8000,2)+[6]*pow(x/8000,3)))/(TMath::Power(x/8000,[2]+[3]*log(x/8000)))",
  				"([0]*TMath::Power(1-x/8000,[1])*exp([4]*x/8000)*TMath::Power(1+exp([5])*x/8000,[6]))/(TMath::Power(x/8000,[2]+[3]*log(x/8000)))",
  				"([0]*TMath::Power(1-x/8000,[1]))/(TMath::Power(x/8000,[2]+[3]*log(x/8000)+[4]*TMath::Power(log(x/8000),2)))",
  				"([0]*TMath::Power(1-x/8000,[1]))/(TMath::Power(x/8000,[2]+[3]*log(x/8000)+[4]*TMath::Power(log(x/8000),2)+[5]*TMath::Power(log(x/8000),3)))",
