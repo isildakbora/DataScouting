@@ -40,23 +40,23 @@ maxX_mass = 5500.
 
 FunctionType = int(sys.argv[1])
 
-FunctionFormLatex = ["#frac{A(1-x/#sqrt{s})^{B}}{(x/#sqrt{s})^{C+D.log(x/#sqrt{s})}}",
-					 "#frac{A(1-x/#sqrt{s})^{B}(1+Ex/#sqrt{s})}{(x/#sqrt{s})^{C+D.log(x/#sqrt{s})}}",
-					 "#frac{A(1-x/#sqrt{s})^{B}(1+Ex/#sqrt{s}+F(x/#sqrt{s})^{2})}{(x/#sqrt{s})^{C+D.log(x/#sqrt{s})}}",
-					 "#frac{A(1-x/#sqrt{s})^{B}(1+Ex/#sqrt{s}+F(x/#sqrt{s})^{2})+G(x/#sqrt{s})^{3})}{(x/#sqrt{s})^{C+D.log(x/#sqrt{s})}}",
-					 "#frac{A(1-x/#sqrt{s})^{B}e^{E(x/#sqrt{s})}(1+e^{F}x/#sqrt{s})^{G}}{(x/#sqrt{s})^{C+D.log(x/#sqrt{s})}}",
-					 "#frac{A(1-x/#sqrt{s})^{B}}{(x/#sqrt{s})^{C+D.log(x/#sqrt{s})+E.log^{2}(x/#sqrt{s})+F.log^{3}(x/#sqrt{s})}}",
-					 "#frac{A(1-x/#sqrt{s})^{B}}{(x/#sqrt{s})^{C+D.log(x/#sqrt{s})+E.log^{2}(x/#sqrt{s})+F.log^{3}(x/#sqrt{s})+G.log^{4}(x/#sqrt{s})}}",
-					 "#frac{A(1-x/#sqrt{s})^{B}}{(x/#sqrt{s})^{C+D.log(x/#sqrt{s})+E.log^{2}(x/#sqrt{s})+F.log^{3}(x/#sqrt{s})+G.log^{4}(x/#sqrt{s})}}"]
+FunctionFormLatex = ["#frac{A(1-x/#sqrt{s})^{B}}{(x/#sqrt{s})^{C+D.log(x/#sqrt{s})}}", #0
+					 "#frac{A(1-x/#sqrt{s})^{B}(1+Ex/#sqrt{s})}{(x/#sqrt{s})^{C+D.log(x/#sqrt{s})}}", #1
+					 "#frac{A(1-x/#sqrt{s})^{B}(1+Ex/#sqrt{s}+F(x/#sqrt{s})^{2})}{(x/#sqrt{s})^{C+D.log(x/#sqrt{s})}}", #2
+					 "#frac{A(1-x/#sqrt{s})^{B}(1+Ex/#sqrt{s}+F(x/#sqrt{s})^{2})+G(x/#sqrt{s})^{3})}{(x/#sqrt{s})^{C+D.log(x/#sqrt{s})}}", #3
+					 "#frac{A(1-x/#sqrt{s})^{B}e^{E(x/#sqrt{s})}(1+e^{F}x/#sqrt{s})^{G}}{(x/#sqrt{s})^{C+D.log(x/#sqrt{s})}}", #4
+					 "#frac{A(1-x/#sqrt{s})^{B}}{(x/#sqrt{s})^{C+D.log(x/#sqrt{s})+E.log^{2}(x/#sqrt{s})}}", #5
+					 "#frac{A(1-x/#sqrt{s})^{B}}{(x/#sqrt{s})^{C+D.log(x/#sqrt{s})+E.log^{2}(x/#sqrt{s})+F.log^{3}(x/#sqrt{s})}}", #6
+					 "#frac{A(1-x/#sqrt{s})^{B}}{(x/#sqrt{s})^{C+D.log(x/#sqrt{s})+E.log^{2}(x/#sqrt{s})+F.log^{3}(x/#sqrt{s})+G.log^{4}(x/#sqrt{s})}}"] #7
 
-FunctionForm = ["([0]*pow(1-x/8000,[1]))/(pow(x/8000,[2]+[3]*log(x/8000)))",
-                "([0]*pow(1-x/8000,[1])*(1+[4]*x/8000))/(pow(x/8000,[2]+[3]*log(x/8000)))",
- 				"([0]*pow(1-x/8000,[1])*(1+[4]*x/8000+[5]*pow(x/8000,2)))/(pow(x/8000,[2]+[3]*log(x/8000)))",
- 				"([0]*pow(1-x/8000,[1])*(1+[4]*x/8000+[5]*pow(x/8000,2)+[6]*pow(x/8000,3)))/(pow(x/8000,[2]+[3]*log(x/8000)))",
- 				"([0]*pow(1-x/8000,[1])*exp([4]*x/8000)*pow(1+exp([5])*x/8000,[6]))/(pow(x/8000,[2]+[3]*log(x/8000)))",
- 				"([0]*pow(1-x/8000,[1]))/(pow(x/8000,[2]+[3]*log(x/8000)+[4]*pow(log(x/8000),2)))",
- 				"([0]*pow(1-x/8000,[1]))/(pow(x/8000,[2]+[3]*log(x/8000)+[4]*pow(log(x/8000),2)+[5]*pow(log(x/8000),3)))",
- 				"([0]*pow(1-x/8000,[1]))/(pow(x/8000,[2]+[3]*log(x/8000)+[4]*pow(log(x/8000),2)+[5]*pow(log(x/8000),3)+[6]*pow(log(x/8000),4)))"]
+FunctionForm = ["([0]*pow(1-x/8000,[1]))/(pow(x/8000,[2]+[3]*log(x/8000)))", #0
+                "([0]*pow(1-x/8000,[1])*(1+[4]*x/8000))/(pow(x/8000,[2]+[3]*log(x/8000)))", #1
+ 				"([0]*pow(1-x/8000,[1])*(1+[4]*x/8000+[5]*pow(x/8000,2)))/(pow(x/8000,[2]+[3]*log(x/8000)))", #2
+ 				"([0]*pow(1-x/8000,[1])*(1+[4]*x/8000+[5]*pow(x/8000,2)+[6]*pow(x/8000,3)))/(pow(x/8000,[2]+[3]*log(x/8000)))", #3
+ 				"([0]*pow(1-x/8000,[1])*exp([4]*x/8000)*pow(1+exp([5])*x/8000,[6]))/(pow(x/8000,[2]+[3]*log(x/8000)))", #4
+ 				"([0]*pow(1-x/8000,[1]))/(pow(x/8000,[2]+[3]*log(x/8000)+[4]*pow(log(x/8000),2)))", #5
+ 				"([0]*pow(1-x/8000,[1]))/(pow(x/8000,[2]+[3]*log(x/8000)+[4]*pow(log(x/8000),2)+[5]*pow(log(x/8000),3)))", #6
+ 				"([0]*pow(1-x/8000,[1]))/(pow(x/8000,[2]+[3]*log(x/8000)+[4]*pow(log(x/8000),2)+[5]*pow(log(x/8000),3)+[6]*pow(log(x/8000),4)))"] #7
 
 print "FunctionType:", FunctionType, " FunctionForm:", FunctionForm[FunctionType]
 
@@ -360,26 +360,25 @@ lstat.DrawLatex(0.7, 0.75, "ndf      = " + "%i" % M1Bkg.GetNDF() )
 lstat.DrawLatex(0.7, 0.70, "#chi^{2}/ndf = " + "%.4f" % (M1Bkg.GetChisquare()/M1Bkg.GetNDF()) )
 lstat.DrawLatex(0.7, 0.65, "Prob   = " + "%.4f" % M1Bkg.GetProb() )
 
-l1 = TLatex()
-l1.SetTextAlign(12)
-l1.SetTextFont(42)
-l1.SetTextColor(ROOT.kAzure-7)
-l1.SetNDC()
-l1.SetTextSize(0.05)
-if FunctionType == 1 or FunctionType == 2 or FunctionType == 3:
-	l1.DrawLatex(0.17, 0.38, "Type I Fit Function")
-elif FunctionType == 4 or FunctionType == 5 or FunctionType == 6:
-	l1.DrawLatex(0.17, 0.38, "Type II Fit Function")
-else:
-	l1.DrawLatex(0.17, 0.38, "Default Fit Function")
+# l1 = TLatex()
+# l1.SetTextAlign(12)
+# l1.SetTextFont(42)
+# l1.SetTextColor(ROOT.kAzure-7)
+# l1.SetNDC()
+# l1.SetTextSize(0.08)
+# if FunctionType == 1 or FunctionType == 2 or FunctionType == 3:
+# 	l1.DrawLatex(0.27, 0.38, "Type I Fit Function")
+# elif FunctionType == 4 or FunctionType == 5 or FunctionType == 6:
+# 	l1.DrawLatex(0.27, 0.38, "Type II Fit Function")
+# else:
+# 	l1.DrawLatex(0.27, 0.38, "Default Fit Function")
 
 l2 = TLatex()
 l2.SetTextAlign(12)
 l2.SetTextFont(42)
-l2.SetTextColor(ROOT.kAzure-7)
 l2.SetNDC()
-l2.SetTextSize(0.03)
-l2.DrawLatex(0.17, 0.27, FunctionFormLatex[FunctionType])
+l2.SetTextSize(0.05)
+l2.DrawLatex(0.37, 0.27, FunctionFormLatex[FunctionType])
 
 Canvas1.cd()
 pad2 = TPad("pad2","pad2",0 ,0 ,1 , 0.3)
