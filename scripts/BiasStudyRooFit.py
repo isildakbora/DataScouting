@@ -4,7 +4,7 @@ import ROOT
 from ROOT import *
 from rootutils import *
 import math
-
+signal_mass = sys.argv[1]
 mass_low  = 354.
 mass_high = 4500.
 
@@ -12,10 +12,10 @@ mass_high = 4500.
 #massBins = array('d',[1, 3, 6, 10, 16, 23, 31, 40, 50, 61, 74, 88, 103, 119, 137, 156, 176, 197, 220, 244, 270, 296, 325, 354, 386, 419, 453, 489, 526, 565, 606, 649,  693, 740, 788, 838, 890, 944, 1000, 1058, 1118, 1181, 1246, 1313, 1383, 1455, 1530, 1607, 1687, 1770, 1856, 1945, 2037, 2132, 2231, 2332, 2438, 2546, 2659, 2775, 2895, 3019, 3147, 3279, 3416, 3558, 3704, 3854, 4010, 4171, 4337, 4509])
 massBins = array('d', range(int(mass_low), int(mass_high)))
 
-file_type     = TFile.Open("dijetFitResults_FuncType3_nParFit7_Run2012BCD.root")
+file_type     = TFile.Open("/afs/cern.ch/user/i/isildak/public/DijetDataScouting/dijetFitResults_FuncType3_nParFit7_Run2012BCD.root")
 func_type     = file_type.FindObjectAny("M1Bkg").Clone("M1Bkg_func_type_2")
 
-MC_signal_file  = TFile.Open("../SignalSamples/RSGravitonToGG_M_700/histo.root")
+MC_signal_file  = TFile.Open("/afs/cern.ch/user/i/isildak/public/DijetDataScouting/SignalSamples/RSGravitonToGG_M_"+ str(signal_mass)+"/histo.root")
 MC_signal_histo = MC_signal_file.FindObjectAny("h1_MjjWide_finalSel")
 
 pseudo_data = TH1F("Generated_by_Type_1_Function","Generated_by_Type_1_Function", len(massBins)-1, massBins)
