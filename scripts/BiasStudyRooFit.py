@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 import sys, getopt
 import ROOT
 from ROOT import *
@@ -6,6 +5,7 @@ import math
 from array import array
 from numpy import divide, sqrt
 import math, sys, os
+
 
 signal_mass = sys.argv[1]
 mass_low  = 354.
@@ -24,10 +24,16 @@ MC_signal_histo = MC_signal_file.FindObjectAny("h1_MjjWide_finalSel")
 pseudo_data = TH1F("Generated_by_Type_1_Function","Generated_by_Type_1_Function", len(massBins)-1, massBins)
 pseudo_data.Sumw2()
 
-bias = TH1F("bias", "bias", 10000, -1, 1)
-output_file = TFile.Open("bias700_.root", "RECREATE")
+bias      = TH1F("bias", "bias", 1000, -1, 1)
+bias_pull = TH1F("bias_pull", "bias_pull", 100, 1.-10., 1.+10)
+bias.SetBit(ROOT.TH1.kCanRebin)
+bias_pull.SetBit(ROOT.TH1.kCanRebin)
 
-for n in xrange(1, 2):
+output_file = TFile.Open("bias" + str(signal_mass) + "_.root", "RECREATE")
+
+f = open('log_'+ str(signal_mass) +'.txt','w')
+
+for n in xrange(1, 1000):
     #Generate by type 1
     for i in xrange(0, len(massBins)-1):
         r = TRandom3()
@@ -64,35 +70,38 @@ for n in xrange(1, 2):
 
     model.fitTo(hist1, RooFit.Silence())
 
-    if int(sys.argv[2]) == 1:
-        can2 = TCanvas('can2', 'can2', 600, 600)
-        can2.SetLogx(True)
-        can2.SetLogy(True)
-        frame  = x.frame(RooFit.Title("Signal Fraction"))
-        hist1.plotOn(frame)
-        model.plotOn(frame)
-        model.plotOn(frame, RooFit.Components("back*"), RooFit.LineColor(RooFit.kRed))
-        model.plotOn(frame, RooFit.Components("sig*"), RooFit.LineStyle(RooFit.kDashed))
-        model.paramOn(frame, RooFit.Layout(0.55)) 
-        hist1.statOn(frame,RooFit.Layout(0.55,0.99,0.8))
-        #MC_hist.plotOn(frame, RooFit.LineColor(RooFit.kGreen))
-        frame.GetXaxis().SetRangeUser(354., 4500.)
-        frame.GetYaxis().SetRangeUser(1e-2, 1e+7)
-        frame.GetXaxis().SetTitle('m_{jj} (GeV)')
-        frame.Draw()
-        MC_signal_histo.Draw("SAME")
+    # if int(sys.argv[2])==1:
+    #     can2 = TCanvas('can2', 'can2', 600, 600)
+    #     can2.SetLogx(True)
+    #     can2.SetLogy(True)
+    #     frame  = x.frame(RooFit.Title("Signal Fraction"))
+    #     hist1.plotOn(frame)
+    #     model.plotOn(frame)
+    #     model.plotOn(frame, RooFit.Components("back*"), RooFit.LineColor(RooFit.kRed))
+    #     model.plotOn(frame, RooFit.Components("sig*"), RooFit.LineStyle(RooFit.kDashed))
+    #     model.paramOn(frame, RooFit.Layout(0.55))
+    #     hist1.statOn(frame,RooFit.Layout(0.55,0.99,0.8))
+    #     frame.GetXaxis().SetRangeUser(354., 4500.)
+    #     frame.GetYaxis().SetRangeUser(1e-2, 1e+7)
+    #     frame.GetXaxis().SetTitle('m_{jj} (GeV)')
+    #     frame.Draw()
 
     for i in xrange(0,6):
         print func_type.GetParameter(i)
-    print "N_Signal", sigfrac.getVal(), sigfrac.getError(), sigfrac.getVal()/sigfrac.getError()
-    #print "N_Background", nbkg.getVal(), nbkg.getError(), 1/(nbkg.getError()/nbkg.getVal())
+
+    print "Signal Fraction/ Signal Fraction Error/Pull: ", sigfrac.getVal(), sigfrac.getError(), sigfrac.getVal()/sigfrac.getError()
+    f.write('Signal Fraction/ Signal Fraction Error/Pull: ' + str(sigfrac.getVal()) + ' ' + str(sigfrac.getError()) + ' ' + str(sigfrac.getVal()/sigfrac.getError()) +'\n')
     bias.Fill(sigfrac.getVal())
+    bias_pull.Fill(sigfrac.getVal()/sigfrac.getError())
+
 output_file.cd()
 bias.Write()
+bias_pull.Write()
+f.close()
 
 if int(sys.argv[2]) == 1:
-	rep = ''
-	while not rep in ['q','Q']:
-		rep = raw_input('enter "q" to quit: ')
-		if 1 < len(rep):
-	    		rep = rep[0]
+    rep = ''
+    while not rep in ['q','Q']:
+        rep = raw_input('enter "q" to quit: ')
+        if 1 < len(rep):
+                rep = rep[0]
