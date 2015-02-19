@@ -25,7 +25,7 @@ pseudo_data = TH1F("Generated_by_Type_1_Function","Generated_by_Type_1_Function"
 pseudo_data.Sumw2()
 
 bias = TH1F("bias", "bias", 10000, -1, 1)
-output_file = TFile.Open("bias"+str(signal_mass)+"_.root", "RECREATE")
+output_file = TFile.Open("bias700_.root", "RECREATE")
 
 for n in xrange(1, 2):
     #Generate by type 1
@@ -91,8 +91,8 @@ output_file.cd()
 bias.Write()
 
 if int(sys.argv[2]) == 1:
-    rep = ''
+	rep = ''
 	while not rep in ['q','Q']:
-	rep = raw_input('enter "q" to quit: ')
-	if 1 < len(rep):
-	    rep = rep[0]
+		rep = raw_input('enter "q" to quit: ')
+		if 1 < len(rep):
+	    		rep = rep[0]
