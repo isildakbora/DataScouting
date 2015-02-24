@@ -77,7 +77,7 @@ for i in xrange(1):#while ngoodfit < int(sys.argv[3]):
 		model.plotOn(frame)
 		model.plotOn(frame, RooFit.Components("back*"), RooFit.LineColor(RooFit.kRed))
 		model.plotOn(frame, RooFit.Components("sig*"), RooFit.LineStyle(RooFit.kDashed))
-		model.plotOn(frame)
+		model.plotOn(frame, RooFit.LineColor(RooFit.kRed))
 		model.paramOn(frame, RooFit.Layout(0.55))
 		hist1.statOn(frame,RooFit.Layout(0.55,0.99,0.8))
 		frame.GetXaxis().SetRangeUser(mass_low, mass_high)
