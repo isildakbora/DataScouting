@@ -2,7 +2,6 @@
 import sys, getopt
 import ROOT
 from ROOT import *
-from rootutils import *
 import math
 
 signal_mass = sys.argv[1]
@@ -10,13 +9,13 @@ mass_low  = 354.#float(signal_mass) - 200.
 mass_high = 4000.#float(signal_mass) + 200.
 
 #Dijet Mass Binning 
-massBins = array('d',[354, 386, 419, 453, 489, 526, 565, 606, 649,  693, 740, 788, 838, 890, 944, 1000, 1058, 1118, 1181, 1246, 1313, 1383, 1455, 1530, 1607, 1687, 1770, 1856, 1945, 2037, 2132, 2231, 2332, 2438, 2546, 2659, 2775, 2895, 3019, 3147, 3279, 3416, 3558, 3704, 3854, 4010, 4171, 4337, 4509])
-#massBins = array('d', range(int(mass_low), int(mass_high)))
+#massBins = array('d',[354, 386, 419, 453, 489, 526, 565, 606, 649,  693, 740, 788, 838, 890, 944, 1000, 1058, 1118, 1181, 1246, 1313, 1383, 1455, 1530, 1607, 1687, 1770, 1856, 1945, 2037, 2132, 2231, 2332, 2438, 2546, 2659, 2775, 2895, 3019, 3147, 3279, 3416, 3558, 3704, 3854, 4010, 4171, 4337, 4509])
+massBins = array('d', range(int(mass_low), int(mass_high)))
 
-file_type     = TFile.Open("dijetFitResults_FuncType3_nParFit7_Run2012BCD.root")
+file_type     = TFile.Open("/afs/cern.ch/user/i/isildak/public/DijetDataScouting/dijetFitResults_FuncType3_nParFit7_Run2012BCD.root")
 func_type     = file_type.FindObjectAny("M1Bkg").Clone("M1Bkg_func_type_2")
 
-MC_signal_file  = TFile.Open("../SignalSamples/RSGravitonToGG_M_" + str(signal_mass) + "/histo.root")
+MC_signal_file  = TFile.Open("/afs/cern.ch/user/i/isildak/public/DijetDataScouting/SignalSamples/RSGravitonToGG_M_" + str(signal_mass) + "/histo.root")
 MC_signal_histo = MC_signal_file.FindObjectAny("h1_MjjWide_finalSel")
 
 pseudo_data = TH1F("Generated_by_Type_1_Function","Generated_by_Type_1_Function", len(massBins)-1, massBins)
@@ -27,19 +26,19 @@ bias_pull = TH1F("bias_pull", "bias_pull", 1000, -1, 1)
 bias.SetBit(TH1.kCanRebin)
 bias_pull.SetBit(TH1.kCanRebin)
 
-output_file = TFile.Open("bias" + str(signal_mass) + "_.root", "RECREATE")
+output_file = TFile.Open("bias" + str(signal_mass) + ".root", "RECREATE")
 
 f = open('log_'+ str(signal_mass) +'.txt','w')
 ngoodfit = 0
 
-while ngoodfit < int(sys.argv[3]):
+for i in xrange(1):#while ngoodfit < int(sys.argv[3]):
 	#Generate by type 1
 	for i in xrange(0, len(massBins)-1):
 		r = TRandom3()
 		r.SetSeed(0)
 		mjj_y = func_type.Integral(massBins[i], massBins[i+1])
 		bin_width = massBins[i+1] - massBins[i]
-		pseudo_data.SetBinContent(i+1, r.Poisson(mjj_y)/bin_width)
+		pseudo_data.SetBinContent(i+1, r.Poisson(mjj_y/bin_width))
 		pseudo_data.SetBinError(i+1, math.sqrt(pseudo_data.GetBinContent(i+1)))
 
 	x = RooRealVar("mjj", "mjj", mass_low, mass_high)
@@ -62,9 +61,8 @@ while ngoodfit < int(sys.argv[3]):
 	bkg = RooGenericPdf("background", "(@1*pow(1-@0/8000,@2)*(1+@5*@0/8000+@6*pow(@0/8000,2)+@7*pow(@0/8000,3)))/(pow(@0/8000,@3+@4*log(@0/8000)))", RooArgList(x, p0, p1, p2, p3, p4, p5, p6) )
 
 	#hist1		 = bkg.generate(RooArgSet(x),1e+4)
-	sig 		 = RooHistPdf("signal", "signal", RooArgSet(x), MC_hist)
-	model        = RooAddPdf("model","Signal + Background", RooArgList(sig,bkg), RooArgList(sigfrac))
-
+	sig    = RooHistPdf("signal", "signal", RooArgSet(x), MC_hist)
+	model  = RooAddPdf("model","Signal + Background", RooArgList(sig,bkg), RooArgList(sigfrac))
 	result = model.fitTo(hist1, RooFit.NumCPU(8), RooFit.Save(), RooFit.PrintLevel(-1), RooFit.PrintEvalErrors(-1))
 
 	if int(sys.argv[2])==1:
@@ -102,4 +100,8 @@ bias_pull.Write()
 f.close()
 
 if int(sys.argv[2]) == 1:
-	keepGUIalive()
+	rep = ''
+	while not rep in ['q','Q']:
+		rep = raw_input('enter "q" to quit: ')
+		if 1 < len(rep):
+			rep = rep[0]
