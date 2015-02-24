@@ -40,18 +40,18 @@ for i in xrange(1):#while ngoodfit < int(sys.argv[3]):
 		r.SetSeed(0)
 		mjj_y = func_type.Integral(massBins[i], massBins[i+1])
 		bin_width = massBins[i+1] - massBins[i]
-		pseudo_data.SetBinContent(i+1, r.Poisson(mjj_y/bin_width))
+		pseudo_data.SetBinContent(i+1, r.Poisson(mjj_y)/bin_width)
 		pseudo_data.SetBinError(i+1, math.sqrt(pseudo_data.GetBinContent(i+1)))
 
 	x = RooRealVar("mjj", "mjj", mass_low, mass_high)
 
 	sigfrac   = RooRealVar("frac" ,"fraction" , 0., -1., 1.)
-	#nsig      = RooRealVar("nsig" ,"N Signal" , 100, -1e-6, 1e+6)
-	#nbkg      = RooRealVar("nbkg" ,"N Background" , 1e+5, -1e+6, 1e+6)
+	#nsig      = RooRealVar("nsig" ,"N Signal" , 10, -1e-2, 1e+2)
+	#nbkg      = RooRealVar("nbkg" ,"N Background" , 1e+6, 0, 1e+6)
 	hist1     = RooDataHist ("hist1","hist1", RooArgList(x), pseudo_data)
 	MC_hist   = RooDataHist ("MC_hist","MC_hist", RooArgList(x), MC_signal_histo)
 
-	scale = 5.
+	scale = 20.
 	p0 = RooRealVar('p0','p0', func_type.GetParameter(0), func_type.GetParameter(0)-scale*func_type.GetParError(0), func_type.GetParameter(0)+scale*func_type.GetParError(0))
 	p1 = RooRealVar('p1','p1', func_type.GetParameter(1), func_type.GetParameter(1)-scale*func_type.GetParError(1), func_type.GetParameter(1)+scale*func_type.GetParError(1)) 
 	p2 = RooRealVar('p2','p2', func_type.GetParameter(2), func_type.GetParameter(2)-scale*func_type.GetParError(2), func_type.GetParameter(2)+scale*func_type.GetParError(2))
@@ -63,8 +63,9 @@ for i in xrange(1):#while ngoodfit < int(sys.argv[3]):
 	bkg = RooGenericPdf("background", "(@1*pow(1-@0/8000,@2)*(1+@5*@0/8000+@6*pow(@0/8000,2)+@7*pow(@0/8000,3)))/(pow(@0/8000,@3+@4*log(@0/8000)))", RooArgList(x, p0, p1, p2, p3, p4, p5, p6) )
 
 	#hist1		 = bkg.generate(RooArgSet(x),1e+4)
-	sig    = RooHistPdf("signal", "signal", RooArgSet(x), MC_hist)
-	model  = RooAddPdf("model","Signal + Background", RooArgList(sig,bkg), RooArgList(sigfrac))
+	sig 		 = RooHistPdf("signal", "signal", RooArgSet(x), MC_hist)
+	model        = RooAddPdf("model","Signal + Background", RooArgList(sig, bkg), RooArgList(sigfrac))
+
 	result = model.fitTo(hist1, RooFit.NumCPU(8), RooFit.Save(), RooFit.PrintLevel(-1), RooFit.PrintEvalErrors(-1))
 
 	if int(sys.argv[2])==1:
@@ -76,12 +77,18 @@ for i in xrange(1):#while ngoodfit < int(sys.argv[3]):
 		model.plotOn(frame)
 		model.plotOn(frame, RooFit.Components("back*"), RooFit.LineColor(RooFit.kRed))
 		model.plotOn(frame, RooFit.Components("sig*"), RooFit.LineStyle(RooFit.kDashed))
+		model.plotOn(frame)
 		model.paramOn(frame, RooFit.Layout(0.55))
 		hist1.statOn(frame,RooFit.Layout(0.55,0.99,0.8))
 		frame.GetXaxis().SetRangeUser(mass_low, mass_high)
 		frame.GetYaxis().SetRangeUser(1e-2, 1e+7)
 		frame.GetXaxis().SetTitle('m_{jj} (GeV)')
 		frame.Draw()
+		can3 = TCanvas('can3', 'can3', 600, 300)
+		hpull = frame.pullHist() 
+		frame2 = x.frame(RooFit.Title("Pull Distribution"))
+  		frame2.addPlotable(hpull,"P")
+  		frame2.Draw()
 
 	for i in xrange(0,6):
 		print func_type.GetParameter(i)
