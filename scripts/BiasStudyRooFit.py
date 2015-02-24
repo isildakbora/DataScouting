@@ -3,7 +3,8 @@ import sys, getopt
 import ROOT
 from ROOT import *
 import math
-from array import *
+from array import array
+from numpy import divide, sqrt
 
 signal_mass = sys.argv[1]
 mass_low  = 354.#float(signal_mass) - 200.
