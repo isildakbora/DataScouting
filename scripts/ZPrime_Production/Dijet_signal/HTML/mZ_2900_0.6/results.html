@@ -1,0 +1,698 @@
+
+<head>
+    <title>Process results</title>
+    <script type="text/javascript" src="../sortable.js"></script>
+    <link rel=stylesheet href="../mgstyle.css" type="text/css">
+</head>
+<body>
+<script type="text/javascript">
+function UrlExists(url) {
+  var http = new XMLHttpRequest();
+  http.open('HEAD', url, false);
+  try{
+     http.send()
+     }
+  catch(err){
+   return 1==2;
+  }
+  return http.status!=404;
+}
+function check_link(url,alt, id){
+    var obj = document.getElementById(id);
+    if ( ! UrlExists(url)){
+        if ( ! UrlExists(alt)){
+         obj.href = alt;
+         return true;
+        }
+       obj.href = alt;
+       return false;
+    }
+    obj.href = url;
+    return 1==1;
+}
+</script>
+  
+
+ <BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>s= 0.00060969 &#177 1.18e-06 (pb)</b><br><br>
+<table class="sortable" id='tablesort'>
+<tr><th>Graph</th>
+    <th> Cross-Section</th>
+    <th>Error</th>
+    <th>Events (K)</th>
+    <th>Unwgt</th>
+    <th>Luminosity</th>
+</tr>
+
+<tr><td align=right><a href=../../SubProcesses/P0_uux_zph_zph_uux/diagrams.html>P0_uux_zph_zph_uux</a></td>
+    <td align=right><a id="#P0_uux_zph_zph_uux" href=#P0_uux_zph_zph_uux onClick="check_link('#P0_uux_zph_zph_uux','#P0_uux_zph_zph_uux','#P0_uux_zph_zph_uux')"> 8.83e-05 </a> </td>
+    <td align=right>  5e-07</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  364.0</td>
+    <td align=right>  0</td>
+</tr>
+
+<tr><td align=right><a href=../../SubProcesses/P0_uux_zph_zph_ccx/diagrams.html>P0_uux_zph_zph_ccx</a></td>
+    <td align=right><a id="#P0_uux_zph_zph_ccx" href=#P0_uux_zph_zph_ccx onClick="check_link('#P0_uux_zph_zph_ccx','#P0_uux_zph_zph_ccx','#P0_uux_zph_zph_ccx')"> 8.732e-05 </a> </td>
+    <td align=right>  4.9e-07</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  370.0</td>
+    <td align=right>  0</td>
+</tr>
+
+<tr><td align=right><a href=../../SubProcesses/P0_uux_zph_zph_ddx/diagrams.html>P0_uux_zph_zph_ddx</a></td>
+    <td align=right><a id="#P0_uux_zph_zph_ddx" href=#P0_uux_zph_zph_ddx onClick="check_link('#P0_uux_zph_zph_ddx','#P0_uux_zph_zph_ddx','#P0_uux_zph_zph_ddx')"> 8.872e-05 </a> </td>
+    <td align=right>  4.85e-07</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  385.0</td>
+    <td align=right>  0</td>
+</tr>
+
+<tr><td align=right><a href=../../SubProcesses/P0_uux_zph_zph_ssx/diagrams.html>P0_uux_zph_zph_ssx</a></td>
+    <td align=right><a id="#P0_uux_zph_zph_ssx" href=#P0_uux_zph_zph_ssx onClick="check_link('#P0_uux_zph_zph_ssx','#P0_uux_zph_zph_ssx','#P0_uux_zph_zph_ssx')"> 8.706e-05 </a> </td>
+    <td align=right>  4.98e-07</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  366.0</td>
+    <td align=right>  0</td>
+</tr>
+
+<tr><td align=right><a href=../../SubProcesses/P0_uux_zph_zph_bbx/diagrams.html>P0_uux_zph_zph_bbx</a></td>
+    <td align=right><a id="#P0_uux_zph_zph_bbx" href=#P0_uux_zph_zph_bbx onClick="check_link('#P0_uux_zph_zph_bbx','#P0_uux_zph_zph_bbx','#P0_uux_zph_zph_bbx')"> 8.814e-05 </a> </td>
+    <td align=right>  5.02e-07</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  379.0</td>
+    <td align=right>  0</td>
+</tr>
+
+<tr><td align=right><a href=../../SubProcesses/P0_ccx_zph_zph_uux/diagrams.html>P0_ccx_zph_zph_uux</a></td>
+    <td align=right><a id="#P0_ccx_zph_zph_uux" href=#P0_ccx_zph_zph_uux onClick="check_link('#P0_ccx_zph_zph_uux','#P0_ccx_zph_zph_uux','#P0_ccx_zph_zph_uux')"> 3.048e-07 </a> </td>
+    <td align=right>  1.82e-09</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  379.0</td>
+    <td align=right>  0</td>
+</tr>
+
+<tr><td align=right><a href=../../SubProcesses/P0_ccx_zph_zph_ccx/diagrams.html>P0_ccx_zph_zph_ccx</a></td>
+    <td align=right><a id="#P0_ccx_zph_zph_ccx" href=#P0_ccx_zph_zph_ccx onClick="check_link('#P0_ccx_zph_zph_ccx','#P0_ccx_zph_zph_ccx','#P0_ccx_zph_zph_ccx')"> 3.026e-07 </a> </td>
+    <td align=right>  2.16e-09</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  390.0</td>
+    <td align=right>  0</td>
+</tr>
+
+<tr><td align=right><a href=../../SubProcesses/P0_ccx_zph_zph_ddx/diagrams.html>P0_ccx_zph_zph_ddx</a></td>
+    <td align=right><a id="#P0_ccx_zph_zph_ddx" href=#P0_ccx_zph_zph_ddx onClick="check_link('#P0_ccx_zph_zph_ddx','#P0_ccx_zph_zph_ddx','#P0_ccx_zph_zph_ddx')"> 3.052e-07 </a> </td>
+    <td align=right>  1.93e-09</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  389.0</td>
+    <td align=right>  0</td>
+</tr>
+
+<tr><td align=right><a href=../../SubProcesses/P0_ccx_zph_zph_ssx/diagrams.html>P0_ccx_zph_zph_ssx</a></td>
+    <td align=right><a id="#P0_ccx_zph_zph_ssx" href=#P0_ccx_zph_zph_ssx onClick="check_link('#P0_ccx_zph_zph_ssx','#P0_ccx_zph_zph_ssx','#P0_ccx_zph_zph_ssx')"> 3.031e-07 </a> </td>
+    <td align=right>  1.77e-09</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  369.0</td>
+    <td align=right>  0</td>
+</tr>
+
+<tr><td align=right><a href=../../SubProcesses/P0_ccx_zph_zph_bbx/diagrams.html>P0_ccx_zph_zph_bbx</a></td>
+    <td align=right><a id="#P0_ccx_zph_zph_bbx" href=#P0_ccx_zph_zph_bbx onClick="check_link('#P0_ccx_zph_zph_bbx','#P0_ccx_zph_zph_bbx','#P0_ccx_zph_zph_bbx')"> 3.076e-07 </a> </td>
+    <td align=right>  1.77e-09</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  371.0</td>
+    <td align=right>  0</td>
+</tr>
+
+<tr><td align=right><a href=../../SubProcesses/P0_ddx_zph_zph_uux/diagrams.html>P0_ddx_zph_zph_uux</a></td>
+    <td align=right><a id="#P0_ddx_zph_zph_uux" href=#P0_ddx_zph_zph_uux onClick="check_link('#P0_ddx_zph_zph_uux','#P0_ddx_zph_zph_uux','#P0_ddx_zph_zph_uux')"> 3.241e-05 </a> </td>
+    <td align=right>  1.88e-07</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  382.0</td>
+    <td align=right>  0</td>
+</tr>
+
+<tr><td align=right><a href=../../SubProcesses/P0_ddx_zph_zph_ccx/diagrams.html>P0_ddx_zph_zph_ccx</a></td>
+    <td align=right><a id="#P0_ddx_zph_zph_ccx" href=#P0_ddx_zph_zph_ccx onClick="check_link('#P0_ddx_zph_zph_ccx','#P0_ddx_zph_zph_ccx','#P0_ddx_zph_zph_ccx')"> 3.234e-05 </a> </td>
+    <td align=right>  1.91e-07</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  387.0</td>
+    <td align=right>  0</td>
+</tr>
+
+<tr><td align=right><a href=../../SubProcesses/P0_ddx_zph_zph_ddx/diagrams.html>P0_ddx_zph_zph_ddx</a></td>
+    <td align=right><a id="#P0_ddx_zph_zph_ddx" href=#P0_ddx_zph_zph_ddx onClick="check_link('#P0_ddx_zph_zph_ddx','#P0_ddx_zph_zph_ddx','#P0_ddx_zph_zph_ddx')"> 3.251e-05 </a> </td>
+    <td align=right>  1.84e-07</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  389.0</td>
+    <td align=right>  0</td>
+</tr>
+
+<tr><td align=right><a href=../../SubProcesses/P0_ddx_zph_zph_ssx/diagrams.html>P0_ddx_zph_zph_ssx</a></td>
+    <td align=right><a id="#P0_ddx_zph_zph_ssx" href=#P0_ddx_zph_zph_ssx onClick="check_link('#P0_ddx_zph_zph_ssx','#P0_ddx_zph_zph_ssx','#P0_ddx_zph_zph_ssx')"> 3.293e-05 </a> </td>
+    <td align=right>  1.79e-07</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  368.0</td>
+    <td align=right>  0</td>
+</tr>
+
+<tr><td align=right><a href=../../SubProcesses/P0_ddx_zph_zph_bbx/diagrams.html>P0_ddx_zph_zph_bbx</a></td>
+    <td align=right><a id="#P0_ddx_zph_zph_bbx" href=#P0_ddx_zph_zph_bbx onClick="check_link('#P0_ddx_zph_zph_bbx','#P0_ddx_zph_zph_bbx','#P0_ddx_zph_zph_bbx')"> 3.272e-05 </a> </td>
+    <td align=right>  1.83e-07</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  396.0</td>
+    <td align=right>  0</td>
+</tr>
+
+<tr><td align=right><a href=../../SubProcesses/P0_ssx_zph_zph_uux/diagrams.html>P0_ssx_zph_zph_uux</a></td>
+    <td align=right><a id="#P0_ssx_zph_zph_uux" href=#P0_ssx_zph_zph_uux onClick="check_link('#P0_ssx_zph_zph_uux','#P0_ssx_zph_zph_uux','#P0_ssx_zph_zph_uux')"> 1.144e-06 </a> </td>
+    <td align=right>  5.93e-09</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  390.0</td>
+    <td align=right>  0</td>
+</tr>
+
+<tr><td align=right><a href=../../SubProcesses/P0_ssx_zph_zph_ccx/diagrams.html>P0_ssx_zph_zph_ccx</a></td>
+    <td align=right><a id="#P0_ssx_zph_zph_ccx" href=#P0_ssx_zph_zph_ccx onClick="check_link('#P0_ssx_zph_zph_ccx','#P0_ssx_zph_zph_ccx','#P0_ssx_zph_zph_ccx')"> 1.131e-06 </a> </td>
+    <td align=right>  5.85e-09</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  368.0</td>
+    <td align=right>  0</td>
+</tr>
+
+<tr><td align=right><a href=../../SubProcesses/P0_ssx_zph_zph_ddx/diagrams.html>P0_ssx_zph_zph_ddx</a></td>
+    <td align=right><a id="#P0_ssx_zph_zph_ddx" href=#P0_ssx_zph_zph_ddx onClick="check_link('#P0_ssx_zph_zph_ddx','#P0_ssx_zph_zph_ddx','#P0_ssx_zph_zph_ddx')"> 1.15e-06 </a> </td>
+    <td align=right>  9.59e-09</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  385.0</td>
+    <td align=right>  0</td>
+</tr>
+
+<tr><td align=right><a href=../../SubProcesses/P0_ssx_zph_zph_ssx/diagrams.html>P0_ssx_zph_zph_ssx</a></td>
+    <td align=right><a id="#P0_ssx_zph_zph_ssx" href=#P0_ssx_zph_zph_ssx onClick="check_link('#P0_ssx_zph_zph_ssx','#P0_ssx_zph_zph_ssx','#P0_ssx_zph_zph_ssx')"> 1.145e-06 </a> </td>
+    <td align=right>  5.73e-09</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  367.0</td>
+    <td align=right>  0</td>
+</tr>
+
+<tr><td align=right><a href=../../SubProcesses/P0_ssx_zph_zph_bbx/diagrams.html>P0_ssx_zph_zph_bbx</a></td>
+    <td align=right><a id="#P0_ssx_zph_zph_bbx" href=#P0_ssx_zph_zph_bbx onClick="check_link('#P0_ssx_zph_zph_bbx','#P0_ssx_zph_zph_bbx','#P0_ssx_zph_zph_bbx')"> 1.147e-06 </a> </td>
+    <td align=right>  5.76e-09</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  387.0</td>
+    <td align=right>  0</td>
+</tr>
+
+<tr><td align=right>P0 sum</td>
+    <td align=right><a id="./results.html" href=./results.html onClick="check_link('./results.html','','./results.html')"> 0.00060969104 </a> </td>
+    <td align=right>  </td>
+    <td align=right>  </td>
+    <td align=right>  </td>
+    <td align=right>  </td>
+</tr>
+
+</table>
+</center>
+<br><br><br>
+ <dl>  
+<dt><a  name=P0_uux_zph_zph_uux href=../../SubProcesses/P0_uux_zph_zph_uux/diagrams.html>P0_uux_zph_zph_uux</a></dt><dd>
+ <BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>s= 8.8301e-05 &#177 5e-07 (pb)</b><br><br>
+<table class="sortable" id='tablesort'>
+<tr><th>Graph</th>
+    <th> Cross-Section</th>
+    <th>Error</th>
+    <th>Events (K)</th>
+    <th>Unwgt</th>
+    <th>Luminosity</th>
+</tr>
+
+<tr><td align=right>G1</td>
+    <td align=right><a id="../../SubProcesses/P0_uux_zph_zph_uux/G1/mZ_2900_0.6_log.txt" href=../../SubProcesses/P0_uux_zph_zph_uux/G1/mZ_2900_0.6_log.txt onClick="check_link('../../SubProcesses/P0_uux_zph_zph_uux/G1/mZ_2900_0.6_log.txt','../../SubProcesses/P0_uux_zph_zph_uux/G1/log.txt','../../SubProcesses/P0_uux_zph_zph_uux/G1/mZ_2900_0.6_log.txt')"> 8.83e-05 </a> </td>
+    <td align=right>  5e-07</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  364.0</td>
+    <td align=right>  4.12e+06</td>
+</tr>
+
+</table>
+</center>
+<br><br><br>
+  
+<dt><a  name=P0_uux_zph_zph_ccx href=../../SubProcesses/P0_uux_zph_zph_ccx/diagrams.html>P0_uux_zph_zph_ccx</a></dt><dd>
+ <BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>s= 8.7324e-05 &#177 4.9e-07 (pb)</b><br><br>
+<table class="sortable" id='tablesort'>
+<tr><th>Graph</th>
+    <th> Cross-Section</th>
+    <th>Error</th>
+    <th>Events (K)</th>
+    <th>Unwgt</th>
+    <th>Luminosity</th>
+</tr>
+
+<tr><td align=right>G1</td>
+    <td align=right><a id="../../SubProcesses/P0_uux_zph_zph_ccx/G1/mZ_2900_0.6_log.txt" href=../../SubProcesses/P0_uux_zph_zph_ccx/G1/mZ_2900_0.6_log.txt onClick="check_link('../../SubProcesses/P0_uux_zph_zph_ccx/G1/mZ_2900_0.6_log.txt','../../SubProcesses/P0_uux_zph_zph_ccx/G1/log.txt','../../SubProcesses/P0_uux_zph_zph_ccx/G1/mZ_2900_0.6_log.txt')"> 8.732e-05 </a> </td>
+    <td align=right>  4.9e-07</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  370.0</td>
+    <td align=right>  4.24e+06</td>
+</tr>
+
+</table>
+</center>
+<br><br><br>
+  
+<dt><a  name=P0_uux_zph_zph_ddx href=../../SubProcesses/P0_uux_zph_zph_ddx/diagrams.html>P0_uux_zph_zph_ddx</a></dt><dd>
+ <BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>s= 8.8721e-05 &#177 4.85e-07 (pb)</b><br><br>
+<table class="sortable" id='tablesort'>
+<tr><th>Graph</th>
+    <th> Cross-Section</th>
+    <th>Error</th>
+    <th>Events (K)</th>
+    <th>Unwgt</th>
+    <th>Luminosity</th>
+</tr>
+
+<tr><td align=right>G1</td>
+    <td align=right><a id="../../SubProcesses/P0_uux_zph_zph_ddx/G1/mZ_2900_0.6_log.txt" href=../../SubProcesses/P0_uux_zph_zph_ddx/G1/mZ_2900_0.6_log.txt onClick="check_link('../../SubProcesses/P0_uux_zph_zph_ddx/G1/mZ_2900_0.6_log.txt','../../SubProcesses/P0_uux_zph_zph_ddx/G1/log.txt','../../SubProcesses/P0_uux_zph_zph_ddx/G1/mZ_2900_0.6_log.txt')"> 8.872e-05 </a> </td>
+    <td align=right>  4.85e-07</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  385.0</td>
+    <td align=right>  4.34e+06</td>
+</tr>
+
+</table>
+</center>
+<br><br><br>
+  
+<dt><a  name=P0_uux_zph_zph_ssx href=../../SubProcesses/P0_uux_zph_zph_ssx/diagrams.html>P0_uux_zph_zph_ssx</a></dt><dd>
+ <BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>s= 8.706e-05 &#177 4.98e-07 (pb)</b><br><br>
+<table class="sortable" id='tablesort'>
+<tr><th>Graph</th>
+    <th> Cross-Section</th>
+    <th>Error</th>
+    <th>Events (K)</th>
+    <th>Unwgt</th>
+    <th>Luminosity</th>
+</tr>
+
+<tr><td align=right>G1</td>
+    <td align=right><a id="../../SubProcesses/P0_uux_zph_zph_ssx/G1/mZ_2900_0.6_log.txt" href=../../SubProcesses/P0_uux_zph_zph_ssx/G1/mZ_2900_0.6_log.txt onClick="check_link('../../SubProcesses/P0_uux_zph_zph_ssx/G1/mZ_2900_0.6_log.txt','../../SubProcesses/P0_uux_zph_zph_ssx/G1/log.txt','../../SubProcesses/P0_uux_zph_zph_ssx/G1/mZ_2900_0.6_log.txt')"> 8.706e-05 </a> </td>
+    <td align=right>  4.98e-07</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  366.0</td>
+    <td align=right>  4.2e+06</td>
+</tr>
+
+</table>
+</center>
+<br><br><br>
+  
+<dt><a  name=P0_uux_zph_zph_bbx href=../../SubProcesses/P0_uux_zph_zph_bbx/diagrams.html>P0_uux_zph_zph_bbx</a></dt><dd>
+ <BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>s= 8.814e-05 &#177 5.02e-07 (pb)</b><br><br>
+<table class="sortable" id='tablesort'>
+<tr><th>Graph</th>
+    <th> Cross-Section</th>
+    <th>Error</th>
+    <th>Events (K)</th>
+    <th>Unwgt</th>
+    <th>Luminosity</th>
+</tr>
+
+<tr><td align=right>G1</td>
+    <td align=right><a id="../../SubProcesses/P0_uux_zph_zph_bbx/G1/mZ_2900_0.6_log.txt" href=../../SubProcesses/P0_uux_zph_zph_bbx/G1/mZ_2900_0.6_log.txt onClick="check_link('../../SubProcesses/P0_uux_zph_zph_bbx/G1/mZ_2900_0.6_log.txt','../../SubProcesses/P0_uux_zph_zph_bbx/G1/log.txt','../../SubProcesses/P0_uux_zph_zph_bbx/G1/mZ_2900_0.6_log.txt')"> 8.814e-05 </a> </td>
+    <td align=right>  5.02e-07</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  379.0</td>
+    <td align=right>  4.3e+06</td>
+</tr>
+
+</table>
+</center>
+<br><br><br>
+  
+<dt><a  name=P0_ccx_zph_zph_uux href=../../SubProcesses/P0_ccx_zph_zph_uux/diagrams.html>P0_ccx_zph_zph_uux</a></dt><dd>
+ <BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>s= 3.0485e-07 &#177 1.82e-09 (pb)</b><br><br>
+<table class="sortable" id='tablesort'>
+<tr><th>Graph</th>
+    <th> Cross-Section</th>
+    <th>Error</th>
+    <th>Events (K)</th>
+    <th>Unwgt</th>
+    <th>Luminosity</th>
+</tr>
+
+<tr><td align=right>G1</td>
+    <td align=right><a id="../../SubProcesses/P0_ccx_zph_zph_uux/G1/mZ_2900_0.6_log.txt" href=../../SubProcesses/P0_ccx_zph_zph_uux/G1/mZ_2900_0.6_log.txt onClick="check_link('../../SubProcesses/P0_ccx_zph_zph_uux/G1/mZ_2900_0.6_log.txt','../../SubProcesses/P0_ccx_zph_zph_uux/G1/log.txt','../../SubProcesses/P0_ccx_zph_zph_uux/G1/mZ_2900_0.6_log.txt')"> 3.048e-07 </a> </td>
+    <td align=right>  1.82e-09</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  379.0</td>
+    <td align=right>  1.24e+09</td>
+</tr>
+
+</table>
+</center>
+<br><br><br>
+  
+<dt><a  name=P0_ccx_zph_zph_ccx href=../../SubProcesses/P0_ccx_zph_zph_ccx/diagrams.html>P0_ccx_zph_zph_ccx</a></dt><dd>
+ <BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>s= 3.0263e-07 &#177 2.16e-09 (pb)</b><br><br>
+<table class="sortable" id='tablesort'>
+<tr><th>Graph</th>
+    <th> Cross-Section</th>
+    <th>Error</th>
+    <th>Events (K)</th>
+    <th>Unwgt</th>
+    <th>Luminosity</th>
+</tr>
+
+<tr><td align=right>G1</td>
+    <td align=right><a id="../../SubProcesses/P0_ccx_zph_zph_ccx/G1/mZ_2900_0.6_log.txt" href=../../SubProcesses/P0_ccx_zph_zph_ccx/G1/mZ_2900_0.6_log.txt onClick="check_link('../../SubProcesses/P0_ccx_zph_zph_ccx/G1/mZ_2900_0.6_log.txt','../../SubProcesses/P0_ccx_zph_zph_ccx/G1/log.txt','../../SubProcesses/P0_ccx_zph_zph_ccx/G1/mZ_2900_0.6_log.txt')"> 3.026e-07 </a> </td>
+    <td align=right>  2.16e-09</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  390.0</td>
+    <td align=right>  1.29e+09</td>
+</tr>
+
+</table>
+</center>
+<br><br><br>
+  
+<dt><a  name=P0_ccx_zph_zph_ddx href=../../SubProcesses/P0_ccx_zph_zph_ddx/diagrams.html>P0_ccx_zph_zph_ddx</a></dt><dd>
+ <BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>s= 3.0521e-07 &#177 1.93e-09 (pb)</b><br><br>
+<table class="sortable" id='tablesort'>
+<tr><th>Graph</th>
+    <th> Cross-Section</th>
+    <th>Error</th>
+    <th>Events (K)</th>
+    <th>Unwgt</th>
+    <th>Luminosity</th>
+</tr>
+
+<tr><td align=right>G1</td>
+    <td align=right><a id="../../SubProcesses/P0_ccx_zph_zph_ddx/G1/mZ_2900_0.6_log.txt" href=../../SubProcesses/P0_ccx_zph_zph_ddx/G1/mZ_2900_0.6_log.txt onClick="check_link('../../SubProcesses/P0_ccx_zph_zph_ddx/G1/mZ_2900_0.6_log.txt','../../SubProcesses/P0_ccx_zph_zph_ddx/G1/log.txt','../../SubProcesses/P0_ccx_zph_zph_ddx/G1/mZ_2900_0.6_log.txt')"> 3.052e-07 </a> </td>
+    <td align=right>  1.93e-09</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  389.0</td>
+    <td align=right>  1.27e+09</td>
+</tr>
+
+</table>
+</center>
+<br><br><br>
+  
+<dt><a  name=P0_ccx_zph_zph_ssx href=../../SubProcesses/P0_ccx_zph_zph_ssx/diagrams.html>P0_ccx_zph_zph_ssx</a></dt><dd>
+ <BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>s= 3.0305e-07 &#177 1.77e-09 (pb)</b><br><br>
+<table class="sortable" id='tablesort'>
+<tr><th>Graph</th>
+    <th> Cross-Section</th>
+    <th>Error</th>
+    <th>Events (K)</th>
+    <th>Unwgt</th>
+    <th>Luminosity</th>
+</tr>
+
+<tr><td align=right>G1</td>
+    <td align=right><a id="../../SubProcesses/P0_ccx_zph_zph_ssx/G1/mZ_2900_0.6_log.txt" href=../../SubProcesses/P0_ccx_zph_zph_ssx/G1/mZ_2900_0.6_log.txt onClick="check_link('../../SubProcesses/P0_ccx_zph_zph_ssx/G1/mZ_2900_0.6_log.txt','../../SubProcesses/P0_ccx_zph_zph_ssx/G1/log.txt','../../SubProcesses/P0_ccx_zph_zph_ssx/G1/mZ_2900_0.6_log.txt')"> 3.031e-07 </a> </td>
+    <td align=right>  1.77e-09</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  369.0</td>
+    <td align=right>  1.22e+09</td>
+</tr>
+
+</table>
+</center>
+<br><br><br>
+  
+<dt><a  name=P0_ccx_zph_zph_bbx href=../../SubProcesses/P0_ccx_zph_zph_bbx/diagrams.html>P0_ccx_zph_zph_bbx</a></dt><dd>
+ <BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>s= 3.076e-07 &#177 1.77e-09 (pb)</b><br><br>
+<table class="sortable" id='tablesort'>
+<tr><th>Graph</th>
+    <th> Cross-Section</th>
+    <th>Error</th>
+    <th>Events (K)</th>
+    <th>Unwgt</th>
+    <th>Luminosity</th>
+</tr>
+
+<tr><td align=right>G1</td>
+    <td align=right><a id="../../SubProcesses/P0_ccx_zph_zph_bbx/G1/mZ_2900_0.6_log.txt" href=../../SubProcesses/P0_ccx_zph_zph_bbx/G1/mZ_2900_0.6_log.txt onClick="check_link('../../SubProcesses/P0_ccx_zph_zph_bbx/G1/mZ_2900_0.6_log.txt','../../SubProcesses/P0_ccx_zph_zph_bbx/G1/log.txt','../../SubProcesses/P0_ccx_zph_zph_bbx/G1/mZ_2900_0.6_log.txt')"> 3.076e-07 </a> </td>
+    <td align=right>  1.77e-09</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  371.0</td>
+    <td align=right>  1.21e+09</td>
+</tr>
+
+</table>
+</center>
+<br><br><br>
+  
+<dt><a  name=P0_ddx_zph_zph_uux href=../../SubProcesses/P0_ddx_zph_zph_uux/diagrams.html>P0_ddx_zph_zph_uux</a></dt><dd>
+ <BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>s= 3.2407e-05 &#177 1.88e-07 (pb)</b><br><br>
+<table class="sortable" id='tablesort'>
+<tr><th>Graph</th>
+    <th> Cross-Section</th>
+    <th>Error</th>
+    <th>Events (K)</th>
+    <th>Unwgt</th>
+    <th>Luminosity</th>
+</tr>
+
+<tr><td align=right>G1</td>
+    <td align=right><a id="../../SubProcesses/P0_ddx_zph_zph_uux/G1/mZ_2900_0.6_log.txt" href=../../SubProcesses/P0_ddx_zph_zph_uux/G1/mZ_2900_0.6_log.txt onClick="check_link('../../SubProcesses/P0_ddx_zph_zph_uux/G1/mZ_2900_0.6_log.txt','../../SubProcesses/P0_ddx_zph_zph_uux/G1/log.txt','../../SubProcesses/P0_ddx_zph_zph_uux/G1/mZ_2900_0.6_log.txt')"> 3.241e-05 </a> </td>
+    <td align=right>  1.88e-07</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  382.0</td>
+    <td align=right>  1.18e+07</td>
+</tr>
+
+</table>
+</center>
+<br><br><br>
+  
+<dt><a  name=P0_ddx_zph_zph_ccx href=../../SubProcesses/P0_ddx_zph_zph_ccx/diagrams.html>P0_ddx_zph_zph_ccx</a></dt><dd>
+ <BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>s= 3.2338e-05 &#177 1.91e-07 (pb)</b><br><br>
+<table class="sortable" id='tablesort'>
+<tr><th>Graph</th>
+    <th> Cross-Section</th>
+    <th>Error</th>
+    <th>Events (K)</th>
+    <th>Unwgt</th>
+    <th>Luminosity</th>
+</tr>
+
+<tr><td align=right>G1</td>
+    <td align=right><a id="../../SubProcesses/P0_ddx_zph_zph_ccx/G1/mZ_2900_0.6_log.txt" href=../../SubProcesses/P0_ddx_zph_zph_ccx/G1/mZ_2900_0.6_log.txt onClick="check_link('../../SubProcesses/P0_ddx_zph_zph_ccx/G1/mZ_2900_0.6_log.txt','../../SubProcesses/P0_ddx_zph_zph_ccx/G1/log.txt','../../SubProcesses/P0_ddx_zph_zph_ccx/G1/mZ_2900_0.6_log.txt')"> 3.234e-05 </a> </td>
+    <td align=right>  1.91e-07</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  387.0</td>
+    <td align=right>  1.2e+07</td>
+</tr>
+
+</table>
+</center>
+<br><br><br>
+  
+<dt><a  name=P0_ddx_zph_zph_ddx href=../../SubProcesses/P0_ddx_zph_zph_ddx/diagrams.html>P0_ddx_zph_zph_ddx</a></dt><dd>
+ <BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>s= 3.2509e-05 &#177 1.84e-07 (pb)</b><br><br>
+<table class="sortable" id='tablesort'>
+<tr><th>Graph</th>
+    <th> Cross-Section</th>
+    <th>Error</th>
+    <th>Events (K)</th>
+    <th>Unwgt</th>
+    <th>Luminosity</th>
+</tr>
+
+<tr><td align=right>G1</td>
+    <td align=right><a id="../../SubProcesses/P0_ddx_zph_zph_ddx/G1/mZ_2900_0.6_log.txt" href=../../SubProcesses/P0_ddx_zph_zph_ddx/G1/mZ_2900_0.6_log.txt onClick="check_link('../../SubProcesses/P0_ddx_zph_zph_ddx/G1/mZ_2900_0.6_log.txt','../../SubProcesses/P0_ddx_zph_zph_ddx/G1/log.txt','../../SubProcesses/P0_ddx_zph_zph_ddx/G1/mZ_2900_0.6_log.txt')"> 3.251e-05 </a> </td>
+    <td align=right>  1.84e-07</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  389.0</td>
+    <td align=right>  1.2e+07</td>
+</tr>
+
+</table>
+</center>
+<br><br><br>
+  
+<dt><a  name=P0_ddx_zph_zph_ssx href=../../SubProcesses/P0_ddx_zph_zph_ssx/diagrams.html>P0_ddx_zph_zph_ssx</a></dt><dd>
+ <BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>s= 3.2927e-05 &#177 1.79e-07 (pb)</b><br><br>
+<table class="sortable" id='tablesort'>
+<tr><th>Graph</th>
+    <th> Cross-Section</th>
+    <th>Error</th>
+    <th>Events (K)</th>
+    <th>Unwgt</th>
+    <th>Luminosity</th>
+</tr>
+
+<tr><td align=right>G1</td>
+    <td align=right><a id="../../SubProcesses/P0_ddx_zph_zph_ssx/G1/mZ_2900_0.6_log.txt" href=../../SubProcesses/P0_ddx_zph_zph_ssx/G1/mZ_2900_0.6_log.txt onClick="check_link('../../SubProcesses/P0_ddx_zph_zph_ssx/G1/mZ_2900_0.6_log.txt','../../SubProcesses/P0_ddx_zph_zph_ssx/G1/log.txt','../../SubProcesses/P0_ddx_zph_zph_ssx/G1/mZ_2900_0.6_log.txt')"> 3.293e-05 </a> </td>
+    <td align=right>  1.79e-07</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  368.0</td>
+    <td align=right>  1.12e+07</td>
+</tr>
+
+</table>
+</center>
+<br><br><br>
+  
+<dt><a  name=P0_ddx_zph_zph_bbx href=../../SubProcesses/P0_ddx_zph_zph_bbx/diagrams.html>P0_ddx_zph_zph_bbx</a></dt><dd>
+ <BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>s= 3.2724e-05 &#177 1.83e-07 (pb)</b><br><br>
+<table class="sortable" id='tablesort'>
+<tr><th>Graph</th>
+    <th> Cross-Section</th>
+    <th>Error</th>
+    <th>Events (K)</th>
+    <th>Unwgt</th>
+    <th>Luminosity</th>
+</tr>
+
+<tr><td align=right>G1</td>
+    <td align=right><a id="../../SubProcesses/P0_ddx_zph_zph_bbx/G1/mZ_2900_0.6_log.txt" href=../../SubProcesses/P0_ddx_zph_zph_bbx/G1/mZ_2900_0.6_log.txt onClick="check_link('../../SubProcesses/P0_ddx_zph_zph_bbx/G1/mZ_2900_0.6_log.txt','../../SubProcesses/P0_ddx_zph_zph_bbx/G1/log.txt','../../SubProcesses/P0_ddx_zph_zph_bbx/G1/mZ_2900_0.6_log.txt')"> 3.272e-05 </a> </td>
+    <td align=right>  1.83e-07</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  396.0</td>
+    <td align=right>  1.21e+07</td>
+</tr>
+
+</table>
+</center>
+<br><br><br>
+  
+<dt><a  name=P0_ssx_zph_zph_uux href=../../SubProcesses/P0_ssx_zph_zph_uux/diagrams.html>P0_ssx_zph_zph_uux</a></dt><dd>
+ <BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>s= 1.1438e-06 &#177 5.93e-09 (pb)</b><br><br>
+<table class="sortable" id='tablesort'>
+<tr><th>Graph</th>
+    <th> Cross-Section</th>
+    <th>Error</th>
+    <th>Events (K)</th>
+    <th>Unwgt</th>
+    <th>Luminosity</th>
+</tr>
+
+<tr><td align=right>G1</td>
+    <td align=right><a id="../../SubProcesses/P0_ssx_zph_zph_uux/G1/mZ_2900_0.6_log.txt" href=../../SubProcesses/P0_ssx_zph_zph_uux/G1/mZ_2900_0.6_log.txt onClick="check_link('../../SubProcesses/P0_ssx_zph_zph_uux/G1/mZ_2900_0.6_log.txt','../../SubProcesses/P0_ssx_zph_zph_uux/G1/log.txt','../../SubProcesses/P0_ssx_zph_zph_uux/G1/mZ_2900_0.6_log.txt')"> 1.144e-06 </a> </td>
+    <td align=right>  5.93e-09</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  390.0</td>
+    <td align=right>  3.41e+08</td>
+</tr>
+
+</table>
+</center>
+<br><br><br>
+  
+<dt><a  name=P0_ssx_zph_zph_ccx href=../../SubProcesses/P0_ssx_zph_zph_ccx/diagrams.html>P0_ssx_zph_zph_ccx</a></dt><dd>
+ <BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>s= 1.1312e-06 &#177 5.85e-09 (pb)</b><br><br>
+<table class="sortable" id='tablesort'>
+<tr><th>Graph</th>
+    <th> Cross-Section</th>
+    <th>Error</th>
+    <th>Events (K)</th>
+    <th>Unwgt</th>
+    <th>Luminosity</th>
+</tr>
+
+<tr><td align=right>G1</td>
+    <td align=right><a id="../../SubProcesses/P0_ssx_zph_zph_ccx/G1/mZ_2900_0.6_log.txt" href=../../SubProcesses/P0_ssx_zph_zph_ccx/G1/mZ_2900_0.6_log.txt onClick="check_link('../../SubProcesses/P0_ssx_zph_zph_ccx/G1/mZ_2900_0.6_log.txt','../../SubProcesses/P0_ssx_zph_zph_ccx/G1/log.txt','../../SubProcesses/P0_ssx_zph_zph_ccx/G1/mZ_2900_0.6_log.txt')"> 1.131e-06 </a> </td>
+    <td align=right>  5.85e-09</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  368.0</td>
+    <td align=right>  3.25e+08</td>
+</tr>
+
+</table>
+</center>
+<br><br><br>
+  
+<dt><a  name=P0_ssx_zph_zph_ddx href=../../SubProcesses/P0_ssx_zph_zph_ddx/diagrams.html>P0_ssx_zph_zph_ddx</a></dt><dd>
+ <BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>s= 1.1501e-06 &#177 9.59e-09 (pb)</b><br><br>
+<table class="sortable" id='tablesort'>
+<tr><th>Graph</th>
+    <th> Cross-Section</th>
+    <th>Error</th>
+    <th>Events (K)</th>
+    <th>Unwgt</th>
+    <th>Luminosity</th>
+</tr>
+
+<tr><td align=right>G1</td>
+    <td align=right><a id="../../SubProcesses/P0_ssx_zph_zph_ddx/G1/mZ_2900_0.6_log.txt" href=../../SubProcesses/P0_ssx_zph_zph_ddx/G1/mZ_2900_0.6_log.txt onClick="check_link('../../SubProcesses/P0_ssx_zph_zph_ddx/G1/mZ_2900_0.6_log.txt','../../SubProcesses/P0_ssx_zph_zph_ddx/G1/log.txt','../../SubProcesses/P0_ssx_zph_zph_ddx/G1/mZ_2900_0.6_log.txt')"> 1.15e-06 </a> </td>
+    <td align=right>  9.59e-09</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  385.0</td>
+    <td align=right>  3.35e+08</td>
+</tr>
+
+</table>
+</center>
+<br><br><br>
+  
+<dt><a  name=P0_ssx_zph_zph_ssx href=../../SubProcesses/P0_ssx_zph_zph_ssx/diagrams.html>P0_ssx_zph_zph_ssx</a></dt><dd>
+ <BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>s= 1.1448e-06 &#177 5.73e-09 (pb)</b><br><br>
+<table class="sortable" id='tablesort'>
+<tr><th>Graph</th>
+    <th> Cross-Section</th>
+    <th>Error</th>
+    <th>Events (K)</th>
+    <th>Unwgt</th>
+    <th>Luminosity</th>
+</tr>
+
+<tr><td align=right>G1</td>
+    <td align=right><a id="../../SubProcesses/P0_ssx_zph_zph_ssx/G1/mZ_2900_0.6_log.txt" href=../../SubProcesses/P0_ssx_zph_zph_ssx/G1/mZ_2900_0.6_log.txt onClick="check_link('../../SubProcesses/P0_ssx_zph_zph_ssx/G1/mZ_2900_0.6_log.txt','../../SubProcesses/P0_ssx_zph_zph_ssx/G1/log.txt','../../SubProcesses/P0_ssx_zph_zph_ssx/G1/mZ_2900_0.6_log.txt')"> 1.145e-06 </a> </td>
+    <td align=right>  5.73e-09</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  367.0</td>
+    <td align=right>  3.21e+08</td>
+</tr>
+
+</table>
+</center>
+<br><br><br>
+  
+<dt><a  name=P0_ssx_zph_zph_bbx href=../../SubProcesses/P0_ssx_zph_zph_bbx/diagrams.html>P0_ssx_zph_zph_bbx</a></dt><dd>
+ <BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>s= 1.1468e-06 &#177 5.76e-09 (pb)</b><br><br>
+<table class="sortable" id='tablesort'>
+<tr><th>Graph</th>
+    <th> Cross-Section</th>
+    <th>Error</th>
+    <th>Events (K)</th>
+    <th>Unwgt</th>
+    <th>Luminosity</th>
+</tr>
+
+<tr><td align=right>G1</td>
+    <td align=right><a id="../../SubProcesses/P0_ssx_zph_zph_bbx/G1/mZ_2900_0.6_log.txt" href=../../SubProcesses/P0_ssx_zph_zph_bbx/G1/mZ_2900_0.6_log.txt onClick="check_link('../../SubProcesses/P0_ssx_zph_zph_bbx/G1/mZ_2900_0.6_log.txt','../../SubProcesses/P0_ssx_zph_zph_bbx/G1/log.txt','../../SubProcesses/P0_ssx_zph_zph_bbx/G1/mZ_2900_0.6_log.txt')"> 1.147e-06 </a> </td>
+    <td align=right>  5.76e-09</td>
+    <td align=right>  7001.0</td>
+    <td align=right>  387.0</td>
+    <td align=right>  3.37e+08</td>
+</tr>
+
+</table>
+</center>
+<br><br><br>
+ </dl></body>

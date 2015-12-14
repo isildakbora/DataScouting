@@ -1,0 +1,34 @@
+ A PDF is used, so alpha_s(MZ) is going to be modified
+ Old value of alpha_s from param_card:   0.11840000003576279     
+  ****************************************
+ 
+       NNPDFDriver version 1.0.3
+   Grid: NNPDF23_lo_as_0130_qed_mem0.grid
+  ****************************************
+ New value of alpha_s from PDF nn23lo1:  0.13000000000000000     
+ Results.dat xsec =    1.9209000000000001E-004  abs xsec =    1.9209000000000001E-004
+ Found           20  subprocesses
+ SubProcess/Channel     kept   read   xsec 
+P0_uux_zph_zph_uux/G1/     542     542 0.281E-04
+P0_uux_zph_zph_ccx/G1/     925     925 0.561E-04
+P0_uux_zph_zph_ddx/G1/    1552    1552 0.843E-04
+P0_uux_zph_zph_ssx/G1/    2022    2022 0.113E-03
+P0_uux_zph_zph_bbx/G1/    2396    2396 0.141E-03
+P0_ccx_zph_zph_uux/G1/    2400    2624 0.142E-03
+P0_ccx_zph_zph_ccx/G1/    2403    2888 0.142E-03
+P0_ccx_zph_zph_ddx/G1/    2405    3131 0.142E-03
+P0_ccx_zph_zph_ssx/G1/    2408    3359 0.142E-03
+P0_ccx_zph_zph_bbx/G1/    2414    3633 0.142E-03
+P0_ddx_zph_zph_uux/G1/    2777    3996 0.152E-03
+P0_ddx_zph_zph_ccx/G1/    3039    4258 0.161E-03
+P0_ddx_zph_zph_ddx/G1/    3395    4614 0.171E-03
+P0_ddx_zph_zph_ssx/G1/    3778    4997 0.181E-03
+P0_ddx_zph_zph_bbx/G1/    4177    5607 0.190E-03
+P0_ssx_zph_zph_uux/G1/    4197    5813 0.191E-03
+P0_ssx_zph_zph_ccx/G1/    4212    6225 0.191E-03
+P0_ssx_zph_zph_ddx/G1/    4236    6594 0.192E-03
+P0_ssx_zph_zph_ssx/G1/    4249    6851 0.192E-03
+P0_ssx_zph_zph_bbx/G1/    4264    7250 0.192E-03
+ Found         2034  events writing first         2000
+ Unweighting selected         2000  events.
+Truncated  0.08% of cross section
